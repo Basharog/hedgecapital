@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HedgeCapitalPro — Financial Consulting & Asset Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060a12;
+  --surface: #0b1120;
+  --surface2: #101828;
+  --border: rgba(100,160,220,0.1);
+  --border2: rgba(100,160,220,0.18);
+  --accent: #00d9b5;
+  --accent2: #1466ff;
+  --text: #dce6f0;
+  --muted: #5a7095;
+  --head: 'Syne', sans-serif;
+  --body: 'Outfit', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(6,10,18,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--head);font-weight:800;font-size:19px;color:#fff;text-decoration:none;letter-spacing:-.3px}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.3px;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;padding:10px 22px;border-radius:3px;font-family:var(--body);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s;border:none;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#06090f}
+.btn-primary:hover{opacity:.85}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--text);transition:all .3s}
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:20px 24px;z-index:199}
+.mobile-menu.open{display:flex;flex-direction:column;gap:0}
+.mobile-menu a{display:block;padding:14px 0;color:var(--muted);text-decoration:none;font-size:15px;border-bottom:1px solid var(--border)}
+.mobile-menu a:last-child{border-bottom:none}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;padding:120px 48px 80px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%)}
+.hero-glow1{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,217,181,.07) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none}
+.hero-glow2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(20,102,255,.05) 0%,transparent 70%);bottom:-100px;left:50px;pointer-events:none}
+.hero-content{position:relative;max-width:860px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:28px}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent)}
+.hero-title{font-family:var(--head);font-size:clamp(38px,6.5vw,82px);font-weight:800;line-height:1.03;letter-spacing:-2.5px;color:#fff;margin-bottom:4px}
+.hero-rotate-wrap{height:1.08em;overflow:hidden;display:block}
+.hero-rotate{display:flex;flex-direction:column;animation:rotateText 15s infinite}
+.hero-rotate span{display:block;height:1.08em;color:var(--accent)}
+@keyframes rotateText{
+  0%,17%{transform:translateY(0)}
+  20%,37%{transform:translateY(-20%)}
+  40%,57%{transform:translateY(-40%)}
+  60%,77%{transform:translateY(-60%)}
+  80%,97%{transform:translateY(-80%)}
+  100%{transform:translateY(0)}
+}
+.hero-sub{margin-top:24px;font-size:18px;color:var(--muted);max-width:500px;font-weight:400;line-height:1.75;margin-bottom:40px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.hero-scroll{position:absolute;bottom:36px;left:48px;display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.scroll-line{width:36px;height:1px;background:var(--muted);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:.4;width:36px}50%{opacity:1;width:54px}}
+
+/* ── TICKER ── */
+.ticker-bar{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:14px 0}
+.ticker-track{display:flex;gap:0;animation:ticker 30s linear infinite;white-space:nowrap}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--muted);padding:0 32px;letter-spacing:.5px}
+.ticker-item .t-name{color:var(--text)}
+.ticker-item .t-up{color:#00d9b5}
+.ticker-item .t-down{color:#ff4d6a}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SERVICES ── */
+#services{padding:100px 48px;max-width:1240px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.section-title{font-family:var(--head);font-size:clamp(26px,4vw,46px);font-weight:700;color:#fff;letter-spacing:-1px;line-height:1.1;margin-bottom:52px}
+.service-tabs{display:flex;gap:0;border-bottom:1px solid var(--border2);margin-bottom:44px}
+.stab{padding:14px 28px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;font-family:var(--body);letter-spacing:.3px}
+.stab:hover{color:var(--text)}
+.stab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.service-panel{display:none;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.service-panel.active{display:grid}
+.panel-title{font-family:var(--head);font-size:30px;font-weight:700;color:#fff;margin-bottom:28px;letter-spacing:-.5px}
+.svc-items{display:flex;flex-direction:column;gap:22px}
+.svc-item-name{font-weight:600;font-size:15px;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:10px}
+.svc-item-name::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.svc-item-desc{font-size:14px;color:var(--muted);line-height:1.75;padding-left:16px}
+.svc-visual{border-radius:4px;background:var(--surface2);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:1px solid var(--border)}
+.svc-visual-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.svc-chart{display:flex;align-items:flex-end;gap:8px;padding:32px}
+.svc-bar{width:28px;border-radius:3px 3px 0 0;background:linear-gradient(to top,var(--accent2),var(--accent));opacity:.7;transition:opacity .3s}
+.svc-visual:hover .svc-bar{opacity:1}
+
+/* ── STATS ── */
+#stats{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 48px}
+.stats-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-item{padding:20px 32px;border-right:1px solid var(--border);text-align:center}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:var(--head);font-size:52px;font-weight:800;color:var(--accent);letter-spacing:-2px;line-height:1;margin-bottom:8px}
+.stat-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;font-weight:500}
+
+/* ── ABOUT/WHY ── */
+#about{padding:100px 48px;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.about-desc{font-size:16px;color:var(--muted);line-height:1.85;margin-bottom:28px}
+.about-visual{position:relative;background:var(--surface2);border-radius:4px;overflow:hidden;border:1px solid var(--border);padding:48px;min-height:360px;display:flex;align-items:center;justify-content:center}
+.about-grid-lines{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:32px 32px}
+.about-chart{position:relative;display:flex;flex-direction:column;gap:16px;width:100%}
+.chart-row{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+.chart-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.chart-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent2),var(--accent))}
+.chart-val{font-weight:600;color:var(--accent);font-size:12px;min-width:40px;text-align:right}
+
+/* ── VALUES ── */
+#values{padding:80px 48px;background:var(--surface);border-top:1px solid var(--border)}
+.values-inner{max-width:1240px;margin:0 auto}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:44px}
+.val-card{background:var(--surface);padding:36px;transition:background .25s}
+.val-card:hover{background:var(--surface2)}
+.val-icon{width:38px;height:38px;border-radius:4px;background:rgba(0,217,181,.1);border:1px solid rgba(0,217,181,.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:16px}
+.val-title{font-family:var(--head);font-size:17px;font-weight:700;color:#fff;margin-bottom:10px}
+.val-desc{font-size:14px;color:var(--muted);line-height:1.75}
+
+/* ── INSIGHTS STRIP ── */
+#insights{padding:80px 48px;max-width:1240px;margin:0 auto}
+.insights-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px}
+.insight-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:32px;transition:border-color .25s,transform .25s;cursor:pointer}
+.insight-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.insight-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);background:rgba(0,217,181,.1);padding:4px 10px;border-radius:2px;margin-bottom:14px}
+.insight-title{font-family:var(--head);font-size:17px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.35}
+.insight-excerpt{font-size:13px;color:var(--muted);line-height:1.7}
+.insight-date{font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:.5px}
+
+/* ── CONTACT ── */
+#contact{padding:100px 48px;max-width:1240px;margin:0 auto}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.contact-headline{font-family:var(--head);font-size:clamp(32px,5vw,58px);font-weight:800;letter-spacing:-2px;line-height:1;color:#fff;margin-bottom:20px}
+.contact-headline span{color:var(--accent)}
+.contact-sub{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:36px}
+.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:14px;color:var(--muted)}
+.contact-detail .c-icon{width:32px;height:32px;border-radius:4px;background:rgba(0,217,181,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.contact-detail strong{color:var(--text);display:block;font-size:13px;margin-bottom:1px}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:12px 16px;color:var(--text);font-family:var(--body);font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent)}
+.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7095' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.form-group textarea{resize:vertical;min-height:100px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ── FOOTER ── */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:64px 48px 28px}
+.footer-inner{max-width:1240px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand{font-family:var(--head);font-weight:800;font-size:20px;color:#fff;margin-bottom:8px}
+.footer-brand span{color:var(--accent)}
+.footer-tagline{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px;max-width:260px}
+.footer-social{display:flex;gap:10px}
+.social-btn{width:34px;height:34px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);text-decoration:none;transition:all .2s}
+.social-btn:hover{border-color:var(--accent);color:var(--accent)}
+.footer-col h4{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text);margin-bottom:16px}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:10px}
+.footer-col ul li a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-col ul li a:hover{color:var(--accent)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:12px}
+.footer-bottom a{color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-bottom a:hover{color:var(--accent)}
+
+/* ── BACK TO TOP ── */
+#back-top{position:fixed;bottom:28px;right:28px;width:40px;height:40px;background:var(--accent);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .3s;z-index:100;font-size:18px;color:#060a12;text-decoration:none}
+#back-top.show{opacity:1}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links,.nav-right .btn-ghost{display:none}
+  .hamburger{display:flex}
+  #hero{padding:100px 20px 60px}
+  .hero-title{font-size:36px;letter-spacing:-1.5px}
+  .hero-scroll{left:20px}
+  .service-panel{grid-template-columns:1fr}
+  .svc-visual{display:none}
+  .stats-inner{grid-template-columns:repeat(2,1fr)}
+  .stat-item:nth-child(2){border-right:none}
+  .stat-item{border-bottom:1px solid var(--border)}
+  .stat-item:nth-child(3),.stat-item:nth-child(4){border-bottom:none}
+  #about{grid-template-columns:1fr;gap:40px;padding:60px 20px}
+  .about-visual{display:none}
+  .values-grid{grid-template-columns:1fr}
+  .insights-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr;gap:40px}
+  #services,#insights,#contact{padding:60px 20px}
+  #values{padding:60px 20px}
+  #stats{padding:40px 20px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+  footer{padding:40px 20px 20px}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav id="navbar">
+  <a href="#" class="nav-logo" id="nav-logo">Hedge<span>Capital</span>Pro</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#insights">Insights</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="login.html" class="btn btn-ghost" style="font-size:12px">Client Portal</a>
+    <a href="#contact" class="btn btn-primary">Get a Consultation</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#insights" onclick="closeMobile()">Insights</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+  <a href="login.html">Client Portal</a>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow1"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow" id="hero-eyebrow">Financial Consulting & Asset Management</div>
+    <h1 class="hero-title">
+      <span class="hero-title-line" id="hero-title-line">Unlock your financial potential with</span>
+      <span class="hero-rotate-wrap">
+        <span class="hero-rotate" id="hero-rotate">
+          <span>expert guidance</span>
+          <span>strategic insights</span>
+          <span>personalized advice</span>
+          <span>proven strategies</span>
+          <span>comprehensive planning</span>
+        </span>
+      </span>
+    </h1>
+    <p class="hero-sub" id="hero-sub">Premier financial consulting and asset management services tailored to your goals, risk profile, and long-term vision.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-primary">Schedule a Free Consultation</a>
+      <a href="#services" class="btn btn-ghost">Explore Services</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span class="scroll-line"></span>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- ═══════════════ TICKER ═══════════════ -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker-track">
+    <!-- Filled by JS -->
+  </div>
+</div>
+
+<!-- ═══════════════ SERVICES ═══════════════ -->
+<section id="services">
+  <div class="section-label">Services</div>
+  <div class="section-title" id="services-title">To meet your needs</div>
+  <div class="service-tabs" id="service-tabs"></div>
+  <div id="service-panels"></div>
+</section>
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<section id="stats">
+  <div class="stats-inner" id="stats-inner"></div>
+</section>
+
+<!-- ═══════════════ ABOUT / WHY US ═══════════════ -->
+<section id="about">
+  <div class="about-text-block">
+    <div class="section-label">Why Us</div>
+    <div class="section-title" style="margin-bottom:24px" id="about-headline">Trusted experts with years of experience and industry accreditations</div>
+    <p class="about-desc" id="about-text">At HedgeCapitalPro, we are dedicated to guiding you on your financial journey with expertise, integrity, and a personalized approach. Our team of experienced financial consultants is committed to helping you unlock your full financial potential.</p>
+    <a href="#contact" class="btn btn-primary">About Us</a>
+  </div>
+  <div class="about-visual">
+    <div class="about-grid-lines"></div>
+    <div class="about-chart" id="about-chart">
+      <div style="font-family:var(--head);font-size:13px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Portfolio Performance</div>
+      <div class="chart-row"><span style="width:80px">Equities</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:82%"></div></div><span class="chart-val">+82%</span></div>
+      <div class="chart-row"><span style="width:80px">Fixed Inc.</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:64%"></div></div><span class="chart-val">+64%</span></div>
+      <div class="chart-row"><span style="width:80px">Real Estate</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:73%"></div></div><span class="chart-val">+73%</span></div>
+      <div class="chart-row"><span style="width:80px">Alt. Assets</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:91%"></div></div><span class="chart-val">+91%</span></div>
+      <div class="chart-row"><span style="width:80px">Commodities</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:55%"></div></div><span class="chart-val">+55%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ VALUES ═══════════════ -->
+<section id="values">
+  <div class="values-inner">
+    <div class="section-label">Our Values</div>
+    <div class="section-title" id="values-title">Guided by integrity, trust, and client-centricity</div>
+    <div class="values-grid" id="values-grid"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ INSIGHTS ═══════════════ -->
+<section id="insights">
+  <div class="section-label">Articles</div>
+  <div class="section-title">Valuable insights that empower your decisions</div>
+  <div class="insights-grid" id="insights-grid">
+    <div class="insight-card">
+      <div class="insight-tag">Analysis</div>
+      <div class="insight-title">Strategies to Stay Calm and Make Informed Decisions in Volatile Markets</div>
+      <div class="insight-excerpt">Investors must navigate uncertain times and unpredictable waters. Effective strategies like diversifying portfolios and analyzing fundamentals are key.</div>
+      <div class="insight-date">March 2025</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-tag">Insights</div>
+      <div class="insight-title">Practical Tips for Creating and Managing Your Personal Wealth Strategy</div>
+      <div class="insight-excerpt">Explore effective approaches to building long-term wealth, minimizing risks, and making informed decisions aligned with your goals.</div>
+      <div class="insight-date">February 2025</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-tag">Perspectives</div>
+      <div class="insight-title">Understanding Behavioral Biases and Making Rational Financial Choices</div>
+      <div class="insight-excerpt">How cognitive biases affect investment decisions and the frameworks high-performing investors use to counteract them effectively.</div>
+      <div class="insight-date">January 2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section id="contact">
+  <div class="contact-grid">
+    <div>
+      <div class="section-label">Get Started</div>
+      <div class="contact-headline">Schedule your<br><span>personalized</span><br>consultation.</div>
+      <p class="contact-sub" id="contact-sub">Drop your details into the form and one of our senior consultants will reach out within one business day.</p>
+      <div class="contact-detail">
+        <div class="c-icon">📞</div>
+        <div><strong id="contact-phone">1-800-HEDGEPRO</strong><span>Mon – Fri, 8am – 7pm EST</span></div>
+      </div>
+      <div class="contact-detail">
+        <div class="c-icon">✉️</div>
+        <div><strong id="contact-email">contact@hedgecapitalpro.com</strong><span>We reply within 24 hours</span></div>
+      </div>
+      <div class="contact-detail">
+        <div class="c-icon">📍</div>
+        <div><strong id="contact-address">New York, NY 10004</strong><span>Our main office</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="John"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"></div>
+      </div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@company.com"></div>
+      <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+1 (555) 000-0000"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Company Name</label><input type="text" placeholder="Acme Corp"></div>
+        <div class="form-group"><label>Website</label><input type="text" placeholder="acme.com"></div>
+      </div>
+      <div class="form-group">
+        <label>Interested In</label>
+        <select>
+          <option value="">Select a service…</option>
+          <option>Investment Planning</option>
+          <option>Retirement Planning</option>
+          <option>Education Planning</option>
+          <option>Portfolio Management</option>
+          <option>Asset Allocation</option>
+          <option>Risk Management</option>
+          <option>Tax Planning</option>
+          <option>Estate Planning</option>
+          <option>Wealth Preservation</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Message</label><textarea placeholder="Tell us about your financial goals…"></textarea></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px">Submit Request</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand" id="footer-brand">Hedge<span>Capital</span>Pro</div>
+        <div class="footer-tagline" id="footer-tagline">Building wealth, securing futures. Trusted financial consulting firm providing expert guidance and personalized solutions.</div>
+        <div class="footer-social">
+          <a class="social-btn" href="#">in</a>
+          <a class="social-btn" href="#">𝕏</a>
+          <a class="social-btn" href="#">fb</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Financial Planning</a></li>
+          <li><a href="#">Wealth Management</a></li>
+          <li><a href="#">Tax & Estate Planning</a></li>
+          <li><a href="#">Asset Management</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Team</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Awards</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Insights</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="#">Subscribe</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span id="footer-copy">© 2025 HedgeCapitalPro. All rights reserved.</span>
+      <div style="display:flex;gap:20px">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="login.html" style="color:var(--accent)">Client Portal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="#" id="back-top" title="Back to top">↑</a>
+
+<script>
+// ─────────────────────────────────────────
+//  DEFAULT CONTENT
+// ─────────────────────────────────────────
+const DEFAULT = {
+  companyName: "HedgeCapitalPro",
+  tagline: "Building wealth, securing futures.",
+  heroEyebrow: "Financial Consulting & Asset Management",
+  heroTitleLine: "Unlock your financial potential with",
+  heroWords: ["expert guidance","strategic insights","personalized advice","proven strategies","comprehensive planning"],
+  heroSub: "Premier financial consulting and asset management services tailored to your goals, risk profile, and long-term vision.",
+  phone: "1-800-HEDGEPRO",
+  email: "contact@hedgecapitalpro.com",
+  address: "New York, NY 10004",
+  aboutHeadline: "Trusted experts with years of experience and industry accreditations",
+  aboutText: "At HedgeCapitalPro, we are dedicated to guiding you on your financial journey with expertise, integrity, and a personalized approach. Our team of experienced financial consultants is committed to helping you unlock your full financial potential.",
+  stats:[
+    {num:"18+",lbl:"Years of Experience"},
+    {num:"1,400+",lbl:"Clients Served"},
+    {num:"$2B+",lbl:"Assets Under Management"},
+    {num:"200+",lbl:"Specialists"}
+  ],
+  services:[
+    {tab:"01 Financial",title:"Financial Planning",items:[
+      {name:"Investment Planning",desc:"Tailored investment strategies to help clients grow their wealth and achieve their financial goals."},
+      {name:"Retirement Planning",desc:"Comprehensive retirement plans designed to secure a comfortable and worry-free future."},
+      {name:"Education Planning",desc:"Guidance on saving and investing for educational expenses, such as college tuition."}
+    ]},
+    {tab:"02 Wealth",title:"Wealth Management",items:[
+      {name:"Portfolio Management",desc:"Active management of investment portfolios to optimize returns while managing risk effectively."},
+      {name:"Asset Allocation",desc:"Strategic allocation of assets to achieve diversification and maximize long-term growth potential."},
+      {name:"Risk Management",desc:"Assessment and mitigation of financial risks through insurance solutions and tailored strategies."}
+    ]},
+    {tab:"03 Tax",title:"Tax & Estate Planning",items:[
+      {name:"Tax Planning",desc:"Expert guidance on minimizing tax liabilities, maximizing deductions, and optimizing tax strategies."},
+      {name:"Estate Planning",desc:"Comprehensive estate plans that ensure a smooth transfer of wealth and minimize estate taxes."},
+      {name:"Wealth Preservation",desc:"Strategies to protect assets and wealth for future generations while minimizing tax implications."}
+    ]}
+  ],
+  values:[
+    {icon:"⚖️",title:"Integrity",desc:"Uphold high ethical standards and act with honesty, transparency, and professionalism in all interactions."},
+    {icon:"🔒",title:"Trust & Confidentiality",desc:"We understand the importance of trust and confidentiality in every client relationship we build."},
+    {icon:"🎯",title:"Objectivity",desc:"Unbiased advice based on thorough analysis, research, and comprehensive understanding of your situation."},
+    {icon:"💡",title:"Expertise",desc:"Stay up-to-date with industry trends, regulations, and best practices to offer informed advice."},
+    {icon:"🤝",title:"Long-Term Relationships",desc:"Build lasting relationships based on trust, open communication, and mutual respect."},
+    {icon:"📊",title:"Accountability",desc:"Monitor progress, review strategies, and adjust to help clients stay on track toward their financial goals."}
+  ],
+  footerTagline: "Building wealth, securing futures. Trusted financial consulting firm providing expert guidance and personalized solutions.",
+  footerCopy: "© 2025 HedgeCapitalPro. All rights reserved."
+};
+
+// ─────────────────────────────────────────
+//  LOAD CONTENT (localStorage or default)
+// ─────────────────────────────────────────
+function loadContent() {
+  try {
+    const saved = localStorage.getItem('hcp_content');
+    return saved ? {...DEFAULT, ...JSON.parse(saved)} : DEFAULT;
+  } catch(e) { return DEFAULT; }
+}
+
+const C = loadContent();
+
+// ─────────────────────────────────────────
+//  RENDER DYNAMIC SECTIONS
+// ─────────────────────────────────────────
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if(el && val !== undefined) el.textContent = val;
+}
+
+function renderAll() {
+  // Basic text
+  document.title = C.companyName + ' — Financial Consulting & Asset Management';
+  setText('hero-eyebrow', C.heroEyebrow);
+  setText('hero-title-line', C.heroTitleLine);
+  setText('hero-sub', C.heroSub);
+  setText('about-headline', C.aboutHeadline);
+  setText('about-text', C.aboutText);
+  setText('contact-phone', C.phone);
+  setText('contact-email', C.email);
+  setText('contact-address', C.address);
+  setText('footer-tagline', C.footerTagline);
+  setText('footer-copy', C.footerCopy);
+
+  // Logo / brand
+  const navLogo = document.getElementById('nav-logo');
+  if(navLogo) navLogo.innerHTML = C.companyName.slice(0,5)+'<span>'+C.companyName.slice(5,12)+'</span>'+C.companyName.slice(12);
+  const fb = document.getElementById('footer-brand');
+  if(fb) fb.innerHTML = C.companyName.slice(0,5)+'<span>'+C.companyName.slice(5,12)+'</span>'+C.companyName.slice(12);
+
+  // Hero rotator
+  const rotator = document.getElementById('hero-rotate');
+  if(rotator && C.heroWords) {
+    rotator.innerHTML = C.heroWords.map(w=>`<span>${w}</span>`).join('');
+    const pct = 100 / C.heroWords.length;
+    let kf = '';
+    C.heroWords.forEach((_,i)=>{
+      const start = (i*(100/C.heroWords.length)).toFixed(1);
+      const end = ((i*(100/C.heroWords.length))+(100/C.heroWords.length)-3).toFixed(1);
+      kf += `${start}%,${end}%{transform:translateY(-${(i*pct).toFixed(1)}%)}`;
+    });
+    const style = document.createElement('style');
+    style.textContent = `@keyframes rotateText{${kf}100%{transform:translateY(0)}}`;
+    document.head.appendChild(style);
+  }
+
+  // Stats
+  const si = document.getElementById('stats-inner');
+  if(si && C.stats) {
+    si.innerHTML = C.stats.map(s=>`
+      <div class="stat-item">
+        <div class="stat-num" data-target="${s.num}">${s.num}</div>
+        <div class="stat-lbl">${s.lbl}</div>
+      </div>`).join('');
+  }
+
+  // Services
+  const tabs = document.getElementById('service-tabs');
+  const panels = document.getElementById('service-panels');
+  if(tabs && panels && C.services) {
+    tabs.innerHTML = C.services.map((s,i)=>`
+      <button class="stab${i===0?' active':''}" onclick="switchTab(${i})">${s.tab}</button>`).join('');
+    const barHeights = [60,100,75,90,55,80];
+    panels.innerHTML = C.services.map((s,i)=>`
+      <div class="service-panel${i===0?' active':''}" id="panel-${i}">
+        <div>
+          <div class="panel-title">${s.title}</div>
+          <div class="svc-items">${s.items.map(it=>`
+            <div>
+              <div class="svc-item-name">${it.name}</div>
+              <div class="svc-item-desc">${it.desc}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="svc-visual">
+          <div class="svc-visual-inner">
+            <div class="svc-chart">${barHeights.map((h,bi)=>`<div class="svc-bar" style="height:${h+(i*12)}px"></div>`).join('')}</div>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  // Values
+  const vg = document.getElementById('values-grid');
+  if(vg && C.values) {
+    vg.innerHTML = C.values.map(v=>`
+      <div class="val-card">
+        <div class="val-icon">${v.icon||'★'}</div>
+        <div class="val-title">${v.title}</div>
+        <div class="val-desc">${v.desc}</div>
+      </div>`).join('');
+  }
+}
+
+// ─────────────────────────────────────────
+//  TICKER
+// ─────────────────────────────────────────
+const tickers = [
+  {name:'S&P 500',val:'5,872.16',chg:'+0.34%',up:true},
+  {name:'NASDAQ',val:'18,391.45',chg:'+0.52%',up:true},
+  {name:'DOW',val:'43,141.22',chg:'-0.11%',up:false},
+  {name:'10Y YIELD',val:'4.37%',chg:'+0.02',up:true},
+  {name:'GOLD',val:'$2,631',chg:'+0.28%',up:true},
+  {name:'BTC',val:'$84,210',chg:'-1.23%',up:false},
+  {name:'EUR/USD',val:'1.0832',chg:'+0.09%',up:true},
+  {name:'CRUDE OIL',val:'$70.42',chg:'-0.74%',up:false},
+];
+function renderTicker() {
+  const t = document.getElementById('ticker-track');
+  if(!t) return;
+  const items = [...tickers,...tickers].map(tk=>`
+    <div class="ticker-item">
+      <span class="t-name">${tk.name}</span>
+      <span>${tk.val}</span>
+      <span class="${tk.up?'t-up':'t-down'}">${tk.chg}</span>
+    </div>`).join('');
+  t.innerHTML = items;
+}
+
+// ─────────────────────────────────────────
+//  SERVICES TAB SWITCH
+// ─────────────────────────────────────────
+function switchTab(idx) {
+  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.service-panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+
+// ─────────────────────────────────────────
+//  MOBILE MENU
+// ─────────────────────────────────────────
+document.getElementById('hamburger').addEventListener('click',()=>{
+  document.getElementById('mobile-menu').classList.toggle('open');
+});
+function closeMobile() {
+  document.getElementById('mobile-menu').classList.remove('open');
+}
+
+// ─────────────────────────────────────────
+//  SCROLL: NAV + BACK TO TOP
+// ─────────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  const bt = document.getElementById('back-top');
+  if(bt) bt.classList.toggle('show', window.scrollY > 400);
+});
+
+// ─────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────
+renderAll();
+renderTicker();
+</script>
+</body>
+</html>

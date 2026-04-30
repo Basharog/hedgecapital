@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HedgeCapitalPro — Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060a12;--surface:#0b1120;--surface2:#101828;--surface3:#141f32;
+  --border:rgba(100,160,220,0.1);--border2:rgba(100,160,220,0.18);
+  --accent:#00d9b5;--accent2:#1466ff;--red:#ff4d6a;--yellow:#ffb830;
+  --text:#dce6f0;--muted:#5a7095;--head:'Syne',sans-serif;--body:'Outfit',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;font-family:var(--body);background:var(--bg);color:var(--text);font-size:14px}
+
+/* ── LOGIN ── */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--bg);position:fixed;inset:0;z-index:999}
+.login-card{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:48px 40px;width:100%;max-width:400px;text-align:center}
+.login-logo{font-family:var(--head);font-size:22px;font-weight:800;color:#fff;margin-bottom:6px}
+.login-logo span{color:var(--accent)}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:32px}
+.login-card label{display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;text-align:left}
+.login-card input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:12px 16px;color:var(--text);font-family:var(--body);font-size:14px;outline:none;transition:border-color .2s;margin-bottom:16px}
+.login-card input:focus{border-color:var(--accent)}
+.login-btn{width:100%;background:var(--accent);color:#060a12;padding:13px;border-radius:4px;font-family:var(--body);font-weight:700;font-size:14px;border:none;cursor:pointer;transition:opacity .2s}
+.login-btn:hover{opacity:.85}
+.login-err{font-size:12px;color:var(--red);margin-top:12px;display:none}
+.login-hint{font-size:11px;color:var(--muted);margin-top:16px}
+
+/* ── LAYOUT ── */
+#app{display:none;height:100vh;overflow:hidden;flex-direction:row}
+#app.show{display:flex}
+
+/* ── SIDEBAR ── */
+aside{width:240px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.sb-header{padding:20px 20px 16px;border-bottom:1px solid var(--border)}
+.sb-logo{font-family:var(--head);font-size:17px;font-weight:800;color:#fff}
+.sb-logo span{color:var(--accent)}
+.sb-role{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:.5px}
+.sb-section{padding:16px 12px 8px;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted)}
+.sb-link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:4px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s;margin:1px 4px;border:none;background:none;font-family:var(--body);width:calc(100% - 8px)}
+.sb-link:hover{background:var(--surface2);color:var(--text)}
+.sb-link.active{background:rgba(0,217,181,.08);color:var(--accent);border:1px solid rgba(0,217,181,.15)}
+.sb-link .icon{font-size:15px;width:20px;text-align:center}
+.sb-bottom{margin-top:auto;padding:16px 12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.sb-bottom a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:4px;font-size:13px;color:var(--muted);text-decoration:none;transition:all .2s}
+.sb-bottom a:hover{color:var(--text);background:var(--surface2)}
+
+/* ── MAIN ── */
+main{flex:1;overflow-y:auto;background:var(--bg)}
+.main-top{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:10}
+.page-title{font-family:var(--head);font-size:18px;font-weight:700;color:#fff}
+.page-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.top-actions{display:flex;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:4px;font-family:var(--body);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;text-decoration:none}
+.btn-primary{background:var(--accent);color:#06090f}
+.btn-primary:hover{opacity:.85}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:rgba(255,77,106,.1);border:1px solid rgba(255,77,106,.25);color:var(--red)}
+.btn-danger:hover{background:rgba(255,77,106,.2)}
+.btn-sm{padding:6px 14px;font-size:12px}
+
+/* ── PANELS ── */
+.panel{display:none;padding:28px 32px;max-width:900px}
+.panel.active{display:block}
+
+/* ── DASHBOARD ── */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.dash-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px}
+.dash-card-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.dash-card-val{font-family:var(--head);font-size:28px;font-weight:800;color:var(--accent)}
+.dash-card-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.dash-status{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px;margin-bottom:20px}
+.dash-status-title{font-weight:600;color:#fff;margin-bottom:14px;font-size:14px}
+.status-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted)}
+.status-row:last-child{border-bottom:none}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-green{background:var(--accent)}
+.dot-yellow{background:var(--yellow)}
+.dot-red{background:var(--red)}
+.status-row span:last-child{margin-left:auto;font-size:11px}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:24px;margin-bottom:20px}
+.card-title{font-family:var(--head);font-size:15px;font-weight:700;color:#fff;margin-bottom:4px}
+.card-desc{font-size:12px;color:var(--muted);margin-bottom:20px}
+
+/* ── FORM ── */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:10px 14px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group textarea{resize:vertical;min-height:80px;line-height:1.6}
+.form-hint{font-size:11px;color:var(--muted);margin-top:5px}
+
+/* ── SERVICES EDITOR ── */
+.service-section{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:20px;margin-bottom:16px}
+.service-section-title{font-weight:700;color:var(--text);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.service-item-editor{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px;margin-top:10px}
+
+/* ── STATS EDITOR ── */
+.stats-editor{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stat-editor-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:16px}
+.stat-editor-card label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px}
+.stat-editor-card input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:8px 12px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;transition:border-color .2s;margin-bottom:10px}
+.stat-editor-card input:focus{border-color:var(--accent)}
+
+/* ── VALUES EDITOR ── */
+.values-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.val-editor{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:16px}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:28px;right:28px;background:var(--accent);color:#06090f;padding:12px 20px;border-radius:4px;font-weight:600;font-size:13px;display:none;z-index:999;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PREVIEW FRAME ── */
+#preview-wrap{display:none;position:fixed;inset:0;z-index:500;background:var(--bg);flex-direction:column}
+#preview-wrap.show{display:flex}
+.preview-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:16px}
+.preview-bar strong{font-size:14px;color:#fff}
+.preview-bar span{font-size:12px;color:var(--muted)}
+#preview-frame{flex:1;border:none;background:#fff}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">Hedge<span>Capital</span>Pro</div>
+    <div class="login-sub">Admin Dashboard — Secure Access</div>
+    <div>
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="admin" value="admin">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="login-btn" onclick="doLogin()">Sign In →</button>
+      <div class="login-err" id="login-err">Incorrect username or password.</div>
+      <div class="login-hint">Default: admin / admin123</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sb-header">
+      <div class="sb-logo">Hedge<span>Capital</span>Pro</div>
+      <div class="sb-role">Administrator</div>
+    </div>
+
+    <div class="sb-section">Overview</div>
+    <button class="sb-link active" onclick="showPanel('dashboard',this)"><span class="icon">⬛</span>Dashboard</button>
+
+    <div class="sb-section">Content</div>
+    <button class="sb-link" onclick="showPanel('hero',this)"><span class="icon">🏠</span>Hero Section</button>
+    <button class="sb-link" onclick="showPanel('services',this)"><span class="icon">⚙️</span>Services</button>
+    <button class="sb-link" onclick="showPanel('stats',this)"><span class="icon">📊</span>Stats & Numbers</button>
+    <button class="sb-link" onclick="showPanel('about',this)"><span class="icon">🏢</span>About / Why Us</button>
+    <button class="sb-link" onclick="showPanel('values',this)"><span class="icon">💎</span>Our Values</button>
+    <button class="sb-link" onclick="showPanel('contact',this)"><span class="icon">📞</span>Contact Info</button>
+    <button class="sb-link" onclick="showPanel('footer',this)"><span class="icon">📄</span>Footer</button>
+
+    <div class="sb-section">Settings</div>
+    <button class="sb-link" onclick="showPanel('settings',this)"><span class="icon">🔧</span>Site Settings</button>
+    <button class="sb-link" onclick="showPanel('security',this)"><span class="icon">🔐</span>Security</button>
+
+    <div class="sb-bottom">
+      <a href="index.html" target="_blank">🔗 View Live Site</a>
+      <a href="#" onclick="doLogout()">⬅ Log Out</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <div class="main-top">
+      <div>
+        <div class="page-title" id="main-title">Dashboard</div>
+        <div class="page-sub" id="main-sub">Overview of your website</div>
+      </div>
+      <div class="top-actions">
+        <button class="btn btn-ghost btn-sm" onclick="openPreview()">👁 Preview Site</button>
+        <button class="btn btn-primary btn-sm" onclick="saveAll()">💾 Save All Changes</button>
+      </div>
+    </div>
+
+    <!-- ─── DASHBOARD ─── -->
+    <div class="panel active" id="panel-dashboard">
+      <div style="margin-bottom:24px;padding-top:8px">
+        <div class="dash-grid">
+          <div class="dash-card"><div class="dash-card-label">Total Sections</div><div class="dash-card-val">8</div><div class="dash-card-sub">Editable content blocks</div></div>
+          <div class="dash-card"><div class="dash-card-label">Services</div><div class="dash-card-val">3</div><div class="dash-card-sub">Active service tabs</div></div>
+          <div class="dash-card"><div class="dash-card-label">Values</div><div class="dash-card-val">6</div><div class="dash-card-sub">Company values displayed</div></div>
+          <div class="dash-card"><div class="dash-card-label">Last Saved</div><div class="dash-card-val" id="dash-saved" style="font-size:14px;padding-top:6px">Never</div><div class="dash-card-sub">Content version</div></div>
+        </div>
+        <div class="dash-status">
+          <div class="dash-status-title">Site Health</div>
+          <div class="status-row"><div class="dot dot-green"></div>Hero Section<span>✓ Configured</span></div>
+          <div class="status-row"><div class="dot dot-green"></div>Services<span>✓ 3 tabs active</span></div>
+          <div class="status-row"><div class="dot dot-green"></div>Stats Bar<span>✓ 4 metrics</span></div>
+          <div class="status-row"><div class="dot dot-yellow"></div>Contact Info<span>⚠ Placeholder data</span></div>
+          <div class="status-row"><div class="dot dot-green"></div>Footer<span>✓ Configured</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Quick Actions</div>
+          <div class="card-desc">Jump directly to the most commonly edited sections</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" onclick="showPanelByName('hero')">Edit Hero</button>
+            <button class="btn btn-ghost btn-sm" onclick="showPanelByName('services')">Edit Services</button>
+            <button class="btn btn-ghost btn-sm" onclick="showPanelByName('contact')">Update Contact</button>
+            <button class="btn btn-ghost btn-sm" onclick="showPanelByName('stats')">Edit Stats</button>
+            <button class="btn btn-primary btn-sm" onclick="openPreview()">Preview Site →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── HERO ─── -->
+    <div class="panel" id="panel-hero">
+      <div class="card">
+        <div class="card-title">Hero Section</div>
+        <div class="card-desc">The main banner at the top of your homepage</div>
+        <div class="form-group"><label>Eyebrow Text (above headline)</label><input id="h-eyebrow" placeholder="Financial Consulting & Asset Management"></div>
+        <div class="form-group"><label>Hero Title Line</label><input id="h-title" placeholder="Unlock your financial potential with"></div>
+        <div class="form-group">
+          <label>Rotating Words (comma-separated)</label>
+          <input id="h-words" placeholder="expert guidance, strategic insights, personalized advice">
+          <div class="form-hint">These words will rotate in the animated headline. Add up to 6.</div>
+        </div>
+        <div class="form-group"><label>Hero Subtitle</label><textarea id="h-sub" rows="3" placeholder="Premier financial consulting..."></textarea></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" onclick="saveAll()">💾 Save Changes</button>
+        <button class="btn btn-ghost" onclick="openPreview()">Preview</button>
+      </div>
+    </div>
+
+    <!-- ─── SERVICES ─── -->
+    <div class="panel" id="panel-services">
+      <div id="services-editor"></div>
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button class="btn btn-primary" onclick="saveAll()">💾 Save Changes</button>
+        <button class="btn btn-ghost" onclick="openPreview()">Preview</button>
+      </div>
+    </div>
+
+    <!-- ─── STATS ─── -->
+    <div class="panel" id="panel-stats">
+      <div class="card">
+        <div class="card-title">Stats & Numbers</div>
+        <div class="card-desc">The four key metrics displayed in the stats bar</div>
+        <div class="stats-editor" id="stats-editor"></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" onclick="saveAll()">💾 Save Changes</button>
+        <button class="btn btn-ghost" onclick="openPreview()">Preview</button>
+      </div>
+    </div>
+
+    <!-- ─── ABOUT ─── -->
+    <div class="panel" id="panel-about">
+      <div class="card">
+        <div class="card-title">About / Why Us Section</div>
+        <div class="card-desc">The section explaining your firm's credentials and story</div>
+        <div class="form-group"><label>Section Headline</label><input id="a-headline" placeholder="Trusted experts with years of experience..."></div>
+        <div class="form-group"><label>About Text</label><textarea id="a-text" rows="5" placeholder="At HedgeCapitalPro, we are dedicated..."></textarea></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" onclick="saveAll()">💾 Save Changes</button>
+        <button class="btn btn-ghost" onclick="openPreview()">Preview</button>
+      </div>
+    </div>
+
+    <!-- ─── VALUES ─── -->
+    <div class="panel" id="panel-values">
+      <div class="card">
+        <div class="card-title">Our Values</div>
+        <div class="card-desc">Six company values displayed in the grid section</div>
+        <div class="values-editor-grid" id="values-editor"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button class="btn btn-primary" onclick="saveAll()">💾 Save Changes</button>
+        <button class="btn btn-ghost" onclick="openPreview()">Preview</button>
+      </div>
+    </div>
+
+    <!-- ─── CONTACT ─── -->
+    <div class="panel" id="panel-contact">
+      <div class="card">
+        <div class="card-title">Contact Information</div>
+        <div class="card-desc">Displayed in the contact section and footer</div>
+        <div class="form-row">
+          <div class="form-group"><label>Phone Number</label><input id="c-phone" placeholder="1-800-HEDGEPRO"></div>
+          <div class="form-group"><label>Email Address</label><input id="c-email" placeholder="contact@hedgecapitalpro.com"></div>
+        </div>
+        <div class="form-group"><label>Office Address</label><input id="c-address" placeholder="New York, NY 10004"></div>
+        <div class="form-group"><label>Contact Section Subtitle</label><textarea id="c-sub" rows="3" placeholder="Drop your details..."></textarea></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" onclick="saveAll()">💾 Save Changes</button>
+      </div>
+    </div>
+
+    <!-- ─── FOOTER ─── -->
+    <div class="panel" id="panel-footer">
+      <div class="card">
+        <div class="card-title">Footer</div>
+        <div class="card-desc">Footer branding and copyright text</div>
+        <div class="form-group"><label>Footer Tagline</label><textarea id="f-tagline" rows="3" placeholder="Building wealth, securing futures..."></textarea></div>
+        <div class="form-group"><label>Copyright Text</label><input id="f-copy" placeholder="© 2025 HedgeCapitalPro. All rights reserved."></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" onclick="saveAll()">💾 Save Changes</button>
+      </div>
+    </div>
+
+    <!-- ─── SETTINGS ─── -->
+    <div class="panel" id="panel-settings">
+      <div class="card">
+        <div class="card-title">Site Settings</div>
+        <div class="card-desc">General configuration for your site</div>
+        <div class="form-group"><label>Company Name</label><input id="s-company" placeholder="HedgeCapitalPro"></div>
+        <div class="form-group"><label>Site Tagline</label><input id="s-tagline" placeholder="Building wealth, securing futures."></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Data Management</div>
+        <div class="card-desc">Export or reset your site content</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-ghost" onclick="exportData()">📤 Export Content JSON</button>
+          <button class="btn btn-ghost" onclick="importData()">📥 Import Content JSON</button>
+          <button class="btn btn-danger" onclick="resetData()">🗑 Reset to Defaults</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" onclick="saveAll()">💾 Save Changes</button>
+      </div>
+    </div>
+
+    <!-- ─── SECURITY ─── -->
+    <div class="panel" id="panel-security">
+      <div class="card">
+        <div class="card-title">Change Admin Password</div>
+        <div class="card-desc">Update the password used to access this dashboard</div>
+        <div class="form-group"><label>Current Password</label><input type="password" id="sec-current" placeholder="••••••••"></div>
+        <div class="form-row">
+          <div class="form-group"><label>New Password</label><input type="password" id="sec-new" placeholder="••••••••"></div>
+          <div class="form-group"><label>Confirm New Password</label><input type="password" id="sec-confirm" placeholder="••••••••"></div>
+        </div>
+        <div id="sec-err" style="font-size:12px;color:var(--red);margin-bottom:12px;display:none"></div>
+        <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══════════════ PREVIEW ═══════════════ -->
+<div id="preview-wrap">
+  <div class="preview-bar">
+    <strong>👁 Live Preview</strong>
+    <span>Changes are shown after saving</span>
+    <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="closePreview()">✕ Close Preview</button>
+    <a href="index.html" target="_blank" class="btn btn-ghost btn-sm">Open in Tab ↗</a>
+  </div>
+  <iframe id="preview-frame" src="index.html"></iframe>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────
+//  DEFAULT CONTENT (mirrors index.html)
+// ─────────────────────────────────────────
+const DEFAULT = {
+  companyName:"HedgeCapitalPro",
+  tagline:"Building wealth, securing futures.",
+  heroEyebrow:"Financial Consulting & Asset Management",
+  heroTitleLine:"Unlock your financial potential with",
+  heroWords:["expert guidance","strategic insights","personalized advice","proven strategies","comprehensive planning"],
+  heroSub:"Premier financial consulting and asset management services tailored to your goals, risk profile, and long-term vision.",
+  phone:"1-800-HEDGEPRO",
+  email:"contact@hedgecapitalpro.com",
+  address:"New York, NY 10004",
+  contactSub:"Drop your details into the form and one of our senior consultants will reach out within one business day.",
+  aboutHeadline:"Trusted experts with years of experience and industry accreditations",
+  aboutText:"At HedgeCapitalPro, we are dedicated to guiding you on your financial journey with expertise, integrity, and a personalized approach. Our team of experienced financial consultants is committed to helping you unlock your full financial potential.",
+  stats:[
+    {num:"18+",lbl:"Years of Experience"},
+    {num:"1,400+",lbl:"Clients Served"},
+    {num:"$2B+",lbl:"Assets Under Management"},
+    {num:"200+",lbl:"Specialists"}
+  ],
+  services:[
+    {tab:"01 Financial",title:"Financial Planning",items:[
+      {name:"Investment Planning",desc:"Tailored investment strategies to help clients grow their wealth and achieve their financial goals."},
+      {name:"Retirement Planning",desc:"Comprehensive retirement plans designed to secure a comfortable and worry-free future."},
+      {name:"Education Planning",desc:"Guidance on saving and investing for educational expenses, such as college tuition."}
+    ]},
+    {tab:"02 Wealth",title:"Wealth Management",items:[
+      {name:"Portfolio Management",desc:"Active management of investment portfolios to optimize returns while managing risk effectively."},
+      {name:"Asset Allocation",desc:"Strategic allocation of assets to achieve diversification and maximize long-term growth potential."},
+      {name:"Risk Management",desc:"Assessment and mitigation of financial risks through insurance solutions and tailored strategies."}
+    ]},
+    {tab:"03 Tax",title:"Tax & Estate Planning",items:[
+      {name:"Tax Planning",desc:"Expert guidance on minimizing tax liabilities, maximizing deductions, and optimizing tax strategies."},
+      {name:"Estate Planning",desc:"Comprehensive estate plans that ensure a smooth transfer of wealth and minimize estate taxes."},
+      {name:"Wealth Preservation",desc:"Strategies to protect assets and wealth for future generations while minimizing tax implications."}
+    ]}
+  ],
+  values:[
+    {icon:"⚖️",title:"Integrity",desc:"Uphold high ethical standards and act with honesty, transparency, and professionalism in all interactions."},
+    {icon:"🔒",title:"Trust & Confidentiality",desc:"We understand the importance of trust and confidentiality in every client relationship we build."},
+    {icon:"🎯",title:"Objectivity",desc:"Unbiased advice based on thorough analysis, research, and comprehensive understanding of your situation."},
+    {icon:"💡",title:"Expertise",desc:"Stay up-to-date with industry trends, regulations, and best practices to offer informed advice."},
+    {icon:"🤝",title:"Long-Term Relationships",desc:"Build lasting relationships based on trust, open communication, and mutual respect."},
+    {icon:"📊",title:"Accountability",desc:"Monitor progress, review strategies, and adjust to help clients stay on track toward their goals."}
+  ],
+  footerTagline:"Building wealth, securing futures. Trusted financial consulting firm providing expert guidance and personalized solutions.",
+  footerCopy:"© 2025 HedgeCapitalPro. All rights reserved."
+};
+
+// ─────────────────────────────────────────
+//  AUTH
+// ─────────────────────────────────────────
+function getPass(){return localStorage.getItem('hcp_admin_pass')||'admin123'}
+function doLogin(){
+  const u=document.getElementById('login-user').value.trim();
+  const p=document.getElementById('login-pass').value;
+  if(u==='admin'&&p===getPass()){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').classList.add('show');
+    localStorage.setItem('hcp_admin_auth','1');
+    initAdmin();
+  } else {
+    const err=document.getElementById('login-err');
+    err.style.display='block';
+    setTimeout(()=>err.style.display='none',3000);
+  }
+}
+function doLogout(){
+  localStorage.removeItem('hcp_admin_auth');
+  location.reload();
+}
+// Auto-login if session active
+if(localStorage.getItem('hcp_admin_auth')==='1'){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('show');
+}
+
+// ─────────────────────────────────────────
+//  CONTENT STORE
+// ─────────────────────────────────────────
+function loadC(){
+  try{const s=localStorage.getItem('hcp_content');return s?{...DEFAULT,...JSON.parse(s)}:DEFAULT;}
+  catch(e){return DEFAULT;}
+}
+function saveC(c){
+  localStorage.setItem('hcp_content',JSON.stringify(c));
+  localStorage.setItem('hcp_last_saved',new Date().toLocaleString());
+}
+
+// ─────────────────────────────────────────
+//  PANEL NAVIGATION
+// ─────────────────────────────────────────
+const panelMeta={
+  dashboard:{title:'Dashboard',sub:'Overview of your website'},
+  hero:{title:'Hero Section',sub:'Edit the main banner content'},
+  services:{title:'Services',sub:'Manage your service tabs and descriptions'},
+  stats:{title:'Stats & Numbers',sub:'Update your key metrics'},
+  about:{title:'About / Why Us',sub:'Edit the about section content'},
+  values:{title:'Our Values',sub:'Manage your company values grid'},
+  contact:{title:'Contact Information',sub:'Update phone, email and address'},
+  footer:{title:'Footer',sub:'Edit footer content and copyright'},
+  settings:{title:'Site Settings',sub:'General site configuration'},
+  security:{title:'Security',sub:'Manage admin credentials'}
+};
+
+function showPanel(name, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.querySelectorAll('.sb-link').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const m=panelMeta[name]||{title:name,sub:''};
+  document.getElementById('main-title').textContent=m.title;
+  document.getElementById('main-sub').textContent=m.sub;
+}
+function showPanelByName(name){
+  const btn=document.querySelector(`.sb-link[onclick*="'${name}'"]`);
+  showPanel(name,btn);
+}
+
+// ─────────────────────────────────────────
+//  INIT ADMIN (populate forms)
+// ─────────────────────────────────────────
+function initAdmin(){
+  const C=loadC();
+  // Hero
+  setVal('h-eyebrow',C.heroEyebrow);
+  setVal('h-title',C.heroTitleLine);
+  setVal('h-words',(C.heroWords||[]).join(', '));
+  setVal('h-sub',C.heroSub);
+  // About
+  setVal('a-headline',C.aboutHeadline);
+  setVal('a-text',C.aboutText);
+  // Contact
+  setVal('c-phone',C.phone);
+  setVal('c-email',C.email);
+  setVal('c-address',C.address);
+  setVal('c-sub',C.contactSub);
+  // Footer
+  setVal('f-tagline',C.footerTagline);
+  setVal('f-copy',C.footerCopy);
+  // Settings
+  setVal('s-company',C.companyName);
+  setVal('s-tagline',C.tagline);
+  // Dashboard last saved
+  const ls=localStorage.getItem('hcp_last_saved');
+  if(ls)document.getElementById('dash-saved').textContent=ls;
+  // Dynamic sections
+  renderServicesEditor(C);
+  renderStatsEditor(C);
+  renderValuesEditor(C);
+}
+function setVal(id,val){const el=document.getElementById(id);if(el)el.value=val||'';}
+
+// ─────────────────────────────────────────
+//  SERVICES EDITOR
+// ─────────────────────────────────────────
+function renderServicesEditor(C){
+  const se=document.getElementById('services-editor');
+  if(!se||!C.services)return;
+  se.innerHTML=C.services.map((svc,si)=>`
+    <div class="card">
+      <div class="card-title">Tab ${si+1}: ${svc.title}</div>
+      <div class="card-desc">Edit the tab name, title, and service items</div>
+      <div class="form-row">
+        <div class="form-group"><label>Tab Label</label><input id="svc-${si}-tab" value="${svc.tab}"></div>
+        <div class="form-group"><label>Section Title</label><input id="svc-${si}-title" value="${svc.title}"></div>
+      </div>
+      ${svc.items.map((item,ii)=>`
+        <div class="service-item-editor">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Item ${ii+1}</div>
+          <div class="form-row">
+            <div class="form-group" style="margin-bottom:0"><label>Name</label><input id="svc-${si}-${ii}-name" value="${item.name}"></div>
+            <div class="form-group" style="margin-bottom:0"><label>Description</label><input id="svc-${si}-${ii}-desc" value="${item.desc}"></div>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+// ─────────────────────────────────────────
+//  STATS EDITOR
+// ─────────────────────────────────────────
+function renderStatsEditor(C){
+  const se=document.getElementById('stats-editor');
+  if(!se||!C.stats)return;
+  se.innerHTML=C.stats.map((s,i)=>`
+    <div class="stat-editor-card">
+      <label>Stat ${i+1} — Number</label>
+      <input id="stat-${i}-num" value="${s.num}">
+      <label>Label</label>
+      <input id="stat-${i}-lbl" value="${s.lbl}">
+    </div>`).join('');
+}
+
+// ─────────────────────────────────────────
+//  VALUES EDITOR
+// ─────────────────────────────────────────
+function renderValuesEditor(C){
+  const ve=document.getElementById('values-editor');
+  if(!ve||!C.values)return;
+  ve.innerHTML=C.values.map((v,i)=>`
+    <div class="val-editor">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Value ${i+1}</div>
+      <div class="form-group" style="margin-bottom:10px"><label>Icon (emoji)</label><input id="val-${i}-icon" value="${v.icon||'★'}" style="background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:7px 12px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;width:100%"></div>
+      <div class="form-group" style="margin-bottom:10px"><label>Title</label><input id="val-${i}-title" value="${v.title}" style="background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:7px 12px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;width:100%"></div>
+      <div class="form-group" style="margin-bottom:0"><label>Description</label><textarea id="val-${i}-desc" rows="3" style="background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:7px 12px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;width:100%;resize:vertical">${v.desc}</textarea></div>
+    </div>`).join('');
+}
+
+// ─────────────────────────────────────────
+//  COLLECT & SAVE ALL
+// ─────────────────────────────────────────
+function saveAll(){
+  const C=loadC();
+  // Hero
+  C.heroEyebrow=gv('h-eyebrow');
+  C.heroTitleLine=gv('h-title');
+  C.heroWords=gv('h-words').split(',').map(w=>w.trim()).filter(Boolean);
+  C.heroSub=gv('h-sub');
+  // About
+  C.aboutHeadline=gv('a-headline');
+  C.aboutText=gv('a-text');
+  // Contact
+  C.phone=gv('c-phone');
+  C.email=gv('c-email');
+  C.address=gv('c-address');
+  C.contactSub=gv('c-sub');
+  // Footer
+  C.footerTagline=gv('f-tagline');
+  C.footerCopy=gv('f-copy');
+  // Settings
+  C.companyName=gv('s-company')||C.companyName;
+  C.tagline=gv('s-tagline')||C.tagline;
+  // Services
+  C.services.forEach((svc,si)=>{
+    svc.tab=gv(`svc-${si}-tab`)||svc.tab;
+    svc.title=gv(`svc-${si}-title`)||svc.title;
+    svc.items.forEach((item,ii)=>{
+      item.name=gv(`svc-${si}-${ii}-name`)||item.name;
+      item.desc=gv(`svc-${si}-${ii}-desc`)||item.desc;
+    });
+  });
+  // Stats
+  C.stats.forEach((s,i)=>{
+    s.num=gv(`stat-${i}-num`)||s.num;
+    s.lbl=gv(`stat-${i}-lbl`)||s.lbl;
+  });
+  // Values
+  C.values.forEach((v,i)=>{
+    v.icon=gv(`val-${i}-icon`)||v.icon;
+    v.title=gv(`val-${i}-title`)||v.title;
+    const ta=document.getElementById(`val-${i}-desc`);
+    if(ta)v.desc=ta.value||v.desc;
+  });
+
+  saveC(C);
+  const now=new Date().toLocaleString();
+  const el=document.getElementById('dash-saved');
+  if(el)el.textContent=now;
+  toast('✓ All changes saved successfully!');
+  // Refresh preview if open
+  const frame=document.getElementById('preview-frame');
+  if(frame&&document.getElementById('preview-wrap').classList.contains('show')){
+    frame.src=frame.src;
+  }
+}
+function gv(id){const el=document.getElementById(id);return el?el.value:'';}
+
+// ─────────────────────────────────────────
+//  PREVIEW
+// ─────────────────────────────────────────
+function openPreview(){
+  document.getElementById('preview-wrap').classList.add('show');
+  document.getElementById('preview-frame').src='index.html?t='+Date.now();
+}
+function closePreview(){
+  document.getElementById('preview-wrap').classList.remove('show');
+}
+
+// ─────────────────────────────────────────
+//  EXPORT / IMPORT / RESET
+// ─────────────────────────────────────────
+function exportData(){
+  const C=loadC();
+  const blob=new Blob([JSON.stringify(C,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='hedgecapitalpro-content.json';a.click();
+  URL.revokeObjectURL(url);
+  toast('Content exported!');
+}
+function importData(){
+  const input=document.createElement('input');
+  input.type='file';input.accept='.json';
+  input.onchange=e=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const data=JSON.parse(ev.target.result);
+        localStorage.setItem('hcp_content',JSON.stringify(data));
+        toast('Content imported! Refreshing…');
+        setTimeout(()=>location.reload(),1200);
+      }catch{toast('Invalid JSON file.');}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+function resetData(){
+  if(!confirm('Reset all content to defaults? This cannot be undone.'))return;
+  localStorage.removeItem('hcp_content');
+  localStorage.removeItem('hcp_last_saved');
+  toast('Reset to defaults. Refreshing…');
+  setTimeout(()=>location.reload(),1200);
+}
+
+// ─────────────────────────────────────────
+//  CHANGE PASSWORD
+// ─────────────────────────────────────────
+function changePassword(){
+  const cur=document.getElementById('sec-current').value;
+  const nw=document.getElementById('sec-new').value;
+  const conf=document.getElementById('sec-confirm').value;
+  const err=document.getElementById('sec-err');
+  if(cur!==getPass()){err.style.display='block';err.textContent='Current password is incorrect.';return;}
+  if(nw.length<6){err.style.display='block';err.textContent='New password must be at least 6 characters.';return;}
+  if(nw!==conf){err.style.display='block';err.textContent='New passwords do not match.';return;}
+  localStorage.setItem('hcp_admin_pass',nw);
+  err.style.display='none';
+  ['sec-current','sec-new','sec-confirm'].forEach(id=>document.getElementById(id).value='');
+  toast('Password updated successfully!');
+}
+
+// ─────────────────────────────────────────
+//  TOAST
+// ─────────────────────────────────────────
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  clearTimeout(t._to);
+  t._to=setTimeout(()=>t.style.display='none',2800);
+}
+
+// ─────────────────────────────────────────
+//  KEYBOARD SHORTCUT: Ctrl+S
+// ─────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveAll();}
+});
+
+// ─────────────────────────────────────────
+//  BOOT
+// ─────────────────────────────────────────
+if(localStorage.getItem('hcp_admin_auth')==='1') initAdmin();
+</script>
+</body>
+</html>
