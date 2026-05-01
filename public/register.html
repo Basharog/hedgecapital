@@ -7,44 +7,103 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060a12;--surface:#0b1120;--surface2:#101828;--border:rgba(100,160,220,0.12);--border2:rgba(100,160,220,0.2);--accent:#00d9b5;--red:#ff4d6a;--text:#dce6f0;--muted:#5a7095;--head:'Syne',sans-serif;--body:'Outfit',sans-serif}
+:root{
+  --bg:#060a12;--surface:#0b1120;--surface2:#101828;
+  --border:rgba(100,160,220,0.12);--border2:rgba(100,160,220,0.2);
+  --accent:#00d9b5;--red:#ff4d6a;--yellow:#ffb830;
+  --text:#dce6f0;--muted:#5a7095;
+  --head:'Syne',sans-serif;--body:'Outfit',sans-serif;
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 20px 40px;position:relative;overflow-x:hidden}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:88px 20px 48px;position:relative;overflow-x:hidden}
+
 .bg-grid{position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at 50% 50%,black 20%,transparent 75%);pointer-events:none}
-.glow{position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,217,181,.06) 0%,transparent 70%);top:-150px;right:-100px;pointer-events:none}
-.card{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:40px;width:100%;max-width:560px;position:relative;z-index:1}
-.logo{font-family:var(--head);font-size:22px;font-weight:800;color:#fff;text-align:center;margin-bottom:6px}
-.logo span{color:var(--accent)}
-.card-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:32px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.form-group{margin-bottom:16px}
-.form-group label{display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.form-group input,.form-group select{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:12px 16px;color:var(--text);font-family:var(--body);font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
-.form-group input:focus,.form-group select:focus{border-color:var(--accent)}
-.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7095' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
-.form-group select option{background:#101828;color:var(--text)}
-.phone-wrap{display:flex;gap:8px}
-.phone-code{width:90px;flex-shrink:0}
-.terms{display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;font-size:13px;color:var(--muted)}
-.terms input{width:auto;margin-top:2px;accent-color:var(--accent);flex-shrink:0}
-.terms a{color:var(--accent);text-decoration:none}
-.btn-full{width:100%;background:var(--accent);color:#060a12;padding:13px;border-radius:4px;font-family:var(--body);font-weight:700;font-size:14px;border:none;cursor:pointer;transition:opacity .2s}
-.btn-full:hover{opacity:.85}
-.login-link{text-align:center;font-size:13px;color:var(--muted);margin-top:20px}
-.login-link a{color:var(--accent);text-decoration:none;font-weight:600}
-.err-msg{background:rgba(255,77,106,.08);border:1px solid rgba(255,77,106,.25);border-radius:4px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:16px;display:none}
-.success-msg{background:rgba(0,217,181,.08);border:1px solid rgba(0,217,181,.25);border-radius:4px;padding:10px 14px;font-size:13px;color:var(--accent);margin-bottom:16px;display:none}
-.nav-top{position:fixed;top:0;left:0;right:0;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;z-index:10;background:rgba(6,10,18,0.8);backdrop-filter:blur(12px)}
+.glow{position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,217,181,.07) 0%,transparent 70%);top:-150px;right:-100px;pointer-events:none}
+.glow2{position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(20,102,255,.04) 0%,transparent 70%);bottom:-100px;left:-50px;pointer-events:none}
+
+.nav-top{position:fixed;top:0;left:0;right:0;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;z-index:10;background:rgba(6,10,18,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 .nav-logo{font-family:var(--head);font-size:17px;font-weight:800;color:#fff;text-decoration:none}
 .nav-logo span{color:var(--accent)}
 .nav-back{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
 .nav-back:hover{color:var(--text)}
-@media(max-width:600px){.form-row{grid-template-columns:1fr}.card{padding:28px 20px}}
+
+.card{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:44px 40px;width:100%;max-width:580px;position:relative;z-index:1;animation:cardIn .4s ease}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.logo{font-family:var(--head);font-size:22px;font-weight:800;color:#fff;text-align:center;margin-bottom:6px}
+.logo span{color:var(--accent)}
+.card-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:32px}
+
+/* ── ALERTS ── */
+.alert{border-radius:4px;padding:11px 14px;font-size:13px;margin-bottom:18px;display:none;line-height:1.55;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.alert-err{background:rgba(255,77,106,.08);border:1px solid rgba(255,77,106,.25);color:var(--red)}
+.alert-ok{background:rgba(0,217,181,.08);border:1px solid rgba(0,217,181,.25);color:var(--accent)}
+.alert.show{display:block}
+
+/* ── FORM ── */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{margin-bottom:16px;position:relative}
+.form-group label{display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.form-group input,
+.form-group select{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:12px 16px;color:var(--text);font-family:var(--body);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.form-group input:focus,
+.form-group select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,217,181,.08)}
+.form-group input.err,
+.form-group select.err{border-color:var(--red)}
+.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7095' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.form-group select option{background:#101828;color:var(--text)}
+.optional-tag{font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);margin-left:4px}
+
+/* ── PHONE FIELD ── */
+.phone-group{display:flex;gap:8px}
+#phone-prefix{width:80px;flex-shrink:0;font-family:monospace;letter-spacing:.5px}
+#phone-number{flex:1}
+
+/* ── PASSWORD STRENGTH ── */
+.pass-wrap{position:relative}
+.pass-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;line-height:1;transition:color .2s}
+.pass-toggle:hover{color:var(--text)}
+.strength-bar{height:3px;border-radius:2px;background:var(--border);margin-top:8px;overflow:hidden}
+.strength-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;width:0}
+.strength-label{font-size:11px;color:var(--muted);margin-top:5px;min-height:16px;transition:color .3s}
+
+/* ── TERMS ── */
+.terms{display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;font-size:13px;color:var(--muted);line-height:1.6}
+.terms input{width:auto;margin-top:3px;accent-color:var(--accent);flex-shrink:0;cursor:pointer}
+.terms a{color:var(--accent);text-decoration:none}
+.terms a:hover{opacity:.8}
+
+/* ── BUTTONS ── */
+.btn-full{width:100%;background:var(--accent);color:#060a12;padding:13px;border-radius:4px;font-family:var(--body);font-weight:700;font-size:14px;border:none;cursor:pointer;transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-full:hover{opacity:.87}
+.btn-full:active{transform:scale(.99)}
+.btn-full:disabled{opacity:.5;cursor:not-allowed}
+.spinner{width:16px;height:16px;border:2px solid rgba(6,10,18,.3);border-top-color:#060a12;border-radius:50%;animation:spin .6s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading .spinner{display:block}
+.loading .btn-text{display:none}
+
+.login-link{text-align:center;font-size:13px;color:var(--muted);margin-top:20px}
+.login-link a{color:var(--accent);text-decoration:none;font-weight:600}
+
+/* ── SUCCESS STATE ── */
+.success-screen{display:none;text-align:center;padding:20px 0}
+.success-screen.show{display:block}
+.success-icon{font-size:52px;margin-bottom:16px}
+.success-title{font-family:var(--head);font-size:22px;font-weight:800;color:#fff;margin-bottom:10px}
+.success-desc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:24px;max-width:340px;margin-left:auto;margin-right:auto}
+.btn-outline{display:inline-flex;align-items:center;padding:11px 24px;border-radius:4px;border:1px solid var(--border2);color:var(--text);font-family:var(--body);font-size:13px;font-weight:600;text-decoration:none;transition:all .2s}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+
+@media(max-width:600px){.form-row{grid-template-columns:1fr}.card{padding:32px 20px}}
 </style>
 </head>
 <body>
 <div class="bg-grid"></div>
 <div class="glow"></div>
+<div class="glow2"></div>
 
 <nav class="nav-top">
   <a href="index.html" class="nav-logo">Hedge<span>Capital</span>Pro</a>
@@ -55,120 +114,287 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
   <div class="logo">Hedge<span>Capital</span>Pro</div>
   <div class="card-sub">Create your investment account — it's free</div>
 
-  <div class="err-msg" id="err-msg"></div>
-  <div class="success-msg" id="success-msg">Account created! Redirecting to your dashboard…</div>
+  <!-- Alerts -->
+  <div class="alert alert-err" id="alert-err"></div>
+  <div class="alert alert-ok"  id="alert-ok"></div>
 
-  <div class="form-row">
-    <div class="form-group"><label>First Name *</label><input type="text" id="r-first" placeholder="John"></div>
-    <div class="form-group"><label>Last Name *</label><input type="text" id="r-last" placeholder="Smith"></div>
-  </div>
-  <div class="form-group"><label>Email Address *</label><input type="email" id="r-email" placeholder="john@example.com"></div>
-  <div class="form-group"><label>Username *</label><input type="text" id="r-user" placeholder="johnsmith" autocomplete="off"></div>
-  <div class="form-group">
-    <label>Country *</label>
-    <select id="r-country">
-      <option value="">Select Country…</option>
-      <option>Afghanistan</option><option>Albania</option><option>Algeria</option><option>Andorra</option>
-      <option>Angola</option><option>Argentina</option><option>Armenia</option><option>Australia</option>
-      <option>Austria</option><option>Azerbaijan</option><option>Bahamas</option><option>Bahrain</option>
-      <option>Bangladesh</option><option>Belarus</option><option>Belgium</option><option>Brazil</option>
-      <option>Canada</option><option>Chile</option><option>China</option><option>Colombia</option>
-      <option>Croatia</option><option>Czech Republic</option><option>Denmark</option><option>Egypt</option>
-      <option>Ethiopia</option><option>Finland</option><option>France</option><option>Germany</option>
-      <option>Ghana</option><option>Greece</option><option>Hungary</option><option>India</option>
-      <option>Indonesia</option><option>Ireland</option><option>Israel</option><option>Italy</option>
-      <option>Jamaica</option><option>Japan</option><option>Jordan</option><option>Kazakhstan</option>
-      <option>Kenya</option><option>Kuwait</option><option>Lebanon</option><option>Malaysia</option>
-      <option>Mexico</option><option>Morocco</option><option>Netherlands</option><option>New Zealand</option>
-      <option>Nigeria</option><option>Norway</option><option>Pakistan</option><option>Peru</option>
-      <option>Philippines</option><option>Poland</option><option>Portugal</option><option>Qatar</option>
-      <option>Romania</option><option>Russia</option><option>Saudi Arabia</option><option>Senegal</option>
-      <option>Singapore</option><option>South Africa</option><option>Spain</option><option>Sweden</option>
-      <option>Switzerland</option><option>Tanzania</option><option>Thailand</option><option>Turkey</option>
-      <option>Uganda</option><option>Ukraine</option><option>United Arab Emirates</option>
-      <option>United Kingdom</option><option>United States</option><option>Venezuela</option>
-      <option>Vietnam</option><option>Zimbabwe</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>Phone Number *</label>
-    <div class="phone-wrap">
-      <input class="phone-code" type="text" id="r-code" placeholder="+1">
-      <input type="tel" id="r-phone" placeholder="555-000-0000">
+  <!-- Form -->
+  <div id="reg-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" id="r-first" placeholder="John" autocomplete="given-name">
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" id="r-last" placeholder="Smith" autocomplete="family-name">
+      </div>
     </div>
-  </div>
-  <div class="form-group"><label>Referral Code <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label><input type="text" id="r-ref" placeholder="e.g. FRIEND123"></div>
-  <div class="form-row">
-    <div class="form-group"><label>Password *</label><input type="password" id="r-pass" placeholder="Min. 8 characters"></div>
-    <div class="form-group"><label>Confirm Password *</label><input type="password" id="r-confirm" placeholder="Repeat password"></div>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="r-email" placeholder="john@example.com" autocomplete="email">
+    </div>
+
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="r-user" placeholder="johnsmith" autocomplete="off" maxlength="20">
+    </div>
+
+    <div class="form-group">
+      <label>Country</label>
+      <select id="r-country" onchange="syncPhoneCode()">
+        <option value="">Select Country…</option>
+        <option value="AF" data-code="+93">Afghanistan</option>
+        <option value="AL" data-code="+355">Albania</option>
+        <option value="DZ" data-code="+213">Algeria</option>
+        <option value="AR" data-code="+54">Argentina</option>
+        <option value="AM" data-code="+374">Armenia</option>
+        <option value="AU" data-code="+61">Australia</option>
+        <option value="AT" data-code="+43">Austria</option>
+        <option value="AZ" data-code="+994">Azerbaijan</option>
+        <option value="BH" data-code="+973">Bahrain</option>
+        <option value="BD" data-code="+880">Bangladesh</option>
+        <option value="BY" data-code="+375">Belarus</option>
+        <option value="BE" data-code="+32">Belgium</option>
+        <option value="BR" data-code="+55">Brazil</option>
+        <option value="CA" data-code="+1">Canada</option>
+        <option value="CL" data-code="+56">Chile</option>
+        <option value="CN" data-code="+86">China</option>
+        <option value="CO" data-code="+57">Colombia</option>
+        <option value="HR" data-code="+385">Croatia</option>
+        <option value="CZ" data-code="+420">Czech Republic</option>
+        <option value="DK" data-code="+45">Denmark</option>
+        <option value="EG" data-code="+20">Egypt</option>
+        <option value="ET" data-code="+251">Ethiopia</option>
+        <option value="FI" data-code="+358">Finland</option>
+        <option value="FR" data-code="+33">France</option>
+        <option value="DE" data-code="+49">Germany</option>
+        <option value="GH" data-code="+233">Ghana</option>
+        <option value="GR" data-code="+30">Greece</option>
+        <option value="HU" data-code="+36">Hungary</option>
+        <option value="IN" data-code="+91">India</option>
+        <option value="ID" data-code="+62">Indonesia</option>
+        <option value="IE" data-code="+353">Ireland</option>
+        <option value="IL" data-code="+972">Israel</option>
+        <option value="IT" data-code="+39">Italy</option>
+        <option value="JM" data-code="+1876">Jamaica</option>
+        <option value="JP" data-code="+81">Japan</option>
+        <option value="JO" data-code="+962">Jordan</option>
+        <option value="KZ" data-code="+7">Kazakhstan</option>
+        <option value="KE" data-code="+254">Kenya</option>
+        <option value="KW" data-code="+965">Kuwait</option>
+        <option value="LB" data-code="+961">Lebanon</option>
+        <option value="MY" data-code="+60">Malaysia</option>
+        <option value="MX" data-code="+52">Mexico</option>
+        <option value="MA" data-code="+212">Morocco</option>
+        <option value="NL" data-code="+31">Netherlands</option>
+        <option value="NZ" data-code="+64">New Zealand</option>
+        <option value="NG" data-code="+234">Nigeria</option>
+        <option value="NO" data-code="+47">Norway</option>
+        <option value="PK" data-code="+92">Pakistan</option>
+        <option value="PE" data-code="+51">Peru</option>
+        <option value="PH" data-code="+63">Philippines</option>
+        <option value="PL" data-code="+48">Poland</option>
+        <option value="PT" data-code="+351">Portugal</option>
+        <option value="QA" data-code="+974">Qatar</option>
+        <option value="RO" data-code="+40">Romania</option>
+        <option value="RU" data-code="+7">Russia</option>
+        <option value="SA" data-code="+966">Saudi Arabia</option>
+        <option value="SN" data-code="+221">Senegal</option>
+        <option value="SG" data-code="+65">Singapore</option>
+        <option value="ZA" data-code="+27">South Africa</option>
+        <option value="ES" data-code="+34">Spain</option>
+        <option value="SE" data-code="+46">Sweden</option>
+        <option value="CH" data-code="+41">Switzerland</option>
+        <option value="TZ" data-code="+255">Tanzania</option>
+        <option value="TH" data-code="+66">Thailand</option>
+        <option value="TR" data-code="+90">Turkey</option>
+        <option value="UG" data-code="+256">Uganda</option>
+        <option value="UA" data-code="+380">Ukraine</option>
+        <option value="AE" data-code="+971">United Arab Emirates</option>
+        <option value="GB" data-code="+44">United Kingdom</option>
+        <option value="US" data-code="+1">United States</option>
+        <option value="VE" data-code="+58">Venezuela</option>
+        <option value="VN" data-code="+84">Vietnam</option>
+        <option value="ZW" data-code="+263">Zimbabwe</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Phone Number</label>
+      <div class="phone-group">
+        <input type="text" id="phone-prefix" placeholder="+1" maxlength="6" autocomplete="tel-country-code">
+        <input type="tel"  id="phone-number" placeholder="555 000 0000" autocomplete="tel-national">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Referral Code <span class="optional-tag">(optional)</span></label>
+      <input type="text" id="r-ref" placeholder="e.g. FRIEND123" style="text-transform:uppercase" maxlength="12">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pass-wrap">
+          <input type="password" id="r-pass" placeholder="Min. 8 characters" oninput="checkStrength(this.value)">
+          <button class="pass-toggle" onclick="togglePass('r-pass','eye1')" type="button" id="eye1">👁</button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="str-fill"></div></div>
+        <div class="strength-label" id="str-label"></div>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="pass-wrap">
+          <input type="password" id="r-confirm" placeholder="Repeat password">
+          <button class="pass-toggle" onclick="togglePass('r-confirm','eye2')" type="button" id="eye2">👁</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="terms">
+      <input type="checkbox" id="r-terms">
+      <label for="r-terms">I agree to the <a href="#">Privacy Policy</a> and <a href="#">Terms & Conditions</a> of HedgeCapitalPro</label>
+    </div>
+
+    <button class="btn-full" id="reg-btn" onclick="doRegister()">
+      <div class="spinner"></div>
+      <span class="btn-text">Create Account →</span>
+    </button>
+    <div class="login-link">Already have an account? <a href="login.html">Sign in</a></div>
   </div>
 
-  <div class="terms">
-    <input type="checkbox" id="r-terms">
-    <label for="r-terms">I agree to the <a href="#">Privacy Policy</a> and <a href="#">Terms & Conditions</a> of HedgeCapitalPro</label>
+  <!-- Success Screen (shown after registration) -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">✉️</div>
+    <div class="success-title">Check your inbox</div>
+    <div class="success-desc">
+      We've sent a confirmation link to <strong id="success-email" style="color:var(--accent)"></strong>.
+      Click the link to activate your account, then sign in.
+    </div>
+    <a href="login.html" class="btn-outline">Go to Sign In →</a>
   </div>
-
-  <button class="btn-full" onclick="doRegister()">Create Account →</button>
-  <div class="login-link">Already have an account? <a href="login.html">Sign in</a></div>
 </div>
 
-<script>
-function doRegister(){
-  const err = document.getElementById('err-msg');
-  const suc = document.getElementById('success-msg');
-  err.style.display='none'; suc.style.display='none';
+<script type="module">
+import { register, redirectIfLoggedIn, getPasswordStrength, getUrlParam } from './auth.js';
 
-  const first = document.getElementById('r-first').value.trim();
-  const last  = document.getElementById('r-last').value.trim();
-  const email = document.getElementById('r-email').value.trim();
-  const user  = document.getElementById('r-user').value.trim();
+// Redirect if already logged in
+await redirectIfLoggedIn('dashboard.html');
+
+// Pre-fill referral code from URL
+const refParam = getUrlParam('ref');
+if (refParam) document.getElementById('r-ref').value = refParam.toUpperCase();
+
+// ── REGISTER ───────────────────────────────────────────────
+window.doRegister = async function() {
+  clearAlerts();
+
+  const first   = document.getElementById('r-first').value.trim();
+  const last    = document.getElementById('r-last').value.trim();
+  const email   = document.getElementById('r-email').value.trim();
+  const user    = document.getElementById('r-user').value.trim();
   const country = document.getElementById('r-country').value;
-  const code  = document.getElementById('r-code').value.trim();
-  const phone = document.getElementById('r-phone').value.trim();
-  const ref   = document.getElementById('r-ref').value.trim();
-  const pass  = document.getElementById('r-pass').value;
-  const conf  = document.getElementById('r-confirm').value;
-  const terms = document.getElementById('r-terms').checked;
+  const code    = document.getElementById('phone-prefix').value.trim();
+  const phone   = document.getElementById('phone-number').value.trim();
+  const ref     = document.getElementById('r-ref').value.trim();
+  const pass    = document.getElementById('r-pass').value;
+  const conf    = document.getElementById('r-confirm').value;
+  const terms   = document.getElementById('r-terms').checked;
 
-  if(!first||!last||!email||!user||!country||!phone||!pass){
-    err.style.display='block'; err.textContent='Please fill in all required fields.'; return;
-  }
-  if(!/^[^@]+@[^@]+\.[^@]+$/.test(email)){
-    err.style.display='block'; err.textContent='Please enter a valid email address.'; return;
-  }
-  if(pass.length<8){
-    err.style.display='block'; err.textContent='Password must be at least 8 characters.'; return;
-  }
-  if(pass!==conf){
-    err.style.display='block'; err.textContent='Passwords do not match.'; return;
-  }
-  if(!terms){
-    err.style.display='block'; err.textContent='Please agree to the Terms & Conditions.'; return;
-  }
+  // Client-side checks
+  if (!terms) { showAlert('err', 'Please agree to the Terms & Conditions.'); return; }
+  if (pass !== conf) { showAlert('err', 'Passwords do not match.'); return; }
 
-  const users = JSON.parse(localStorage.getItem('hcp_users')||'[]');
-  if(users.find(u=>u.email===email)){
-    err.style.display='block'; err.textContent='An account with this email already exists.'; return;
+  setLoading(true);
+  const result = await register({
+    email, password: pass, firstName: first, lastName: last,
+    username: user, phone: (code + ' ' + phone).trim(),
+    country, referredBy: ref || ''
+  });
+  setLoading(false);
+
+  if (result.error) { showAlert('err', result.error); return; }
+
+  // Show success / email confirmation screen
+  document.getElementById('reg-form').style.display = 'none';
+  document.getElementById('success-email').textContent = email;
+  document.getElementById('success-screen').classList.add('show');
+};
+
+// ── PHONE PREFIX SYNC ────────────────────────────────────────
+// Global standard — reused across all forms with country + phone
+
+window.prefixManuallyEdited = false;
+
+const prefixInput = document.getElementById('phone-prefix');
+const countrySelect = document.getElementById('r-country');
+
+// Manual override protection — if user types in prefix, stop auto-sync
+prefixInput.addEventListener('input', () => {
+  window.prefixManuallyEdited = prefixInput.value.trim() !== '';
+});
+
+// Bind country change → sync prefix
+countrySelect.addEventListener('change', syncPhoneCode);
+
+window.syncPhoneCode = function() {
+  const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+  const dialCode = selectedOption?.getAttribute('data-code') || '';
+  if (!window.prefixManuallyEdited && dialCode) {
+    prefixInput.value = dialCode;
   }
-  if(users.find(u=>u.username===user)){
-    err.style.display='block'; err.textContent='Username is already taken.'; return;
-  }
+};
 
-  const newUser = {
-    id:'u'+Date.now(), firstName:first, lastName:last, email, username:user,
-    country, phone:(code+' '+phone).trim(), referralCode:ref||'',
-    password:pass,
-    balance:0, invested:0, profit:0, totalWithdrawn:0,
-    joinDate:new Date().toISOString().split('T')[0],
-    plans:[], transactions:[]
-  };
+// ── PASSWORD STRENGTH ────────────────────────────────────────
+window.checkStrength = function(val) {
+  const { getPasswordStrength: _unused, ..._ } = {};
+  import('./auth.js').then(({ getPasswordStrength }) => {
+    if (!val) {
+      document.getElementById('str-fill').style.width = '0';
+      document.getElementById('str-label').textContent = '';
+      return;
+    }
+    const s = getPasswordStrength(val);
+    const pct = (s.score / 5) * 100;
+    const fill = document.getElementById('str-fill');
+    const lbl  = document.getElementById('str-label');
+    fill.style.width      = pct + '%';
+    fill.style.background = s.color;
+    lbl.textContent       = s.label;
+    lbl.style.color       = s.color;
+  });
+};
 
-  users.push(newUser);
-  localStorage.setItem('hcp_users', JSON.stringify(users));
-  localStorage.setItem('hcp_session', JSON.stringify(newUser));
+// ── TOGGLE PASSWORD VISIBILITY ───────────────────────────────
+window.togglePass = function(inputId, eyeId) {
+  const inp = document.getElementById(inputId);
+  const eye = document.getElementById(eyeId);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  eye.textContent = inp.type === 'password' ? '👁' : '🙈';
+};
 
-  suc.style.display='block';
-  setTimeout(()=>window.location.href='dashboard.html', 1500);
+// ── LOADING ──────────────────────────────────────────────────
+function setLoading(on) {
+  const btn = document.getElementById('reg-btn');
+  btn.classList.toggle('loading', on);
+  btn.disabled = on;
+}
+
+function clearAlerts() {
+  ['alert-err','alert-ok'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('show');
+    el.textContent = '';
+  });
+}
+
+function showAlert(type, msg) {
+  clearAlerts();
+  const el = document.getElementById(`alert-${type}`);
+  el.textContent = msg;
+  el.classList.add('show');
 }
 </script>
 </body>
