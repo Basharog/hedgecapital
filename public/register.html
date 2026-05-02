@@ -143,7 +143,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
 
     <div class="form-group">
       <label>Country</label>
-      <select id="r-country" onchange="syncPhoneCode()">
+      <select id="r-country">
         <option value="">Select Country…</option>
         <option value="AF" data-code="+93">Afghanistan</option>
         <option value="AL" data-code="+355">Albania</option>
@@ -238,8 +238,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
       <div class="form-group">
         <label>Password</label>
         <div class="pass-wrap">
-          <input type="password" id="r-pass" placeholder="Min. 8 characters" oninput="checkStrength(this.value)">
-          <button class="pass-toggle" onclick="togglePass('r-pass','eye1')" type="button" id="eye1">👁</button>
+          <input type="password" id="r-pass" placeholder="Min. 8 characters">
+          <button class="pass-toggle" type="button" id="eye1">👁</button>
         </div>
         <div class="strength-bar"><div class="strength-fill" id="str-fill"></div></div>
         <div class="strength-label" id="str-label"></div>
@@ -248,7 +248,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
         <label>Confirm Password</label>
         <div class="pass-wrap">
           <input type="password" id="r-confirm" placeholder="Repeat password">
-          <button class="pass-toggle" onclick="togglePass('r-confirm','eye2')" type="button" id="eye2">👁</button>
+          <button class="pass-toggle" type="button" id="eye2">👁</button>
         </div>
       </div>
     </div>
@@ -258,7 +258,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
       <label for="r-terms">I agree to the <a href="#">Privacy Policy</a> and <a href="#">Terms & Conditions</a> of HedgeCapitalPro</label>
     </div>
 
-    <button class="btn-full" id="reg-btn" onclick="doRegister()">
+    <button class="btn-full" id="reg-btn">
       <div class="spinner"></div>
       <span class="btn-text">Create Account →</span>
     </button>
@@ -287,8 +287,14 @@ await redirectIfLoggedIn('dashboard.html');
 const refParam = getUrlParam('ref');
 if (refParam) document.getElementById('r-ref').value = refParam.toUpperCase();
 
+// ── BIND EVENTS ─────────────────────────────────────────────
+document.getElementById('reg-btn').addEventListener('click', doRegister);
+document.getElementById('eye1').addEventListener('click', () => togglePass('r-pass', 'eye1'));
+document.getElementById('eye2').addEventListener('click', () => togglePass('r-confirm', 'eye2'));
+document.getElementById('r-pass').addEventListener('input', e => checkStrength(e.target.value));
+
 // ── REGISTER ───────────────────────────────────────────────
-window.doRegister = async function() {
+async function doRegister() {
   clearAlerts();
 
   const first   = document.getElementById('r-first').value.trim();
@@ -348,7 +354,7 @@ window.syncPhoneCode = function() {
 };
 
 // ── PASSWORD STRENGTH ────────────────────────────────────────
-window.checkStrength = function(val) {
+async function checkStrength(val) {
   const { getPasswordStrength: _unused, ..._ } = {};
   import('./auth.js').then(({ getPasswordStrength }) => {
     if (!val) {
@@ -368,7 +374,7 @@ window.checkStrength = function(val) {
 };
 
 // ── TOGGLE PASSWORD VISIBILITY ───────────────────────────────
-window.togglePass = function(inputId, eyeId) {
+function togglePass(inputId, eyeId) {
   const inp = document.getElementById(inputId);
   const eye = document.getElementById(eyeId);
   inp.type = inp.type === 'password' ? 'text' : 'password';

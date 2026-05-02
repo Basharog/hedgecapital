@@ -4,9 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HedgeCapitalPro — Financial Consulting & Asset Management</title>
+<meta name="description" content="Premier financial consulting and asset management services. Trusted by 1,400+ clients worldwide with $2B+ AUM.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════
+   VARIABLES & RESET
+═══════════════════════════════════════ */
 :root {
   --bg: #060a12;
   --surface: #0b1120;
@@ -17,78 +21,180 @@
   --accent2: #1466ff;
   --text: #dce6f0;
   --muted: #5a7095;
+  --red: #ff4d6a;
+  --yellow: #ffb830;
   --head: 'Syne', sans-serif;
   --body: 'Outfit', sans-serif;
+  --radius: 4px;
+  --transition: 0.25s ease;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden}
 
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(6,10,18,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:var(--head);font-weight:800;font-size:19px;color:#fff;text-decoration:none;letter-spacing:-.3px}
+/* ═══════════════════════════════════════
+   PRELOADER
+═══════════════════════════════════════ */
+#preloader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s,visibility .5s}
+#preloader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.pre-logo{font-family:var(--head);font-size:24px;font-weight:800;color:#fff;margin-bottom:32px;letter-spacing:-.3px}
+.pre-logo span{color:var(--accent)}
+.pre-bar{width:180px;height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.pre-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;animation:preLoad 1.8s ease forwards}
+@keyframes preLoad{0%{width:0}60%{width:70%}100%{width:100%}}
+.pre-pct{font-size:12px;color:var(--muted);margin-top:12px;letter-spacing:2px}
+
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(6,10,18,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:background var(--transition)}
+nav.scrolled{background:rgba(6,10,18,0.98)}
+.nav-logo{font-family:var(--head);font-weight:800;font-size:19px;color:#fff;text-decoration:none;letter-spacing:-.3px;flex-shrink:0}
 .nav-logo span{color:var(--accent)}
-.nav-links{display:flex;gap:32px;list-style:none}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.3px;transition:color .2s}
-.nav-links a:hover{color:var(--text)}
-.nav-right{display:flex;gap:12px;align-items:center}
+.nav-links{display:flex;gap:4px;list-style:none;align-items:center}
+.nav-links > li{position:relative}
+.nav-links > li > a,.nav-dd-trigger{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.3px;transition:color .2s;padding:8px 14px;border-radius:3px;display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-family:var(--body)}
+.nav-links > li > a:hover,.nav-dd-trigger:hover{color:var(--text);background:var(--surface)}
+.nav-dd-trigger .dd-arrow{font-size:10px;transition:transform .2s}
+.nav-links > li.open .dd-arrow{transform:rotate(180deg)}
+.dropdown{position:absolute;top:calc(100% + 8px);left:0;background:var(--surface);border:1px solid var(--border2);border-radius:6px;min-width:220px;padding:8px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .2s;z-index:300;box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.nav-links > li.open .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.dropdown a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:4px;color:var(--muted);text-decoration:none;font-size:13px;transition:all .2s}
+.dropdown a:hover{background:var(--surface2);color:var(--text)}
+.dropdown a .d-icon{width:28px;height:28px;border-radius:4px;background:rgba(0,217,181,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.nav-right{display:flex;gap:10px;align-items:center}
+
+/* Language switcher */
+.lang-switch{position:relative}
+.lang-btn{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:3px;background:var(--surface);border:1px solid var(--border2);color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--body)}
+.lang-btn:hover{border-color:var(--accent);color:var(--accent)}
+.lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:6px;min-width:140px;padding:6px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .2s;z-index:300}
+.lang-switch.open .lang-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.lang-opt{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:3px;color:var(--muted);font-size:12px;cursor:pointer;transition:all .2s}
+.lang-opt:hover,.lang-opt.active{background:var(--surface2);color:var(--text)}
+
 .btn{display:inline-flex;align-items:center;padding:10px 22px;border-radius:3px;font-family:var(--body);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s;border:none;white-space:nowrap}
 .btn-primary{background:var(--accent);color:#06090f}
-.btn-primary:hover{opacity:.85}
+.btn-primary:hover{opacity:.85;transform:translateY(-1px)}
 .btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
-.hamburger span{display:block;width:22px;height:1.5px;background:var(--text);transition:all .3s}
-.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:20px 24px;z-index:199}
-.mobile-menu.open{display:flex;flex-direction:column;gap:0}
-.mobile-menu a{display:block;padding:14px 0;color:var(--muted);text-decoration:none;font-size:15px;border-bottom:1px solid var(--border)}
-.mobile-menu a:last-child{border-bottom:none}
 
-/* ── HERO ── */
+/* Hamburger */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none;z-index:201}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--text);transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* Mobile menu */
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:var(--surface);z-index:199;overflow-y:auto;padding:20px 24px 40px;flex-direction:column;gap:0}
+.mobile-menu.open{display:flex}
+.mob-section{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);padding:16px 0 8px}
+.mobile-menu a{display:block;padding:13px 0;color:var(--text);text-decoration:none;font-size:15px;border-bottom:1px solid var(--border)}
+.mobile-menu a:last-of-type{border-bottom:none}
+.mob-cta{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.mob-cta a{flex:1;text-align:center;justify-content:center;min-width:120px}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
 #hero{min-height:100vh;display:flex;align-items:center;padding:120px 48px 80px;position:relative;overflow:hidden}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%)}
-.hero-glow1{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,217,181,.07) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none}
-.hero-glow2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(20,102,255,.05) 0%,transparent 70%);bottom:-100px;left:50px;pointer-events:none}
+.hero-glow1{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,217,181,.07) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none;animation:glowPulse 6s ease-in-out infinite}
+.hero-glow2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(20,102,255,.05) 0%,transparent 70%);bottom:-100px;left:50px;pointer-events:none;animation:glowPulse 8s ease-in-out infinite reverse}
+@keyframes glowPulse{0%,100%{opacity:.6}50%{opacity:1}}
 .hero-content{position:relative;max-width:860px}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:28px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:28px;opacity:0;animation:fadeUp .6s ease forwards .2s}
 .hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent)}
-.hero-title{font-family:var(--head);font-size:clamp(38px,6.5vw,82px);font-weight:800;line-height:1.03;letter-spacing:-2.5px;color:#fff;margin-bottom:4px}
-.hero-rotate-wrap{height:1.08em;overflow:hidden;display:block}
-.hero-rotate{display:flex;flex-direction:column;animation:rotateText 15s infinite}
-.hero-rotate span{display:block;height:1.08em;color:var(--accent)}
-@keyframes rotateText{
-  0%,17%{transform:translateY(0)}
-  20%,37%{transform:translateY(-20%)}
-  40%,57%{transform:translateY(-40%)}
-  60%,77%{transform:translateY(-60%)}
-  80%,97%{transform:translateY(-80%)}
-  100%{transform:translateY(0)}
-}
-.hero-sub{margin-top:24px;font-size:18px;color:var(--muted);max-width:500px;font-weight:400;line-height:1.75;margin-bottom:40px}
-.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.hero-title{font-family:var(--head);font-size:clamp(38px,6.5vw,82px);font-weight:800;line-height:1.03;letter-spacing:-2.5px;color:#fff;opacity:0;animation:fadeUp .6s ease forwards .4s}
+.hero-static{display:block}
+.hero-rotate-wrap{display:inline-block;overflow:hidden;vertical-align:bottom;height:1.08em}
+.hero-rotate-inner{display:flex;flex-direction:column;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.hero-rotate-inner span{display:block;height:1.08em;color:var(--accent);white-space:nowrap}
+.hero-sub{margin-top:24px;font-size:18px;color:var(--muted);max-width:500px;font-weight:400;line-height:1.75;margin-bottom:40px;opacity:0;animation:fadeUp .6s ease forwards .6s}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:fadeUp .6s ease forwards .8s}
 .hero-scroll{position:absolute;bottom:36px;left:48px;display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
 .scroll-line{width:36px;height:1px;background:var(--muted);animation:scrollPulse 2s ease-in-out infinite}
 @keyframes scrollPulse{0%,100%{opacity:.4;width:36px}50%{opacity:1;width:54px}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── TICKER ── */
+/* ═══════════════════════════════════════
+   TICKER
+═══════════════════════════════════════ */
 .ticker-bar{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:14px 0}
-.ticker-track{display:flex;gap:0;animation:ticker 30s linear infinite;white-space:nowrap}
+.ticker-track{display:flex;gap:0;animation:ticker 35s linear infinite;white-space:nowrap}
+.ticker-track:hover{animation-play-state:paused}
 .ticker-item{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--muted);padding:0 32px;letter-spacing:.5px}
 .ticker-item .t-name{color:var(--text)}
 .ticker-item .t-up{color:#00d9b5}
 .ticker-item .t-down{color:#ff4d6a}
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* ── SERVICES ── */
+/* ═══════════════════════════════════════
+   SCROLL ANIMATIONS
+═══════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal-stagger > *{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal-stagger.visible > *:nth-child(1){opacity:1;transform:none;transition-delay:.05s}
+.reveal-stagger.visible > *:nth-child(2){opacity:1;transform:none;transition-delay:.15s}
+.reveal-stagger.visible > *:nth-child(3){opacity:1;transform:none;transition-delay:.25s}
+.reveal-stagger.visible > *:nth-child(4){opacity:1;transform:none;transition-delay:.35s}
+.reveal-stagger.visible > *:nth-child(5){opacity:1;transform:none;transition-delay:.45s}
+.reveal-stagger.visible > *:nth-child(6){opacity:1;transform:none;transition-delay:.55s}
+
+/* ═══════════════════════════════════════
+   SERVICES — SLIDER / CAROUSEL
+═══════════════════════════════════════ */
 #services{padding:100px 48px;max-width:1240px;margin:0 auto}
 .section-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
 .section-title{font-family:var(--head);font-size:clamp(26px,4vw,46px);font-weight:700;color:#fff;letter-spacing:-1px;line-height:1.1;margin-bottom:52px}
-.service-tabs{display:flex;gap:0;border-bottom:1px solid var(--border2);margin-bottom:44px}
-.stab{padding:14px 28px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;font-family:var(--body);letter-spacing:.3px}
-.stab:hover{color:var(--text)}
-.stab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.service-panel{display:none;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-.service-panel.active{display:grid}
+
+/* ── Slider wrapper ── */
+.service-slider-outer{position:relative;overflow:hidden;border-radius:6px}
+
+/* Viewport — clips the sliding track */
+.service-slider-viewport{overflow:hidden;width:100%;border-radius:6px}
+
+/* Track — all slides side-by-side */
+.service-slider-track{
+  display:flex;
+  will-change:transform;
+  transition:transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+  touch-action:pan-y;
+  cursor:grab;
+}
+.service-slider-track.is-dragging{
+  transition:none;
+  cursor:grabbing;
+}
+
+/* Individual slide */
+.service-slide{
+  flex:0 0 100%;
+  width:100%;
+  min-width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:56px;
+  align-items:start;
+  padding:48px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:6px;
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
+  pointer-events:none;
+  user-select:none;
+}
+.service-slide.is-active{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+
+/* Slide content */
 .panel-title{font-family:var(--head);font-size:30px;font-weight:700;color:#fff;margin-bottom:28px;letter-spacing:-.5px}
 .svc-items{display:flex;flex-direction:column;gap:22px}
 .svc-item-name{font-weight:600;font-size:15px;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:10px}
@@ -97,10 +203,132 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 .svc-visual{border-radius:4px;background:var(--surface2);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:1px solid var(--border)}
 .svc-visual-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .svc-chart{display:flex;align-items:flex-end;gap:8px;padding:32px}
-.svc-bar{width:28px;border-radius:3px 3px 0 0;background:linear-gradient(to top,var(--accent2),var(--accent));opacity:.7;transition:opacity .3s}
-.svc-visual:hover .svc-bar{opacity:1}
+.svc-bar{width:28px;border-radius:3px 3px 0 0;background:linear-gradient(to top,var(--accent2),var(--accent));opacity:.7;transition:all .4s}
+.is-active .svc-bar{opacity:1;animation:barGrow .8s ease forwards}
+.svc-visual:hover .svc-bar{opacity:1;transform:scaleY(1.05)}
+@keyframes barGrow{from{transform:scaleY(0);transform-origin:bottom}to{transform:scaleY(1);transform-origin:bottom}}
 
-/* ── STATS ── */
+/* ── Slider controls row (indicator + arrows) ── */
+.slider-controls{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:24px;
+  gap:16px;
+}
+
+/* Progress bar indicator */
+.slider-progress-wrap{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.slider-labels{
+  display:flex;
+  gap:0;
+}
+.slider-label-item{
+  flex:1;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--muted);
+  transition:color 0.3s ease;
+  padding:0 2px;
+}
+.slider-label-item.is-active{
+  color:var(--accent);
+}
+.slider-track-bar{
+  width:100%;
+  height:2px;
+  background:var(--border2);
+  border-radius:2px;
+  position:relative;
+  overflow:hidden;
+}
+.slider-fill{
+  position:absolute;
+  left:0;top:0;height:100%;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  border-radius:2px;
+  transition:width 0.55s cubic-bezier(0.25,0.46,0.45,0.94),left 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+
+/* Arrow buttons */
+.slider-arrows{
+  display:flex;
+  gap:8px;
+  flex-shrink:0;
+}
+.slider-arrow{
+  width:38px;height:38px;
+  border-radius:3px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  color:var(--text);
+  font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  font-family:var(--body);
+  line-height:1;
+  user-select:none;
+}
+.slider-arrow:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:rgba(0,217,181,0.08);
+}
+.slider-arrow:disabled{
+  opacity:0.3;
+  cursor:default;
+  pointer-events:none;
+}
+
+/* Dot indicators */
+.slider-dots{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-shrink:0;
+}
+.slider-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--border2);
+  cursor:pointer;
+  transition:all 0.3s ease;
+  border:none;
+  padding:0;
+}
+.slider-dot.is-active{
+  background:var(--accent);
+  width:20px;
+  border-radius:3px;
+}
+
+/* Auto-slide progress ring */
+.slide-timer-bar{
+  height:2px;
+  background:rgba(0,217,181,0.15);
+  border-radius:2px;
+  overflow:hidden;
+  margin-top:4px;
+}
+.slide-timer-fill{
+  height:100%;
+  background:rgba(0,217,181,0.4);
+  border-radius:2px;
+  width:0%;
+  transition:width linear;
+}
+
+/* ═══════════════════════════════════════
+   STATS
+═══════════════════════════════════════ */
 #stats{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 48px}
 .stats-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
 .stat-item{padding:20px 32px;border-right:1px solid var(--border);text-align:center}
@@ -108,7 +336,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 .stat-num{font-family:var(--head);font-size:52px;font-weight:800;color:var(--accent);letter-spacing:-2px;line-height:1;margin-bottom:8px}
 .stat-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;font-weight:500}
 
-/* ── ABOUT/WHY ── */
+/* ═══════════════════════════════════════
+   ABOUT / WHY US
+═══════════════════════════════════════ */
 #about{padding:100px 48px;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
 .about-desc{font-size:16px;color:var(--muted);line-height:1.85;margin-bottom:28px}
 .about-visual{position:relative;background:var(--surface2);border-radius:4px;overflow:hidden;border:1px solid var(--border);padding:48px;min-height:360px;display:flex;align-items:center;justify-content:center}
@@ -116,10 +346,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 .about-chart{position:relative;display:flex;flex-direction:column;gap:16px;width:100%}
 .chart-row{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
 .chart-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
-.chart-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent2),var(--accent))}
+.chart-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0;transition:width 1.5s cubic-bezier(.16,1,.3,1)}
+.chart-bar-fill.animated{width:var(--fill)}
 .chart-val{font-weight:600;color:var(--accent);font-size:12px;min-width:40px;text-align:right}
 
-/* ── VALUES ── */
+/* ═══════════════════════════════════════
+   VALUES
+═══════════════════════════════════════ */
 #values{padding:80px 48px;background:var(--surface);border-top:1px solid var(--border)}
 .values-inner{max-width:1240px;margin:0 auto}
 .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:44px}
@@ -129,7 +362,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 .val-title{font-family:var(--head);font-size:17px;font-weight:700;color:#fff;margin-bottom:10px}
 .val-desc{font-size:14px;color:var(--muted);line-height:1.75}
 
-/* ── INSIGHTS STRIP ── */
+/* ═══════════════════════════════════════
+   TEAM SECTION
+═══════════════════════════════════════ */
+#team{padding:100px 48px;max-width:1240px;margin:0 auto}
+.team-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px;flex-wrap:wrap;gap:20px}
+.team-header-text{flex:1}
+.team-actions{display:flex;gap:12px;flex-shrink:0}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.team-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s,transform .2s;cursor:default}
+.team-card:hover{border-color:var(--border2);transform:translateY(-4px)}
+.team-avatar{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--surface2) 0%,rgba(0,217,181,.15) 100%);display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:36px;font-weight:800;color:var(--accent);position:relative;overflow:hidden}
+.team-avatar img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.team-avatar-initials{position:relative;z-index:1}
+.team-info{padding:20px}
+.team-name{font-family:var(--head);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px}
+.team-role{font-size:12px;color:var(--accent);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+.team-bio{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ═══════════════════════════════════════
+   INSIGHTS
+═══════════════════════════════════════ */
 #insights{padding:80px 48px;max-width:1240px;margin:0 auto}
 .insights-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px}
 .insight-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:32px;transition:border-color .25s,transform .25s;cursor:pointer}
@@ -139,7 +392,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 .insight-excerpt{font-size:13px;color:var(--muted);line-height:1.7}
 .insight-date{font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:.5px}
 
-/* ── CONTACT ── */
+/* ═══════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════ */
 #contact{padding:100px 48px;max-width:1240px;margin:0 auto}
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
 .contact-headline{font-family:var(--head);font-size:clamp(32px,5vw,58px);font-weight:800;letter-spacing:-2px;line-height:1;color:#fff;margin-bottom:20px}
@@ -155,8 +410,139 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 .form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7095' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
 .form-group textarea{resize:vertical;min-height:100px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-success{background:rgba(0,217,181,.08);border:1px solid rgba(0,217,181,.25);border-radius:4px;padding:14px 18px;font-size:14px;color:var(--accent);display:none;margin-top:16px}
 
-/* ── FOOTER ── */
+/* ═══════════════════════════════════════
+   PHONE PREFIX INPUT
+═══════════════════════════════════════ */
+.phone-input-wrap{
+  display:flex;
+  align-items:stretch;
+  gap:0;
+  border:1px solid var(--border2);
+  border-radius:3px;
+  overflow:hidden;
+  transition:border-color .2s;
+}
+.phone-input-wrap:focus-within{
+  border-color:var(--accent);
+}
+.phone-prefix{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:10px 10px 10px 12px;
+  background:var(--surface2);
+  border-right:1px solid var(--border2);
+  color:var(--accent);
+  font-size:13px;
+  font-weight:600;
+  font-family:var(--body);
+  white-space:nowrap;
+  flex-shrink:0;
+  position:relative;
+  min-width:90px;
+  transition:background .2s;
+}
+.phone-prefix:focus-within{
+  background:rgba(0,217,181,0.06);
+}
+.phone-prefix .prefix-flag{font-size:15px;flex-shrink:0;pointer-events:none}
+.phone-prefix .prefix-arrow{font-size:9px;color:var(--muted);flex-shrink:0;transition:transform .2s;cursor:pointer;padding:2px;pointer-events:none}
+.phone-prefix.open .prefix-arrow{transform:rotate(180deg)}
+
+/* Editable prefix search input */
+.prefix-search-input{
+  background:transparent;
+  border:none;
+  outline:none;
+  color:var(--accent);
+  font-size:13px;
+  font-weight:600;
+  font-family:var(--body);
+  letter-spacing:.5px;
+  width:40px;
+  min-width:0;
+  cursor:text;
+  caret-color:var(--accent);
+  padding:0;
+}
+.prefix-search-input::placeholder{color:var(--muted)}
+
+/* Prefix dropdown */
+.prefix-dropdown{
+  position:absolute;
+  top:calc(100% + 4px);
+  left:-1px;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:6px;
+  min-width:220px;
+  max-height:260px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:6px;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-6px);
+  transition:all .2s;
+  z-index:500;
+  box-shadow:0 16px 40px rgba(0,0,0,.5);
+  scrollbar-width:thin;
+  scrollbar-color:var(--border2) transparent;
+}
+.prefix-no-results{
+  padding:12px 10px;
+  font-size:13px;
+  color:var(--muted);
+  text-align:center;
+}
+.prefix-dropdown::-webkit-scrollbar{width:4px}
+.prefix-dropdown::-webkit-scrollbar-track{background:transparent}
+.prefix-dropdown::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.phone-prefix.open .prefix-dropdown{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+.prefix-option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 10px;
+  border-radius:4px;
+  cursor:pointer;
+  font-size:13px;
+  color:var(--muted);
+  transition:all .15s;
+  white-space:nowrap;
+}
+.prefix-option:hover,.prefix-option.selected{
+  background:var(--surface2);
+  color:var(--text);
+}
+.prefix-option.selected{color:var(--accent)}
+.prefix-option .po-flag{font-size:14px;flex-shrink:0}
+.prefix-option .po-country{flex:1;overflow:hidden;text-overflow:ellipsis}
+.prefix-option .po-code{font-weight:600;color:var(--accent);font-size:12px;flex-shrink:0}
+
+/* Phone text input — strips its own border since wrapper handles it */
+.phone-number-input{
+  flex:1;
+  background:var(--surface) !important;
+  border:none !important;
+  border-radius:0 !important;
+  padding:12px 16px !important;
+  outline:none;
+  color:var(--text);
+  font-family:var(--body);
+  font-size:14px;
+  min-width:0;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
 footer{background:var(--surface);border-top:1px solid var(--border);padding:64px 48px 28px}
 .footer-inner{max-width:1240px;margin:0 auto}
 .footer-top{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
@@ -175,19 +561,29 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
 .footer-bottom a{color:var(--muted);text-decoration:none;transition:color .2s}
 .footer-bottom a:hover{color:var(--accent)}
 
-/* ── BACK TO TOP ── */
-#back-top{position:fixed;bottom:28px;right:28px;width:40px;height:40px;background:var(--accent);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .3s;z-index:100;font-size:18px;color:#060a12;text-decoration:none}
+/* ═══════════════════════════════════════
+   BACK TO TOP
+═══════════════════════════════════════ */
+#back-top{position:fixed;bottom:28px;right:28px;width:40px;height:40px;background:var(--accent);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .3s,transform .2s;z-index:100;font-size:18px;color:#060a12;text-decoration:none;border:none}
 #back-top.show{opacity:1}
+#back-top:hover{transform:translateY(-2px)}
 
-/* ── RESPONSIVE ── */
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:1024px){
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+}
 @media(max-width:900px){
   nav{padding:0 20px}
-  .nav-links,.nav-right .btn-ghost{display:none}
+  .nav-links,.nav-right .btn-ghost,.lang-switch{display:none}
   .hamburger{display:flex}
   #hero{padding:100px 20px 60px}
-  .hero-title{font-size:36px;letter-spacing:-1.5px}
+  .hero-title{font-size:clamp(32px,8vw,56px);letter-spacing:-1.5px}
   .hero-scroll{left:20px}
-  .service-panel{grid-template-columns:1fr}
+  /* Slide responsive */
+  .service-slide{grid-template-columns:1fr;gap:32px;padding:28px}
   .svc-visual{display:none}
   .stats-inner{grid-template-columns:repeat(2,1fr)}
   .stat-item:nth-child(2){border-right:none}
@@ -198,41 +594,113 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
   .values-grid{grid-template-columns:1fr}
   .insights-grid{grid-template-columns:1fr}
   .contact-grid{grid-template-columns:1fr;gap:40px}
-  #services,#insights,#contact{padding:60px 20px}
+  #services,#team,#insights,#contact{padding:70px 20px}
   #values{padding:60px 20px}
   #stats{padding:40px 20px}
-  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
-  footer{padding:40px 20px 20px}
+  .section-title{margin-bottom:32px}
+  .team-header{flex-direction:column;align-items:flex-start}
   .form-row{grid-template-columns:1fr}
+  footer{padding:48px 20px 24px}
+  .footer-top{grid-template-columns:1fr;gap:28px}
+}
+@media(max-width:480px){
+  .team-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column;width:100%}
+  .hero-actions .btn{width:100%;justify-content:center}
+  .stat-num{font-size:38px}
+  .service-slide{padding:20px}
+  .panel-title{font-size:22px}
 }
 </style>
 </head>
 <body>
 
+<!-- ═══════════════ PRELOADER ═══════════════ -->
+<div id="preloader">
+  <div class="pre-logo">Hedge<span>Capital</span>Pro</div>
+  <div class="pre-bar"><div class="pre-fill"></div></div>
+  <div class="pre-pct" id="pre-pct">Loading…</div>
+</div>
+
 <!-- ═══════════════ NAV ═══════════════ -->
-<nav id="navbar">
-  <a href="#" class="nav-logo" id="nav-logo">Hedge<span>Capital</span>Pro</a>
-  <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
+<nav id="main-nav">
+  <a href="index.html" class="nav-logo" id="nav-logo">Hedge<span>Capital</span>Pro</a>
+  
+  <ul class="nav-links" id="nav-links">
+    <li>
+      <button class="nav-dd-trigger" onclick="toggleDropdown(this)">
+        Services <span class="dd-arrow">▾</span>
+      </button>
+      <div class="dropdown">
+        <a href="#services"><div class="d-icon">📈</div>Financial Planning</a>
+        <a href="#services"><div class="d-icon">💼</div>Wealth Management</a>
+        <a href="#services"><div class="d-icon">🏛️</div>Tax & Estate Planning</a>
+        <a href="#services"><div class="d-icon">🔒</div>Risk Management</a>
+      </div>
+    </li>
     <li><a href="#about">About</a></li>
-    <li><a href="#insights">Insights</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li>
+      <button class="nav-dd-trigger" onclick="toggleDropdown(this)">
+        Insights <span class="dd-arrow">▾</span>
+      </button>
+      <div class="dropdown">
+        <a href="#insights"><div class="d-icon">📰</div>Market Analysis</a>
+        <a href="#insights"><div class="d-icon">💡</div>Investment Tips</a>
+        <a href="#insights"><div class="d-icon">📊</div>Economic Outlook</a>
+      </div>
+    </li>
+    <li>
+      <button class="nav-dd-trigger" onclick="toggleDropdown(this)">
+        Contact <span class="dd-arrow">▾</span>
+      </button>
+      <div class="dropdown">
+        <a href="#contact"><div class="d-icon">📅</div>Book Consultation</a>
+        <a href="#team"><div class="d-icon">👥</div>Our Team</a>
+        <a href="#contact"><div class="d-icon">📞</div>Get in Touch</a>
+      </div>
+    </li>
   </ul>
+
   <div class="nav-right">
-    <a href="login.html" class="btn btn-ghost" style="font-size:12px">Client Portal</a>
-    <a href="#contact" class="btn btn-primary">Get a Consultation</a>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="lang-switch" id="lang-switch">
+      <button class="lang-btn" onclick="toggleLang()">🌐 <span id="lang-current">EN</span> ▾</button>
+      <div class="lang-dropdown" id="lang-dropdown">
+        <div class="lang-opt active" onclick="setLang('en')">🇺🇸 English</div>
+        <div class="lang-opt" onclick="setLang('fr')">🇫🇷 Français</div>
+        <div class="lang-opt" onclick="setLang('es')">🇪🇸 Español</div>
+        <div class="lang-opt" onclick="setLang('de')">🇩🇪 Deutsch</div>
+        <div class="lang-opt" onclick="setLang('zh')">🇨🇳 中文</div>
+        <div class="lang-opt" onclick="setLang('ar')">🇸🇦 العربية</div>
+      </div>
+    </div>
+    <a href="login.html" class="btn btn-ghost">Sign In</a>
+    <a href="login.html" class="btn btn-primary" data-i18n="cta.portal">Client Portal →</a>
   </div>
+
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
+<!-- Mobile menu -->
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#services" onclick="closeMobile()">Services</a>
-  <a href="#about" onclick="closeMobile()">About</a>
+  <div class="mob-section">Services</div>
+  <a href="#services" onclick="closeMobile()">Financial Planning</a>
+  <a href="#services" onclick="closeMobile()">Wealth Management</a>
+  <a href="#services" onclick="closeMobile()">Tax & Estate Planning</a>
+  <div class="mob-section">Company</div>
+  <a href="#about" onclick="closeMobile()">About Us</a>
+  <a href="#team" onclick="closeMobile()">Our Team</a>
   <a href="#insights" onclick="closeMobile()">Insights</a>
   <a href="#contact" onclick="closeMobile()">Contact</a>
-  <a href="login.html">Client Portal</a>
+  <div class="mob-section">Language</div>
+  <a href="#" onclick="setLang('en');closeMobile()">🇺🇸 English</a>
+  <a href="#" onclick="setLang('fr');closeMobile()">🇫🇷 Français</a>
+  <a href="#" onclick="setLang('es');closeMobile()">🇪🇸 Español</a>
+  <div class="mob-cta">
+    <a href="login.html" class="btn btn-ghost" style="flex:1;text-align:center;justify-content:center">Sign In</a>
+    <a href="login.html" class="btn btn-primary" style="flex:1;text-align:center;justify-content:center">Client Portal →</a>
+  </div>
 </div>
 
 <!-- ═══════════════ HERO ═══════════════ -->
@@ -240,12 +708,14 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
   <div class="hero-grid"></div>
   <div class="hero-glow1"></div>
   <div class="hero-glow2"></div>
+  
   <div class="hero-content">
     <div class="hero-eyebrow" id="hero-eyebrow">Financial Consulting & Asset Management</div>
+    
     <h1 class="hero-title">
-      <span class="hero-title-line" id="hero-title-line">Unlock your financial potential with</span>
+      <span class="hero-static" id="hero-title-line">Unlock your financial potential with</span>
       <span class="hero-rotate-wrap">
-        <span class="hero-rotate" id="hero-rotate">
+        <span class="hero-rotate-inner" id="hero-rotate">
           <span>expert guidance</span>
           <span>strategic insights</span>
           <span>personalized advice</span>
@@ -254,55 +724,80 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
         </span>
       </span>
     </h1>
+    
     <p class="hero-sub" id="hero-sub">Premier financial consulting and asset management services tailored to your goals, risk profile, and long-term vision.</p>
+    
     <div class="hero-actions">
-      <a href="#contact" class="btn btn-primary">Schedule a Free Consultation</a>
-      <a href="#services" class="btn btn-ghost">Explore Services</a>
+      <a href="login.html" class="btn btn-primary" style="padding:14px 32px;font-size:15px" data-i18n="cta.portal">Client Portal →</a>
+      <a href="#services" class="btn btn-ghost" style="padding:14px 28px;font-size:15px">Our Services</a>
     </div>
   </div>
-  <div class="hero-scroll">
-    <span class="scroll-line"></span>
-    Scroll to explore
-  </div>
+  
+  <div class="hero-scroll"><div class="scroll-line"></div>Scroll to explore</div>
 </section>
 
 <!-- ═══════════════ TICKER ═══════════════ -->
 <div class="ticker-bar">
-  <div class="ticker-track" id="ticker-track">
-    <!-- Filled by JS -->
-  </div>
+  <div class="ticker-track" id="ticker-track"></div>
 </div>
 
 <!-- ═══════════════ SERVICES ═══════════════ -->
 <section id="services">
-  <div class="section-label">Services</div>
-  <div class="section-title" id="services-title">To meet your needs</div>
-  <div class="service-tabs" id="service-tabs"></div>
-  <div id="service-panels"></div>
+  <div class="reveal">
+    <div class="section-label">Services</div>
+    <div class="section-title" id="services-title">To meet your needs</div>
+  </div>
+
+  <!-- Slider structure — populated by JS -->
+  <div class="service-slider-outer reveal" id="service-slider-outer">
+    <div class="service-slider-viewport" id="service-slider-viewport">
+      <div class="service-slider-track" id="service-slider-track">
+        <!-- slides injected by renderAll() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls: labels + progress + dots + arrows -->
+  <div class="slider-controls" id="slider-controls">
+    <div class="slider-progress-wrap">
+      <div class="slider-labels" id="slider-labels"></div>
+      <div class="slider-track-bar">
+        <div class="slider-fill" id="slider-fill"></div>
+      </div>
+      <div class="slide-timer-bar">
+        <div class="slide-timer-fill" id="slide-timer-fill"></div>
+      </div>
+    </div>
+    <div class="slider-dots" id="slider-dots"></div>
+    <div class="slider-arrows">
+      <button class="slider-arrow" id="slider-prev" aria-label="Previous slide">&#8592;</button>
+      <button class="slider-arrow" id="slider-next" aria-label="Next slide">&#8594;</button>
+    </div>
+  </div>
 </section>
 
 <!-- ═══════════════ STATS ═══════════════ -->
 <section id="stats">
-  <div class="stats-inner" id="stats-inner"></div>
+  <div class="stats-inner reveal-stagger" id="stats-inner"></div>
 </section>
 
 <!-- ═══════════════ ABOUT / WHY US ═══════════════ -->
 <section id="about">
-  <div class="about-text-block">
+  <div class="about-text-block reveal">
     <div class="section-label">Why Us</div>
     <div class="section-title" style="margin-bottom:24px" id="about-headline">Trusted experts with years of experience and industry accreditations</div>
     <p class="about-desc" id="about-text">At HedgeCapitalPro, we are dedicated to guiding you on your financial journey with expertise, integrity, and a personalized approach. Our team of experienced financial consultants is committed to helping you unlock your full financial potential.</p>
     <a href="#contact" class="btn btn-primary">About Us</a>
   </div>
-  <div class="about-visual">
+  <div class="about-visual reveal">
     <div class="about-grid-lines"></div>
     <div class="about-chart" id="about-chart">
       <div style="font-family:var(--head);font-size:13px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Portfolio Performance</div>
-      <div class="chart-row"><span style="width:80px">Equities</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:82%"></div></div><span class="chart-val">+82%</span></div>
-      <div class="chart-row"><span style="width:80px">Fixed Inc.</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:64%"></div></div><span class="chart-val">+64%</span></div>
-      <div class="chart-row"><span style="width:80px">Real Estate</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:73%"></div></div><span class="chart-val">+73%</span></div>
-      <div class="chart-row"><span style="width:80px">Alt. Assets</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:91%"></div></div><span class="chart-val">+91%</span></div>
-      <div class="chart-row"><span style="width:80px">Commodities</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:55%"></div></div><span class="chart-val">+55%</span></div>
+      <div class="chart-row"><span style="width:80px">Equities</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="--fill:82%"></div></div><span class="chart-val">+82%</span></div>
+      <div class="chart-row"><span style="width:80px">Fixed Inc.</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="--fill:64%"></div></div><span class="chart-val">+64%</span></div>
+      <div class="chart-row"><span style="width:80px">Real Estate</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="--fill:73%"></div></div><span class="chart-val">+73%</span></div>
+      <div class="chart-row"><span style="width:80px">Alt. Assets</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="--fill:91%"></div></div><span class="chart-val">+91%</span></div>
+      <div class="chart-row"><span style="width:80px">Commodities</span><div class="chart-bar-wrap"><div class="chart-bar-fill" style="--fill:55%"></div></div><span class="chart-val">+55%</span></div>
     </div>
   </div>
 </section>
@@ -310,17 +805,36 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
 <!-- ═══════════════ VALUES ═══════════════ -->
 <section id="values">
   <div class="values-inner">
-    <div class="section-label">Our Values</div>
-    <div class="section-title" id="values-title">Guided by integrity, trust, and client-centricity</div>
-    <div class="values-grid" id="values-grid"></div>
+    <div class="reveal">
+      <div class="section-label">Our Values</div>
+      <div class="section-title" id="values-title">Guided by integrity, trust, and client-centricity</div>
+    </div>
+    <div class="values-grid reveal-stagger" id="values-grid"></div>
   </div>
+</section>
+
+<!-- ═══════════════ TEAM ═══════════════ -->
+<section id="team">
+  <div class="team-header reveal">
+    <div class="team-header-text">
+      <div class="section-label">People</div>
+      <div class="section-title" style="margin-bottom:0" id="team-title">Meet our experts</div>
+    </div>
+    <div class="team-actions">
+      <a href="#team" class="btn btn-ghost">Our People</a>
+      <a href="#contact" class="btn btn-primary">Join Our Team →</a>
+    </div>
+  </div>
+  <div class="team-grid reveal-stagger" id="team-grid"></div>
 </section>
 
 <!-- ═══════════════ INSIGHTS ═══════════════ -->
 <section id="insights">
-  <div class="section-label">Articles</div>
-  <div class="section-title">Valuable insights that empower your decisions</div>
-  <div class="insights-grid" id="insights-grid">
+  <div class="reveal">
+    <div class="section-label">Articles</div>
+    <div class="section-title">Valuable insights that empower your decisions</div>
+  </div>
+  <div class="insights-grid reveal-stagger" id="insights-grid">
     <div class="insight-card">
       <div class="insight-tag">Analysis</div>
       <div class="insight-title">Strategies to Stay Calm and Make Informed Decisions in Volatile Markets</div>
@@ -345,7 +859,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
 <!-- ═══════════════ CONTACT ═══════════════ -->
 <section id="contact">
   <div class="contact-grid">
-    <div>
+    <div class="reveal">
       <div class="section-label">Get Started</div>
       <div class="contact-headline">Schedule your<br><span>personalized</span><br>consultation.</div>
       <p class="contact-sub" id="contact-sub">Drop your details into the form and one of our senior consultants will reach out within one business day.</p>
@@ -362,20 +876,48 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
         <div><strong id="contact-address">New York, NY 10004</strong><span>Our main office</span></div>
       </div>
     </div>
-    <div>
+    <div class="reveal">
       <div class="form-row">
-        <div class="form-group"><label>First Name</label><input type="text" placeholder="John"></div>
-        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"></div>
+        <div class="form-group"><label>First Name</label><input type="text" id="cf-first" placeholder="John"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" id="cf-last" placeholder="Smith"></div>
       </div>
-      <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@company.com"></div>
-      <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+1 (555) 000-0000"></div>
-      <div class="form-row">
-        <div class="form-group"><label>Company Name</label><input type="text" placeholder="Acme Corp"></div>
-        <div class="form-group"><label>Website</label><input type="text" placeholder="acme.com"></div>
+      <div class="form-group"><label>Email Address</label><input type="email" id="cf-email" placeholder="john@company.com"></div>
+
+      <!-- ── Phone with country-code prefix ── -->
+      <div class="form-group">
+        <label>Phone Number</label>
+        <div class="phone-input-wrap">
+          <!-- Editable prefix box -->
+          <div class="phone-prefix" id="phone-prefix">
+            <span class="prefix-flag" id="prefix-flag">🇺🇸</span>
+            <input
+              type="text"
+              id="prefix-search"
+              class="prefix-search-input"
+              value="+1"
+              placeholder="+1"
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <span class="prefix-arrow" id="prefix-arrow">▾</span>
+            <!-- Dropdown -->
+            <div class="prefix-dropdown" id="prefix-dropdown">
+              <!-- options injected by JS -->
+            </div>
+          </div>
+          <!-- Phone number field -->
+          <input
+            type="tel"
+            id="cf-phone"
+            class="phone-number-input"
+            placeholder="(555) 000-0000"
+          >
+        </div>
       </div>
+
       <div class="form-group">
         <label>Interested In</label>
-        <select>
+        <select id="cf-service">
           <option value="">Select a service…</option>
           <option>Investment Planning</option>
           <option>Retirement Planning</option>
@@ -389,8 +931,9 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
           <option>Other</option>
         </select>
       </div>
-      <div class="form-group"><label>Message</label><textarea placeholder="Tell us about your financial goals…"></textarea></div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px">Submit Request</button>
+      <div class="form-group"><label>Message</label><textarea id="cf-message" placeholder="Tell us about your financial goals…"></textarea></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="submitContact()">Submit Request</button>
+      <div class="form-success" id="cf-success">✓ Thank you! We'll be in touch within one business day.</div>
     </div>
   </div>
 </section>
@@ -403,36 +946,36 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
         <div class="footer-brand" id="footer-brand">Hedge<span>Capital</span>Pro</div>
         <div class="footer-tagline" id="footer-tagline">Building wealth, securing futures. Trusted financial consulting firm providing expert guidance and personalized solutions.</div>
         <div class="footer-social">
-          <a class="social-btn" href="#">in</a>
-          <a class="social-btn" href="#">𝕏</a>
-          <a class="social-btn" href="#">fb</a>
+          <a class="social-btn" href="#" title="LinkedIn">in</a>
+          <a class="social-btn" href="#" title="X/Twitter">𝕏</a>
+          <a class="social-btn" href="#" title="Facebook">fb</a>
         </div>
       </div>
       <div class="footer-col">
         <h4>Services</h4>
         <ul>
-          <li><a href="#">Financial Planning</a></li>
-          <li><a href="#">Wealth Management</a></li>
-          <li><a href="#">Tax & Estate Planning</a></li>
-          <li><a href="#">Asset Management</a></li>
+          <li><a href="#services">Financial Planning</a></li>
+          <li><a href="#services">Wealth Management</a></li>
+          <li><a href="#services">Tax & Estate Planning</a></li>
+          <li><a href="#services">Asset Management</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Our Team</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Awards</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#team">Our Team</a></li>
+          <li><a href="#contact">Careers</a></li>
+          <li><a href="#insights">Awards</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <ul>
-          <li><a href="#">Insights</a></li>
-          <li><a href="#">Case Studies</a></li>
-          <li><a href="#">Subscribe</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#insights">Insights</a></li>
+          <li><a href="#insights">Case Studies</a></li>
+          <li><a href="#contact">Subscribe</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -447,12 +990,96 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
   </div>
 </footer>
 
-<a href="#" id="back-top" title="Back to top">↑</a>
+<button id="back-top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-// ─────────────────────────────────────────
-//  DEFAULT CONTENT
-// ─────────────────────────────────────────
+/* ════════════════════════════════════════
+   SUPABASE CONFIG — replace with your keys
+   ════════════════════════════════════════ */
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+
+/* ════════════════════════════════════════
+   i18n TRANSLATIONS
+   ════════════════════════════════════════ */
+const TRANSLATIONS = {
+  en: {
+    'cta.portal': 'Client Portal →',
+    'hero.eyebrow': 'Financial Consulting & Asset Management',
+    'hero.sub': 'Premier financial consulting and asset management services tailored to your goals, risk profile, and long-term vision.',
+    'nav.services': 'Services', 'nav.about': 'About', 'nav.insights': 'Insights', 'nav.contact': 'Contact',
+    'section.services': 'Services', 'section.about': 'Why Us', 'section.values': 'Our Values',
+    'section.team': 'People', 'section.insights': 'Articles', 'section.contact': 'Get Started',
+  },
+  fr: {
+    'cta.portal': 'Portail Client →',
+    'hero.eyebrow': 'Conseil Financier & Gestion d\'Actifs',
+    'hero.sub': 'Services de conseil financier et de gestion d\'actifs adaptés à vos objectifs et à votre vision à long terme.',
+    'nav.services': 'Services', 'nav.about': 'À Propos', 'nav.insights': 'Insights', 'nav.contact': 'Contact',
+  },
+  es: {
+    'cta.portal': 'Portal del Cliente →',
+    'hero.eyebrow': 'Consultoría Financiera & Gestión de Activos',
+    'hero.sub': 'Servicios de consultoría financiera y gestión de activos adaptados a sus objetivos y visión a largo plazo.',
+  },
+  de: {
+    'cta.portal': 'Kundenportal →',
+    'hero.eyebrow': 'Finanzberatung & Vermögensverwaltung',
+    'hero.sub': 'Erstklassige Finanzberatungs- und Vermögensverwaltungsdienstleistungen, abgestimmt auf Ihre Ziele.',
+  },
+  zh: {
+    'cta.portal': '客户门户 →',
+    'hero.eyebrow': '金融咨询与资产管理',
+    'hero.sub': '量身定制的优质金融咨询和资产管理服务，符合您的目标和长远愿景。',
+  },
+  ar: {
+    'cta.portal': 'بوابة العميل →',
+    'hero.eyebrow': 'الاستشارات المالية وإدارة الأصول',
+    'hero.sub': 'خدمات استشارات مالية وإدارة أصول متميزة مصممة وفقًا لأهدافك ورؤيتك طويلة الأمد.',
+  }
+};
+
+let currentLang = localStorage.getItem('hcp_lang') || detectLang();
+
+function detectLang() {
+  const bl = (navigator.language || navigator.userLanguage || 'en').split('-')[0];
+  return TRANSLATIONS[bl] ? bl : 'en';
+}
+function t(key) {
+  const trs = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+  return trs[key] || TRANSLATIONS.en[key] || key;
+}
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  const lc = document.getElementById('lang-current');
+  if(lc) lc.textContent = currentLang.toUpperCase();
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+}
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('hcp_lang', lang);
+  document.querySelectorAll('.lang-opt').forEach(el => {
+    el.classList.toggle('active',
+      (lang==='en'&&el.textContent.includes('English'))||
+      (lang==='fr'&&el.textContent.includes('Français'))||
+      (lang==='es'&&el.textContent.includes('Español'))||
+      (lang==='de'&&el.textContent.includes('Deutsch'))||
+      (lang==='zh'&&el.textContent.includes('中文'))||
+      (lang==='ar'&&el.textContent.includes('العربية'))
+    );
+  });
+  applyTranslations();
+  document.getElementById('lang-switch').classList.remove('open');
+}
+function toggleLang() {
+  document.getElementById('lang-switch').classList.toggle('open');
+}
+
+/* ════════════════════════════════════════
+   DEFAULT CONTENT
+   ════════════════════════════════════════ */
 const DEFAULT = {
   companyName: "HedgeCapitalPro",
   tagline: "Building wealth, securing futures.",
@@ -472,17 +1099,17 @@ const DEFAULT = {
     {num:"200+",lbl:"Specialists"}
   ],
   services:[
-    {tab:"01 Financial",title:"Financial Planning",items:[
+    {tab:"Financial",title:"Financial Planning",items:[
       {name:"Investment Planning",desc:"Tailored investment strategies to help clients grow their wealth and achieve their financial goals."},
       {name:"Retirement Planning",desc:"Comprehensive retirement plans designed to secure a comfortable and worry-free future."},
       {name:"Education Planning",desc:"Guidance on saving and investing for educational expenses, such as college tuition."}
     ]},
-    {tab:"02 Wealth",title:"Wealth Management",items:[
+    {tab:"Wealth",title:"Wealth Management",items:[
       {name:"Portfolio Management",desc:"Active management of investment portfolios to optimize returns while managing risk effectively."},
       {name:"Asset Allocation",desc:"Strategic allocation of assets to achieve diversification and maximize long-term growth potential."},
       {name:"Risk Management",desc:"Assessment and mitigation of financial risks through insurance solutions and tailored strategies."}
     ]},
-    {tab:"03 Tax",title:"Tax & Estate Planning",items:[
+    {tab:"Tax",title:"Tax & Estate Planning",items:[
       {name:"Tax Planning",desc:"Expert guidance on minimizing tax liabilities, maximizing deductions, and optimizing tax strategies."},
       {name:"Estate Planning",desc:"Comprehensive estate plans that ensure a smooth transfer of wealth and minimize estate taxes."},
       {name:"Wealth Preservation",desc:"Strategies to protect assets and wealth for future generations while minimizing tax implications."}
@@ -496,32 +1123,47 @@ const DEFAULT = {
     {icon:"🤝",title:"Long-Term Relationships",desc:"Build lasting relationships based on trust, open communication, and mutual respect."},
     {icon:"📊",title:"Accountability",desc:"Monitor progress, review strategies, and adjust to help clients stay on track toward their financial goals."}
   ],
+  team:[
+    {name:"James Whitmore",role:"Chief Executive Officer",bio:"20+ years in global asset management and institutional finance.",initials:"JW"},
+    {name:"Sarah Chen",role:"Chief Investment Officer",bio:"Former Goldman Sachs VP with expertise in emerging markets.",initials:"SC"},
+    {name:"Marcus Rivera",role:"Head of Wealth Management",bio:"Specialized in high-net-worth portfolio strategies and tax optimization.",initials:"MR"},
+    {name:"Aisha Okonkwo",role:"Head of Risk & Compliance",bio:"15 years guiding regulatory frameworks across 3 continents.",initials:"AO"}
+  ],
   footerTagline: "Building wealth, securing futures. Trusted financial consulting firm providing expert guidance and personalized solutions.",
   footerCopy: "© 2025 HedgeCapitalPro. All rights reserved."
 };
 
-// ─────────────────────────────────────────
-//  LOAD CONTENT (localStorage or default)
-// ─────────────────────────────────────────
 function loadContent() {
   try {
     const saved = localStorage.getItem('hcp_content');
     return saved ? {...DEFAULT, ...JSON.parse(saved)} : DEFAULT;
   } catch(e) { return DEFAULT; }
 }
+async function loadFromSupabase() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content?select=key,value`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    if(!res.ok) return null;
+    const rows = await res.json();
+    if(!rows || !rows.length) return null;
+    const obj = {};
+    rows.forEach(r => { try { obj[r.key] = JSON.parse(r.value); } catch(e) { obj[r.key] = r.value; } });
+    return obj;
+  } catch(e) { return null; }
+}
 
 const C = loadContent();
 
-// ─────────────────────────────────────────
-//  RENDER DYNAMIC SECTIONS
-// ─────────────────────────────────────────
+/* ════════════════════════════════════════
+   RENDER HELPERS
+   ════════════════════════════════════════ */
 function setText(id, val) {
   const el = document.getElementById(id);
   if(el && val !== undefined) el.textContent = val;
 }
 
 function renderAll() {
-  // Basic text
   document.title = C.companyName + ' — Financial Consulting & Asset Management';
   setText('hero-eyebrow', C.heroEyebrow);
   setText('hero-title-line', C.heroTitleLine);
@@ -534,26 +1176,21 @@ function renderAll() {
   setText('footer-tagline', C.footerTagline);
   setText('footer-copy', C.footerCopy);
 
-  // Logo / brand
+  const logoHtml = `Hedge<span>Capital</span>Pro`;
   const navLogo = document.getElementById('nav-logo');
-  if(navLogo) navLogo.innerHTML = C.companyName.slice(0,5)+'<span>'+C.companyName.slice(5,12)+'</span>'+C.companyName.slice(12);
+  if(navLogo) navLogo.innerHTML = logoHtml;
   const fb = document.getElementById('footer-brand');
-  if(fb) fb.innerHTML = C.companyName.slice(0,5)+'<span>'+C.companyName.slice(5,12)+'</span>'+C.companyName.slice(12);
+  if(fb) fb.innerHTML = logoHtml;
 
   // Hero rotator
   const rotator = document.getElementById('hero-rotate');
   if(rotator && C.heroWords) {
     rotator.innerHTML = C.heroWords.map(w=>`<span>${w}</span>`).join('');
-    const pct = 100 / C.heroWords.length;
-    let kf = '';
-    C.heroWords.forEach((_,i)=>{
-      const start = (i*(100/C.heroWords.length)).toFixed(1);
-      const end = ((i*(100/C.heroWords.length))+(100/C.heroWords.length)-3).toFixed(1);
-      kf += `${start}%,${end}%{transform:translateY(-${(i*pct).toFixed(1)}%)}`;
-    });
-    const style = document.createElement('style');
-    style.textContent = `@keyframes rotateText{${kf}100%{transform:translateY(0)}}`;
-    document.head.appendChild(style);
+    let idx = 0;
+    setInterval(() => {
+      idx = (idx + 1) % C.heroWords.length;
+      rotator.style.transform = `translateY(-${idx * 1.08}em)`;
+    }, 2800);
   }
 
   // Stats
@@ -561,35 +1198,14 @@ function renderAll() {
   if(si && C.stats) {
     si.innerHTML = C.stats.map(s=>`
       <div class="stat-item">
-        <div class="stat-num" data-target="${s.num}">${s.num}</div>
+        <div class="stat-num">${s.num}</div>
         <div class="stat-lbl">${s.lbl}</div>
       </div>`).join('');
   }
 
-  // Services
-  const tabs = document.getElementById('service-tabs');
-  const panels = document.getElementById('service-panels');
-  if(tabs && panels && C.services) {
-    tabs.innerHTML = C.services.map((s,i)=>`
-      <button class="stab${i===0?' active':''}" onclick="switchTab(${i})">${s.tab}</button>`).join('');
-    const barHeights = [60,100,75,90,55,80];
-    panels.innerHTML = C.services.map((s,i)=>`
-      <div class="service-panel${i===0?' active':''}" id="panel-${i}">
-        <div>
-          <div class="panel-title">${s.title}</div>
-          <div class="svc-items">${s.items.map(it=>`
-            <div>
-              <div class="svc-item-name">${it.name}</div>
-              <div class="svc-item-desc">${it.desc}</div>
-            </div>`).join('')}
-          </div>
-        </div>
-        <div class="svc-visual">
-          <div class="svc-visual-inner">
-            <div class="svc-chart">${barHeights.map((h,bi)=>`<div class="svc-bar" style="height:${h+(i*12)}px"></div>`).join('')}</div>
-          </div>
-        </div>
-      </div>`).join('');
+  // Services → Slider
+  if(C.services) {
+    renderServiceSlider(C.services);
   }
 
   // Values
@@ -602,11 +1218,249 @@ function renderAll() {
         <div class="val-desc">${v.desc}</div>
       </div>`).join('');
   }
+
+  // Team
+  const tg = document.getElementById('team-grid');
+  if(tg && C.team) {
+    tg.innerHTML = C.team.map(m=>`
+      <div class="team-card">
+        <div class="team-avatar">
+          ${m.photo ? `<img src="${m.photo}" alt="${m.name}">` : ''}
+          <span class="team-avatar-initials" ${m.photo?'style="display:none"':''}>${m.initials||m.name.split(' ').map(n=>n[0]).join('')}</span>
+        </div>
+        <div class="team-info">
+          <div class="team-name">${m.name}</div>
+          <div class="team-role">${m.role}</div>
+          <div class="team-bio">${m.bio||m.desc||''}</div>
+        </div>
+      </div>`).join('');
+  }
 }
 
-// ─────────────────────────────────────────
-//  TICKER
-// ─────────────────────────────────────────
+/* ════════════════════════════════════════
+   SERVICE SLIDER ENGINE
+   ════════════════════════════════════════ */
+(function() {
+  let currentSlide = 0;
+  let totalSlides = 0;
+  let autoTimer = null;
+  let timerFillTimer = null;
+  const AUTO_INTERVAL = 5000; // ms between auto-slides
+
+  // Expose init function for renderAll to call
+  window.renderServiceSlider = function(services) {
+    totalSlides = services.length;
+    const track = document.getElementById('service-slider-track');
+    const dotsEl = document.getElementById('slider-dots');
+    const labelsEl = document.getElementById('slider-labels');
+    if(!track) return;
+
+    const barHeights = [60,100,75,90,55,80];
+
+    // Build slides
+    track.innerHTML = services.map((s, i) => `
+      <div class="service-slide${i===0?' is-active':''}" data-index="${i}">
+        <div>
+          <div class="panel-title">${s.title}</div>
+          <div class="svc-items">${s.items.map(it=>`
+            <div>
+              <div class="svc-item-name">${it.name}</div>
+              <div class="svc-item-desc">${it.desc}</div>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="svc-visual">
+          <div class="svc-visual-inner">
+            <div class="svc-chart">${barHeights.map(h=>`<div class="svc-bar" style="height:${h+(i*10)}px"></div>`).join('')}</div>
+          </div>
+        </div>
+      </div>`).join('');
+
+    // Build dots
+    if(dotsEl) {
+      dotsEl.innerHTML = services.map((_,i)=>`
+        <button class="slider-dot${i===0?' is-active':''}" data-idx="${i}" aria-label="Go to slide ${i+1}"></button>`
+      ).join('');
+      dotsEl.querySelectorAll('.slider-dot').forEach(dot => {
+        dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.idx)));
+      });
+    }
+
+    // Build labels
+    if(labelsEl) {
+      labelsEl.innerHTML = services.map((s,i)=>`
+        <div class="slider-label-item${i===0?' is-active':''}" data-idx="${i}">${s.tab}</div>`
+      ).join('');
+    }
+
+    // Arrow buttons
+    const prevBtn = document.getElementById('slider-prev');
+    const nextBtn = document.getElementById('slider-next');
+    if(prevBtn) prevBtn.addEventListener('click', () => { stopAuto(); goToSlide(currentSlide - 1); startAuto(); });
+    if(nextBtn) nextBtn.addEventListener('click', () => { stopAuto(); goToSlide(currentSlide + 1); startAuto(); });
+
+    // Touch / drag handling
+    initDrag(track);
+
+    // Init progress bar + start
+    updateSliderUI(0);
+    startAuto();
+  };
+
+  function goToSlide(idx) {
+    if(totalSlides === 0) return;
+    currentSlide = ((idx % totalSlides) + totalSlides) % totalSlides; // wrap
+    updateSliderUI(currentSlide);
+  }
+
+  function updateSliderUI(idx) {
+    const track = document.getElementById('service-slider-track');
+    if(!track) return;
+
+    // Move track
+    track.style.transform = `translateX(-${idx * 100}%)`;
+
+    // Active slide opacity/animation
+    track.querySelectorAll('.service-slide').forEach((slide, i) => {
+      slide.classList.toggle('is-active', i === idx);
+    });
+
+    // Dots
+    document.querySelectorAll('.slider-dot').forEach((dot, i) => {
+      dot.classList.toggle('is-active', i === idx);
+    });
+
+    // Labels
+    document.querySelectorAll('.slider-label-item').forEach((lbl, i) => {
+      lbl.classList.toggle('is-active', i === idx);
+    });
+
+    // Progress fill bar — segment of total
+    const fillEl = document.getElementById('slider-fill');
+    if(fillEl) {
+      const segW = 100 / totalSlides;
+      fillEl.style.left = (idx * segW) + '%';
+      fillEl.style.width = segW + '%';
+    }
+
+    // Arrow disabled states
+    // (we loop, so never truly disabled — but you could disable at ends for non-loop):
+    // const prevBtn = document.getElementById('slider-prev');
+    // const nextBtn = document.getElementById('slider-next');
+  }
+
+  function startAuto() {
+    stopAuto();
+    // Timer fill animation
+    const timerFill = document.getElementById('slide-timer-fill');
+    if(timerFill) {
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '0%';
+      // Force reflow
+      void timerFill.offsetWidth;
+      timerFill.style.transition = `width ${AUTO_INTERVAL}ms linear`;
+      timerFill.style.width = '100%';
+    }
+    autoTimer = setTimeout(() => {
+      goToSlide(currentSlide + 1);
+      startAuto();
+    }, AUTO_INTERVAL);
+  }
+
+  function stopAuto() {
+    if(autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+    // Reset timer fill
+    const timerFill = document.getElementById('slide-timer-fill');
+    if(timerFill) {
+      timerFill.style.transition = 'none';
+      timerFill.style.width = '0%';
+    }
+  }
+
+  /* ── Touch & Mouse Drag ── */
+  function initDrag(track) {
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+    let dragX = 0;
+    const DRAG_THRESHOLD = 50; // px to trigger slide change
+
+    // Mouse events
+    track.addEventListener('mousedown', e => {
+      startX = e.clientX;
+      startY = e.clientY;
+      isDragging = true;
+      dragX = 0;
+      track.classList.add('is-dragging');
+      stopAuto();
+    });
+    window.addEventListener('mousemove', e => {
+      if(!isDragging) return;
+      dragX = e.clientX - startX;
+      // Visual drag feedback (bounded)
+      const offset = currentSlide * 100;
+      const pct = (dragX / track.parentElement.offsetWidth) * 100;
+      const bounded = Math.max(Math.min(pct, 15), -15);
+      track.style.transform = `translateX(calc(-${offset}% + ${bounded}%))`;
+    });
+    window.addEventListener('mouseup', e => {
+      if(!isDragging) return;
+      isDragging = false;
+      track.classList.remove('is-dragging');
+      handleDragEnd(dragX);
+    });
+
+    // Touch events
+    track.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isDragging = true;
+      dragX = 0;
+      stopAuto();
+    }, { passive: true });
+    track.addEventListener('touchmove', e => {
+      if(!isDragging) return;
+      dragX = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+      // Only intercept horizontal swipes
+      if(Math.abs(dy) > Math.abs(dragX)) return;
+      const offset = currentSlide * 100;
+      const pct = (dragX / track.parentElement.offsetWidth) * 100;
+      const bounded = Math.max(Math.min(pct, 15), -15);
+      track.style.transform = `translateX(calc(-${offset}% + ${bounded}%))`;
+    }, { passive: true });
+    track.addEventListener('touchend', () => {
+      if(!isDragging) return;
+      isDragging = false;
+      handleDragEnd(dragX);
+    });
+
+    function handleDragEnd(dx) {
+      if(dx < -DRAG_THRESHOLD) {
+        goToSlide(currentSlide + 1);
+      } else if(dx > DRAG_THRESHOLD) {
+        goToSlide(currentSlide - 1);
+      } else {
+        // Snap back
+        updateSliderUI(currentSlide);
+      }
+      startAuto();
+    }
+  }
+
+  // Pause auto on hover
+  document.addEventListener('DOMContentLoaded', () => {
+    const outer = document.getElementById('service-slider-outer');
+    if(outer) {
+      outer.addEventListener('mouseenter', stopAuto);
+      outer.addEventListener('mouseleave', startAuto);
+    }
+  });
+})();
+
+/* ════════════════════════════════════════
+   TICKER
+   ════════════════════════════════════════ */
 const tickers = [
   {name:'S&P 500',val:'5,872.16',chg:'+0.34%',up:true},
   {name:'NASDAQ',val:'18,391.45',chg:'+0.52%',up:true},
@@ -616,50 +1470,304 @@ const tickers = [
   {name:'BTC',val:'$84,210',chg:'-1.23%',up:false},
   {name:'EUR/USD',val:'1.0832',chg:'+0.09%',up:true},
   {name:'CRUDE OIL',val:'$70.42',chg:'-0.74%',up:false},
+  {name:'ETH',val:'$3,142',chg:'+2.1%',up:true},
+  {name:'SILVER',val:'$30.18',chg:'+0.45%',up:true},
 ];
 function renderTicker() {
   const t = document.getElementById('ticker-track');
   if(!t) return;
-  const items = [...tickers,...tickers].map(tk=>`
+  t.innerHTML = [...tickers,...tickers].map(tk=>`
     <div class="ticker-item">
       <span class="t-name">${tk.name}</span>
       <span>${tk.val}</span>
       <span class="${tk.up?'t-up':'t-down'}">${tk.chg}</span>
     </div>`).join('');
-  t.innerHTML = items;
 }
 
-// ─────────────────────────────────────────
-//  SERVICES TAB SWITCH
-// ─────────────────────────────────────────
-function switchTab(idx) {
-  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',i===idx));
-  document.querySelectorAll('.service-panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+/* ════════════════════════════════════════
+   PHONE PREFIX — EDITABLE + SEARCHABLE
+   ════════════════════════════════════════ */
+const COUNTRY_CODES = [
+  {flag:'🇺🇸',country:'United States',code:'+1'},
+  {flag:'🇬🇧',country:'United Kingdom',code:'+44'},
+  {flag:'🇳🇬',country:'Nigeria',code:'+234'},
+  {flag:'🇨🇦',country:'Canada',code:'+1'},
+  {flag:'🇦🇺',country:'Australia',code:'+61'},
+  {flag:'🇮🇳',country:'India',code:'+91'},
+  {flag:'🇩🇪',country:'Germany',code:'+49'},
+  {flag:'🇫🇷',country:'France',code:'+33'},
+  {flag:'🇧🇷',country:'Brazil',code:'+55'},
+  {flag:'🇿🇦',country:'South Africa',code:'+27'},
+  {flag:'🇸🇦',country:'Saudi Arabia',code:'+966'},
+  {flag:'🇦🇪',country:'UAE',code:'+971'},
+  {flag:'🇸🇬',country:'Singapore',code:'+65'},
+  {flag:'🇯🇵',country:'Japan',code:'+81'},
+  {flag:'🇨🇳',country:'China',code:'+86'},
+  {flag:'🇰🇪',country:'Kenya',code:'+254'},
+  {flag:'🇬🇭',country:'Ghana',code:'+233'},
+  {flag:'🇪🇬',country:'Egypt',code:'+20'},
+  {flag:'🇲🇽',country:'Mexico',code:'+52'},
+  {flag:'🇳🇱',country:'Netherlands',code:'+31'},
+  {flag:'🇳🇿',country:'New Zealand',code:'+64'},
+  {flag:'🇮🇹',country:'Italy',code:'+39'},
+  {flag:'🇪🇸',country:'Spain',code:'+34'},
+  {flag:'🇵🇹',country:'Portugal',code:'+351'},
+  {flag:'🇰🇷',country:'South Korea',code:'+82'},
+];
+
+let selectedPrefix = COUNTRY_CODES[0];
+
+function renderPrefixOptions(filter) {
+  const dd = document.getElementById('prefix-dropdown');
+  if(!dd) return;
+  const q = (filter||'').toLowerCase().trim();
+  const matches = q
+    ? COUNTRY_CODES.filter(c =>
+        c.country.toLowerCase().includes(q) ||
+        c.code.includes(q) ||
+        c.flag.includes(q)
+      )
+    : COUNTRY_CODES;
+
+  if(matches.length === 0) {
+    dd.innerHTML = '<div class="prefix-no-results">No results</div>';
+    return;
+  }
+  dd.innerHTML = matches.map((c, i) => {
+    const realIdx = COUNTRY_CODES.indexOf(c);
+    const isSel = c === selectedPrefix;
+    return `<div class="prefix-option${isSel?' selected':''}" data-idx="${realIdx}">
+      <span class="po-flag">${c.flag}</span>
+      <span class="po-country">${c.country}</span>
+      <span class="po-code">${c.code}</span>
+    </div>`;
+  }).join('');
+  dd.querySelectorAll('.prefix-option').forEach(opt => {
+    opt.addEventListener('mousedown', e => {
+      e.preventDefault(); // prevent blur on input
+      selectPrefix(parseInt(opt.dataset.idx));
+    });
+  });
 }
 
-// ─────────────────────────────────────────
-//  MOBILE MENU
-// ─────────────────────────────────────────
+function selectPrefix(idx) {
+  selectedPrefix = COUNTRY_CODES[idx];
+  const flagEl = document.getElementById('prefix-flag');
+  const searchEl = document.getElementById('prefix-search');
+  if(flagEl) flagEl.textContent = selectedPrefix.flag;
+  if(searchEl) {
+    searchEl.value = selectedPrefix.code;
+    searchEl.style.width = Math.max(28, selectedPrefix.code.length * 9 + 4) + 'px';
+  }
+  closePrefixDropdown();
+}
+
+function openPrefixDropdown() {
+  const pfx = document.getElementById('phone-prefix');
+  const dd = document.getElementById('prefix-dropdown');
+  if(!pfx || !dd) return;
+  pfx.classList.add('open');
+  dd.style.opacity = '1';
+  dd.style.visibility = 'visible';
+  dd.style.transform = 'translateY(0)';
+}
+
+function closePrefixDropdown() {
+  const pfx = document.getElementById('phone-prefix');
+  const dd = document.getElementById('prefix-dropdown');
+  if(!pfx || !dd) return;
+  pfx.classList.remove('open');
+  dd.style.opacity = '';
+  dd.style.visibility = '';
+  dd.style.transform = '';
+  // Restore value to selected code if user left it half-typed
+  const searchEl = document.getElementById('prefix-search');
+  if(searchEl && selectedPrefix) {
+    searchEl.value = selectedPrefix.code;
+    searchEl.style.width = Math.max(28, selectedPrefix.code.length * 9 + 4) + 'px';
+  }
+  // Reset dropdown to full list
+  renderPrefixOptions('');
+}
+
+function initPrefixDropdown() {
+  const searchEl = document.getElementById('prefix-search');
+  const arrowEl = document.getElementById('prefix-arrow');
+  if(!searchEl) return;
+
+  // Set initial width
+  searchEl.style.width = Math.max(28, selectedPrefix.code.length * 9 + 4) + 'px';
+
+  // Render full list initially
+  renderPrefixOptions('');
+
+  // Typing filters the list + opens dropdown
+  searchEl.addEventListener('input', e => {
+    const val = e.target.value;
+    // Auto-resize input width
+    searchEl.style.width = Math.max(28, val.length * 9 + 4) + 'px';
+    openPrefixDropdown();
+    renderPrefixOptions(val);
+    // If typed value exactly matches a code, update flag preview
+    const exact = COUNTRY_CODES.find(c => c.code === val.trim());
+    if(exact) {
+      document.getElementById('prefix-flag').textContent = exact.flag;
+    }
+  });
+
+  // Focus opens dropdown
+  searchEl.addEventListener('focus', () => {
+    searchEl.select();
+    renderPrefixOptions('');
+    openPrefixDropdown();
+  });
+
+  // Blur closes dropdown (with slight delay so mousedown on option fires first)
+  searchEl.addEventListener('blur', () => {
+    setTimeout(closePrefixDropdown, 150);
+  });
+
+  // Arrow toggle click
+  if(arrowEl) {
+    arrowEl.style.pointerEvents = 'auto';
+    arrowEl.style.cursor = 'pointer';
+    arrowEl.addEventListener('mousedown', e => {
+      e.preventDefault();
+      const pfx = document.getElementById('phone-prefix');
+      if(pfx && pfx.classList.contains('open')) {
+        closePrefixDropdown();
+      } else {
+        searchEl.focus();
+      }
+    });
+  }
+}
+
+// Close on outside click
+document.addEventListener('click', e => {
+  const pfx = document.getElementById('phone-prefix');
+  if(pfx && !pfx.contains(e.target)) {
+    closePrefixDropdown();
+  }
+});
+
+/* ════════════════════════════════════════
+   NAV DROPDOWNS
+   ════════════════════════════════════════ */
+function toggleDropdown(btn) {
+  const li = btn.closest('li');
+  const isOpen = li.classList.contains('open');
+  document.querySelectorAll('.nav-links > li').forEach(l=>l.classList.remove('open'));
+  if(!isOpen) li.classList.add('open');
+}
+document.addEventListener('click', e => {
+  if(!e.target.closest('.nav-links') && !e.target.closest('.lang-switch')) {
+    document.querySelectorAll('.nav-links > li').forEach(l=>l.classList.remove('open'));
+    const ls = document.getElementById('lang-switch');
+    if(ls) ls.classList.remove('open');
+  }
+});
+
+/* ════════════════════════════════════════
+   MOBILE MENU
+   ════════════════════════════════════════ */
 document.getElementById('hamburger').addEventListener('click',()=>{
-  document.getElementById('mobile-menu').classList.toggle('open');
+  const h = document.getElementById('hamburger');
+  const m = document.getElementById('mobile-menu');
+  h.classList.toggle('open');
+  m.classList.toggle('open');
+  document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
 });
 function closeMobile() {
+  document.getElementById('hamburger').classList.remove('open');
   document.getElementById('mobile-menu').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
-// ─────────────────────────────────────────
-//  SCROLL: NAV + BACK TO TOP
-// ─────────────────────────────────────────
+/* ════════════════════════════════════════
+   SCROLL: NAV + BACK TO TOP
+   ════════════════════════════════════════ */
 window.addEventListener('scroll',()=>{
+  const nav = document.getElementById('main-nav');
+  if(nav) nav.classList.toggle('scrolled', window.scrollY > 50);
   const bt = document.getElementById('back-top');
   if(bt) bt.classList.toggle('show', window.scrollY > 400);
+  // Animate about chart bars
+  document.querySelectorAll('.chart-bar-fill:not(.animated)').forEach(f => {
+    if(f.getBoundingClientRect().top < window.innerHeight - 100) f.classList.add('animated');
+  });
 });
 
-// ─────────────────────────────────────────
-//  INIT
-// ─────────────────────────────────────────
+/* ════════════════════════════════════════
+   INTERSECTION OBSERVER — SCROLL REVEALS
+   ════════════════════════════════════════ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => observer.observe(el));
+
+/* ════════════════════════════════════════
+   CONTACT FORM
+   ════════════════════════════════════════ */
+async function submitContact() {
+  const data = {
+    first: document.getElementById('cf-first').value.trim(),
+    last: document.getElementById('cf-last').value.trim(),
+    email: document.getElementById('cf-email').value.trim(),
+    phone: (selectedPrefix ? selectedPrefix.code : '') + ' ' + document.getElementById('cf-phone').value.trim(),
+    service: document.getElementById('cf-service').value,
+    message: document.getElementById('cf-message').value.trim(),
+  };
+  if(!data.first || !data.email) { alert('Please fill in your name and email.'); return; }
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/contact_requests`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(data)
+    });
+  } catch(e) {}
+  document.getElementById('cf-success').style.display = 'block';
+  setTimeout(() => { document.getElementById('cf-success').style.display = 'none'; }, 5000);
+}
+
+/* ════════════════════════════════════════
+   PRELOADER
+   ════════════════════════════════════════ */
+let pct = 0;
+const pctEl = document.getElementById('pre-pct');
+const pctTimer = setInterval(() => {
+  pct = Math.min(pct + Math.random() * 15, 95);
+  if(pctEl) pctEl.textContent = Math.floor(pct) + '%';
+}, 120);
+window.addEventListener('load', () => {
+  clearInterval(pctTimer);
+  if(pctEl) pctEl.textContent = '100%';
+  setTimeout(() => {
+    document.getElementById('preloader').classList.add('hidden');
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => observer.observe(el));
+  }, 400);
+});
+
+/* ════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════ */
 renderAll();
 renderTicker();
+applyTranslations();
+initPrefixDropdown();
+
+loadFromSupabase().then(data => {
+  if(data) {
+    Object.assign(C, data);
+    renderAll();
+    initPrefixDropdown();
+  }
+});
 </script>
 </body>
 </html>

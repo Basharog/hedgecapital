@@ -116,21 +116,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
   <div class="form-group">
     <label>Password</label>
     <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
-    <button class="pass-toggle" onclick="togglePass()" type="button" id="pass-eye">👁</button>
+    <button class="pass-toggle" type="button" id="pass-eye">👁</button>
   </div>
   <div class="form-row-inline">
     <label class="remember"><input type="checkbox" id="remember"> Remember me</label>
     <a href="forgot-password.html" class="forgot">Forgot password?</a>
   </div>
 
-  <button class="btn-full" id="login-btn" onclick="doLogin()">
+  <button class="btn-full" id="login-btn">
     <div class="spinner"></div>
     <span class="btn-text">Sign In →</span>
   </button>
 
   <div class="resend-bar" id="resend-bar">
     Didn't get the confirmation email?
-    <a onclick="doResend()">Resend it</a>
+    <a id="resend-link">Resend it</a>
   </div>
 
   <div class="divider">or</div>
@@ -153,10 +153,21 @@ if (verified)   showAlert('ok',   '✓ Email confirmed! You can now sign in.');
 if (suspended)  showAlert('warn', '⚠ Your account has been suspended. Contact support.');
 if (registered) showAlert('ok',   '✓ Account created! Please check your email to confirm your account before signing in.');
 
+// ── BIND EVENTS ────────────────────────────────────────────
+document.getElementById('login-btn').addEventListener('click', doLogin);
+document.getElementById('resend-link').addEventListener('click', doResend);
+document.getElementById('pass-eye').addEventListener('click', togglePass);
+document.getElementById('login-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('login-id').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('login-pass').focus();
+});
+
 // ── LOGIN ──────────────────────────────────────────────────
 let lastEmail = '';
 
-window.doLogin = async function() {
+async function doLogin() {
   const id   = document.getElementById('login-id').value.trim();
   const pass = document.getElementById('login-pass').value;
 
@@ -187,7 +198,7 @@ window.doLogin = async function() {
 };
 
 // ── RESEND CONFIRMATION ────────────────────────────────────
-window.doResend = async function() {
+async function doResend() {
   const id = document.getElementById('login-id').value.trim() || lastEmail;
   if (!id || !id.includes('@')) {
     showAlert('err', 'Enter your email address above, then click Resend.');
@@ -200,16 +211,8 @@ window.doResend = async function() {
   showAlert('ok', '✓ Confirmation email resent! Check your inbox.');
 };
 
-// ── ENTER KEY ──────────────────────────────────────────────
-document.getElementById('login-pass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') window.doLogin();
-});
-document.getElementById('login-id').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('login-pass').focus();
-});
-
 // ── HELPERS ────────────────────────────────────────────────
-window.togglePass = function() {
+function togglePass() {
   const inp = document.getElementById('login-pass');
   const eye = document.getElementById('pass-eye');
   inp.type = inp.type === 'password' ? 'text' : 'password';
