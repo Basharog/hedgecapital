@@ -160,7 +160,7 @@ export async function resendConfirmation(email) {
 // ── ROUTE GUARDS ──────────────────────────────────────────────
 
 // Use on dashboard.html — redirect to login if no session
-export async function requireAuth(redirectTo = 'login.html') {
+export async function requireAuth(redirectTo = '/htmlpages/login.html') {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) { window.location.href = redirectTo; return null; }
 
@@ -188,7 +188,7 @@ export async function requireAdmin(redirectTo = 'index.html') {
 }
 
 // Use on login.html / register.html — redirect away if already logged in
-export async function redirectIfLoggedIn(redirectTo = 'dashboard.html') {
+export async function redirectIfLoggedIn(redirectTo = '/htmlpages/dashboard.html') {
   const { data: { session } } = await supabase.auth.getSession();
   if (session) {
     const profile = await getProfile();

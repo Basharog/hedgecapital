@@ -663,12 +663,12 @@ const fmt = n => '$' + parseFloat(n || 0).toLocaleString('en-US', { minimumFract
 // ─────────────────────────────────────────────────────────────
 async function boot() {
   const { data: { session } } = await supabase.auth.getSession();
-  if (!session) { window.location.href = 'login.html'; return; }
+  if (!session) { window.location.href = '/htmlpages/login.html'; return; }
 
   const { data, error } = await supabase
     .from('profiles').select('*').eq('id', session.user.id).single();
 
-  if (error || !data) { window.location.href = 'login.html'; return; }
+  if (error || !data) { window.location.href = '/htmlpages/login.html'; return; }
   if (data.is_suspended) {
     await supabase.auth.signOut();
     window.location.href = 'login.html?suspended=1';
@@ -1287,7 +1287,7 @@ document.getElementById('hbtn').addEventListener('click', () => {
 // Logout
 document.getElementById('logout-btn').addEventListener('click', async () => {
   await supabase.auth.signOut();
-  window.location.href = 'login.html';
+  window.location.href = '/htmlpages/login.html';
 });
 
 // Deposit

@@ -79,7 +79,7 @@ export async function updatePassword(newPassword) {
   return supabase.auth.updateUser({ password: newPassword });
 }
 
-export async function requireAuth(redirectTo = 'login.html') {
+export async function requireAuth(redirectTo = '/htmlpages/login.html') {
   const user = await getCurrentUser();
   if (!user) { window.location.href = redirectTo; return null; }
   const profile = await getProfile();
