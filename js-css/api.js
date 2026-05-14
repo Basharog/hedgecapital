@@ -71,7 +71,7 @@ export async function signOut() {
 
 export async function sendPasswordReset(email) {
   return supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/reset-password.html`
+    redirectTo: `${window.location.origin}/htmlpages/reset-password.html`
   });
 }
 
@@ -293,11 +293,6 @@ export async function syncNowPaymentsStatus(nowpaymentsId, nowpaymentsStatus) {
 
   // If NOWPayments says finished and we haven't credited yet — credit the user
   if (nowpaymentsStatus === 'finished' && tx.status === 'pending') {
-    await supabase
-      .from('profiles')
-      .update({ balance: supabase.rpc('balance + ' + tx.amount) })
-      .eq('id', tx.user_id);
-    // Use the proper RPC pattern
     await supabase.rpc('admin_adjust_balance', {
       p_user_id:  tx.user_id,
       p_amount:   tx.amount,
@@ -418,7 +413,6 @@ export async function uploadKYCDoc(file, side) {
   const path = `${user.id}/${side}_${Date.now()}.${ext}`;
   const { error } = await supabase.storage.from('kyc-documents').upload(path, file, { upsert: true });
   if (error) return { error: error.message };
-  const { data } = supabase.storage.from('kyc-documents').getPublicUrl(path);
   return { url: path }; // return path, admin fetches signed URL
 }
 

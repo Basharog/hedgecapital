@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://egedzwcezqksjeozzttd.supabase.co https://ipapi.co https:; frame-src 'none'; object-src 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Page Not Found | HedgeCapitalPro</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060a12;--surface:#0b1120;--surface2:#101828;
+  --border:rgba(100,160,220,0.10);--border2:rgba(100,160,220,0.18);
+  --accent:#00d9b5;--text:#dce6f0;--muted:#5a7095;
+  --head:'Syne',sans-serif;--body:'Outfit',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--body);
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  overflow:hidden;position:relative;padding:20px;
+}
+
+/* ── BACKGROUND ── */
+.bg-grid{
+  position:fixed;inset:0;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at 50% 50%,black 20%,transparent 75%);
+  pointer-events:none;
+}
+.glow{
+  position:fixed;width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,217,181,.07) 0%,transparent 70%);
+  top:-200px;right:-150px;pointer-events:none;
+}
+.glow2{
+  position:fixed;width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(20,102,255,.05) 0%,transparent 70%);
+  bottom:-150px;left:-100px;pointer-events:none;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  background:rgba(6,10,18,.92);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);z-index:100;
+}
+.nav-logo{font-family:var(--head);font-weight:800;font-size:18px;color:#fff;text-decoration:none}
+.nav-logo span{color:var(--accent)}
+.nav-back{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:6px}
+.nav-back:hover{color:var(--text)}
+
+/* ── MAIN CONTENT ── */
+.wrap{
+  position:relative;z-index:1;text-align:center;
+  max-width:580px;padding:0 20px;
+  animation:fadeUp .7s ease forwards;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── 404 NUMBER ── */
+.error-num{
+  font-family:var(--head);
+  font-size:clamp(100px,20vw,180px);
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-8px;
+  color:transparent;
+  background:linear-gradient(135deg,var(--accent) 0%,rgba(0,217,181,.3) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  margin-bottom:4px;
+  position:relative;
+}
+/* Subtle glitch flicker */
+.error-num::before{
+  content:'404';
+  position:absolute;inset:0;
+  color:transparent;
+  background:linear-gradient(135deg,#1466ff 0%,rgba(20,102,255,.2) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  animation:glitch 4s infinite;
+  clip-path:polygon(0 30%,100% 30%,100% 50%,0 50%);
+}
+@keyframes glitch{
+  0%,92%,100%{transform:translate(0)}
+  93%{transform:translate(-4px,1px)}
+  95%{transform:translate(4px,-1px)}
+  97%{transform:translate(-2px,2px)}
+}
+
+.error-label{
+  font-family:var(--head);font-size:11px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;color:var(--accent);
+  margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.error-label::before,.error-label::after{content:'';width:28px;height:1px;background:var(--accent)}
+
+h1{
+  font-family:var(--head);font-size:clamp(22px,4vw,34px);
+  font-weight:800;color:#fff;letter-spacing:-0.5px;
+  margin-bottom:16px;line-height:1.15;
+}
+.error-desc{
+  font-size:15px;color:var(--muted);line-height:1.8;
+  margin-bottom:40px;max-width:440px;margin-left:auto;margin-right:auto;
+}
+
+/* ── BUTTONS ── */
+.actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 26px;border-radius:4px;
+  font-family:var(--body);font-size:13px;font-weight:600;
+  text-decoration:none;cursor:pointer;transition:all .2s;border:none;
+}
+.btn-primary{background:var(--accent);color:#060a12}
+.btn-primary:hover{opacity:.86;transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+
+/* ── QUICK LINKS ── */
+.quick-links{
+  margin-top:48px;padding-top:32px;
+  border-top:1px solid var(--border);
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  max-width:420px;margin-left:auto;margin-right:auto;
+}
+.quick-link{
+  background:var(--surface);border:1px solid var(--border);border-radius:4px;
+  padding:14px;text-decoration:none;transition:border-color .2s,transform .2s;
+  display:block;
+}
+.quick-link:hover{border-color:var(--accent);transform:translateY(-2px)}
+.quick-link-icon{font-size:20px;margin-bottom:6px}
+.quick-link-label{font-size:11px;color:var(--muted);font-weight:500}
+
+@media(max-width:480px){
+  nav{padding:0 20px}
+  .actions{flex-direction:column;align-items:center}
+  .btn{width:100%;justify-content:center}
+  .quick-links{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="glow"></div>
+<div class="glow2"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Hedge<span>Capital</span>Pro</a>
+  <a href="javascript:history.back()" class="nav-back">← Go Back</a>
+</nav>
+
+<div class="wrap">
+  <div class="error-num">404</div>
+  <div class="error-label">Page Not Found</div>
+
+  <h1>Looks like this page doesn't exist</h1>
+  <p class="error-desc">
+    The page you're looking for may have been moved, deleted, or never existed.
+    Double-check the URL or head back somewhere familiar.
+  </p>
+
+  <div class="actions">
+    <a href="index.html" class="btn btn-primary">← Back to Home</a>
+    <a href="dashboard.html" class="btn btn-ghost">Go to Dashboard</a>
+  </div>
+
+  <div class="quick-links">
+    <a href="index.html#services" class="quick-link">
+      <div class="quick-link-icon">⚙️</div>
+      <div class="quick-link-label">Services</div>
+    </a>
+    <a href="index.html#contact" class="quick-link">
+      <div class="quick-link-icon">📞</div>
+      <div class="quick-link-label">Contact</div>
+    </a>
+    <a href="login.html" class="quick-link">
+      <div class="quick-link-icon">🔑</div>
+      <div class="quick-link-label">Client Portal</div>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

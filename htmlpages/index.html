@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://egedzwcezqksjeozzttd.supabase.co https://ipapi.co https:; frame-src 'none'; object-src 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HedgeCapitalPro — Financial Consulting & Asset Management</title>
 <meta name="description" content="Premier financial consulting and asset management services. Trusted by 1,400+ clients worldwide with $2B+ AUM.">
@@ -385,12 +388,22 @@ nav.scrolled{background:rgba(6,10,18,0.98)}
 ═══════════════════════════════════════ */
 #insights{padding:80px 48px;max-width:1240px;margin:0 auto}
 .insights-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px}
-.insight-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:32px;transition:border-color .25s,transform .25s;cursor:pointer}
+.insight-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;transition:border-color .25s,transform .25s;cursor:pointer}
 .insight-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.insight-image{width:100%;height:160px;object-fit:cover;display:block;background:var(--surface2)}
+.insight-image-wrap{height:160px;background:var(--surface2);overflow:hidden;margin:-0px}
+.insight-body{padding:24px}
+.insight-card.no-image .insight-body{padding:32px}
 .insight-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);background:rgba(0,217,181,.1);padding:4px 10px;border-radius:2px;margin-bottom:14px}
 .insight-title{font-family:var(--head);font-size:17px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.35}
 .insight-excerpt{font-size:13px;color:var(--muted);line-height:1.7}
 .insight-date{font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:.5px}
+/* articles loading skeleton */
+.insight-skeleton{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden;padding:0}
+.sk-img{height:160px;background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%);background-size:400px 100%;animation:shimmer 1.4s infinite}
+.sk-body{padding:24px;display:flex;flex-direction:column;gap:10px}
+.sk-line{height:10px;border-radius:4px;background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%);background-size:400px 100%;animation:shimmer 1.4s infinite}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
 
 /* ═══════════════════════════════════════
    CONTACT
@@ -411,6 +424,16 @@ nav.scrolled{background:rgba(6,10,18,0.98)}
 .form-group textarea{resize:vertical;min-height:100px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .form-success{background:rgba(0,217,181,.08);border:1px solid rgba(0,217,181,.25);border-radius:4px;padding:14px 18px;font-size:14px;color:var(--accent);display:none;margin-top:16px}
+
+/* ── PREFIX DROPDOWN VISIBILITY FIX ──
+   .phone-input-wrap has overflow:hidden which clips the absolute
+   dropdown. Override to visible so dropdown renders above the form.
+   ────────────────────────────────────── */
+.phone-input-wrap{overflow:visible}
+.phone-prefix{overflow:visible}
+#prefix-dropdown{z-index:9999}
+/* Keep the inner radius clip on the inputs, not the wrapper */
+.phone-input-wrap > input.phone-number-input{border-radius:0 3px 3px 0 !important}
 
 /* ═══════════════════════════════════════
    PHONE PREFIX INPUT
@@ -835,25 +858,9 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
     <div class="section-title">Valuable insights that empower your decisions</div>
   </div>
   <div class="insights-grid reveal-stagger" id="insights-grid">
-    <div class="insight-card">
-      <div class="insight-tag">Analysis</div>
-      <div class="insight-title">Strategies to Stay Calm and Make Informed Decisions in Volatile Markets</div>
-      <div class="insight-excerpt">Investors must navigate uncertain times and unpredictable waters. Effective strategies like diversifying portfolios and analyzing fundamentals are key.</div>
-      <div class="insight-date">March 2025</div>
-    </div>
-    <div class="insight-card">
-      <div class="insight-tag">Insights</div>
-      <div class="insight-title">Practical Tips for Creating and Managing Your Personal Wealth Strategy</div>
-      <div class="insight-excerpt">Explore effective approaches to building long-term wealth, minimizing risks, and making informed decisions aligned with your goals.</div>
-      <div class="insight-date">February 2025</div>
-    </div>
-    <div class="insight-card">
-      <div class="insight-tag">Perspectives</div>
-      <div class="insight-title">Understanding Behavioral Biases and Making Rational Financial Choices</div>
-      <div class="insight-excerpt">How cognitive biases affect investment decisions and the frameworks high-performing investors use to counteract them effectively.</div>
-      <div class="insight-date">January 2025</div>
-    </div>
+    <!-- populated by loadArticles() — falls back to C.articles defaults -->
   </div>
+  <div style="text-align:center;margin-top:40px" id="articles-more-wrap" class="reveal"></div>
 </section>
 
 <!-- ═══════════════ CONTACT ═══════════════ -->
@@ -996,70 +1003,35 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:64px
 /* ════════════════════════════════════════
    SUPABASE CONFIG — replace with your keys
    ════════════════════════════════════════ */
-const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+const SUPABASE_URL = 'https://egedzwcezqksjeozzttd.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_YOGPxMoD0RWCTW43n-hurw_es3iSN8K';
 
 /* ════════════════════════════════════════
-   i18n TRANSLATIONS
+   i18n — powered by i18n.js (loaded as module below)
+   Non-module shims keep inline callers working.
    ════════════════════════════════════════ */
-const TRANSLATIONS = {
-  en: {
-    'cta.portal': 'Client Portal →',
-    'hero.eyebrow': 'Financial Consulting & Asset Management',
-    'hero.sub': 'Premier financial consulting and asset management services tailored to your goals, risk profile, and long-term vision.',
-    'nav.services': 'Services', 'nav.about': 'About', 'nav.insights': 'Insights', 'nav.contact': 'Contact',
-    'section.services': 'Services', 'section.about': 'Why Us', 'section.values': 'Our Values',
-    'section.team': 'People', 'section.insights': 'Articles', 'section.contact': 'Get Started',
-  },
-  fr: {
-    'cta.portal': 'Portail Client →',
-    'hero.eyebrow': 'Conseil Financier & Gestion d\'Actifs',
-    'hero.sub': 'Services de conseil financier et de gestion d\'actifs adaptés à vos objectifs et à votre vision à long terme.',
-    'nav.services': 'Services', 'nav.about': 'À Propos', 'nav.insights': 'Insights', 'nav.contact': 'Contact',
-  },
-  es: {
-    'cta.portal': 'Portal del Cliente →',
-    'hero.eyebrow': 'Consultoría Financiera & Gestión de Activos',
-    'hero.sub': 'Servicios de consultoría financiera y gestión de activos adaptados a sus objetivos y visión a largo plazo.',
-  },
-  de: {
-    'cta.portal': 'Kundenportal →',
-    'hero.eyebrow': 'Finanzberatung & Vermögensverwaltung',
-    'hero.sub': 'Erstklassige Finanzberatungs- und Vermögensverwaltungsdienstleistungen, abgestimmt auf Ihre Ziele.',
-  },
-  zh: {
-    'cta.portal': '客户门户 →',
-    'hero.eyebrow': '金融咨询与资产管理',
-    'hero.sub': '量身定制的优质金融咨询和资产管理服务，符合您的目标和长远愿景。',
-  },
-  ar: {
-    'cta.portal': 'بوابة العميل →',
-    'hero.eyebrow': 'الاستشارات المالية وإدارة الأصول',
-    'hero.sub': 'خدمات استشارات مالية وإدارة أصول متميزة مصممة وفقًا لأهدافك ورؤيتك طويلة الأمد.',
-  }
-};
+let currentLang = localStorage.getItem('hcp_lang') || (navigator.language||'en').split('-')[0];
+if (!['en','fr','es','de','zh','ar'].includes(currentLang)) currentLang = 'en';
 
-let currentLang = localStorage.getItem('hcp_lang') || detectLang();
-
-function detectLang() {
-  const bl = (navigator.language || navigator.userLanguage || 'en').split('-')[0];
-  return TRANSLATIONS[bl] ? bl : 'en';
-}
 function t(key) {
-  const trs = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
-  return trs[key] || TRANSLATIONS.en[key] || key;
+  if (window._i18n) return window._i18n.t(key);
+  return key;
 }
 function applyTranslations() {
+  if (window._i18n) { window._i18n.applyToDOM(); return; }
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.getAttribute('data-i18n'));
+    const val = t(el.getAttribute('data-i18n'));
+    if (val !== el.getAttribute('data-i18n')) el.textContent = val;
   });
   const lc = document.getElementById('lang-current');
-  if(lc) lc.textContent = currentLang.toUpperCase();
+  if (lc) lc.textContent = currentLang.toUpperCase();
   document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
 }
 function setLang(lang) {
+  if (window._i18n) { window._i18n.setLang(lang); currentLang = lang; return; }
   currentLang = lang;
   localStorage.setItem('hcp_lang', lang);
+  applyTranslations();
   document.querySelectorAll('.lang-opt').forEach(el => {
     el.classList.toggle('active',
       (lang==='en'&&el.textContent.includes('English'))||
@@ -1070,11 +1042,10 @@ function setLang(lang) {
       (lang==='ar'&&el.textContent.includes('العربية'))
     );
   });
-  applyTranslations();
-  document.getElementById('lang-switch').classList.remove('open');
+  document.getElementById('lang-switch')?.classList.remove('open');
 }
 function toggleLang() {
-  document.getElementById('lang-switch').classList.toggle('open');
+  document.getElementById('lang-switch')?.classList.toggle('open');
 }
 
 /* ════════════════════════════════════════
@@ -1130,7 +1101,12 @@ const DEFAULT = {
     {name:"Aisha Okonkwo",role:"Head of Risk & Compliance",bio:"15 years guiding regulatory frameworks across 3 continents.",initials:"AO"}
   ],
   footerTagline: "Building wealth, securing futures. Trusted financial consulting firm providing expert guidance and personalized solutions.",
-  footerCopy: "© 2025 HedgeCapitalPro. All rights reserved."
+  footerCopy: "© 2025 HedgeCapitalPro. All rights reserved.",
+  articles: [
+    { tag:'Analysis',     title:'Strategies to Stay Calm and Make Informed Decisions in Volatile Markets', excerpt:'Investors must navigate uncertain times and unpredictable waters. Effective strategies like diversifying portfolios and analyzing fundamentals are key.', date:'March 2025',    image:null, url:'#', content:'<p>Navigating volatile markets requires discipline, a clear framework, and the ability to separate short-term noise from long-term fundamentals.</p><h3>1. Maintain a Diversified Portfolio</h3><p>Diversification remains one of the most reliable buffers against market volatility. Spreading assets across equities, fixed income, real estate, and alternative investments reduces exposure to any single sector shock.</p><h3>2. Analyze Fundamentals, Not Headlines</h3><p>Market swings are often driven by sentiment rather than fundamentals. Investors who focus on earnings quality, balance sheet strength, and cash flow generation tend to make more rational decisions in turbulent periods.</p><h3>3. Maintain Adequate Liquidity</h3><p>Holding a liquidity reserve prevents forced selling at depressed prices. A 6–12 month cash buffer gives investors the patience to wait out drawdowns without disrupting their long-term strategy.</p><h3>4. Revisit Risk Tolerance</h3><p>Volatility is an opportunity to reassess whether your current allocation genuinely matches your risk tolerance — not just on paper, but emotionally. Adjust positions proactively rather than reactively.</p><p>At HedgeCapitalPro, our advisors help clients build portfolios designed to perform across market cycles. <a href="#contact">Schedule a consultation</a> to review your strategy.</p>' },
+    { tag:'Insights',     title:'Practical Tips for Creating and Managing Your Personal Wealth Strategy',    excerpt:'Explore effective approaches to building long-term wealth, minimizing risks, and making informed decisions aligned with your goals.',               date:'February 2025', image:null, url:'#', content:'<p>A personal wealth strategy is not a one-time exercise — it is a living plan that evolves with your life circumstances, financial goals, and market conditions.</p><h3>1. Define Clear Financial Goals</h3><p>Begin with specificity. "I want to retire comfortably" is not a goal. "I want $2M in investable assets by age 60 to fund a $80K annual lifestyle" is. Concrete goals drive concrete plans.</p><h3>2. Build Around Your Cash Flow</h3><p>Wealth is built from the gap between what you earn and what you spend. Before selecting investment vehicles, optimize this gap through budgeting, debt reduction, and income growth.</p><h3>3. Leverage Tax-Advantaged Accounts</h3><p>Maximize contributions to retirement and tax-advantaged vehicles before allocating to taxable accounts. The compounding effect of deferred taxation is one of the most powerful tools available to individual investors.</p><h3>4. Review and Rebalance Regularly</h3><p>Markets move, life changes, and allocations drift. A quarterly review ensures your portfolio remains aligned with your goals and risk profile.</p><p>Our wealth management team at HedgeCapitalPro specializes in building personalized strategies for long-term financial success. <a href="#contact">Talk to an advisor today.</a></p>' },
+    { tag:'Perspectives', title:'Understanding Behavioral Biases and Making Rational Financial Choices',     excerpt:'How cognitive biases affect investment decisions and the frameworks high-performing investors use to counteract them effectively.',             date:'January 2025',  image:null, url:'#', content:'<p>The most sophisticated investment strategy can be undermined by predictable human psychology. Understanding the biases that distort financial decision-making is the first step to counteracting them.</p><h3>Confirmation Bias</h3><p>Investors tend to seek information that validates existing beliefs while discounting contradictory evidence. Counter this by actively seeking opposing viewpoints before making any significant portfolio decision.</p><h3>Loss Aversion</h3><p>Research shows losses feel roughly twice as painful as equivalent gains feel pleasurable. This asymmetry leads to holding losing positions too long and selling winners too early — the opposite of optimal behavior.</p><h3>Recency Bias</h3><p>Recent events disproportionately influence expectations about the future. After a bull market, investors overestimate future returns. After a crash, they underestimate recovery speed. Anchoring to long-term historical data helps correct this distortion.</p><h3>Overconfidence</h3><p>Studies consistently show that individual investors overestimate their ability to time markets or select outperforming stocks. A rules-based, systematic approach removes discretion — and with it, many expensive mistakes.</p><p>Working with an objective advisor at HedgeCapitalPro provides a behavioral check that helps keep decision-making rational and strategy-driven. <a href="#contact">Connect with our team.</a></p>' },
+  ],
 };
 
 function loadContent() {
@@ -1217,6 +1193,8 @@ function renderAll() {
         <div class="val-title">${v.title}</div>
         <div class="val-desc">${v.desc}</div>
       </div>`).join('');
+    // Issue 20: re-observe so stagger animation fires
+    if(typeof observer !== 'undefined') observer.observe(vg);
   }
 
   // Team
@@ -1234,7 +1212,12 @@ function renderAll() {
           <div class="team-bio">${m.bio||m.desc||''}</div>
         </div>
       </div>`).join('');
+    // Issue 20: re-observe so stagger animation fires
+    if(typeof observer !== 'undefined') observer.observe(tg);
   }
+
+  // Issue 13: notify i18n module to re-apply translations to dynamic content
+  document.dispatchEvent(new CustomEvent('hcp:rendered'));
 }
 
 /* ════════════════════════════════════════
@@ -1293,11 +1276,11 @@ function renderAll() {
       ).join('');
     }
 
-    // Arrow buttons
+    // Arrow buttons — use onclick to prevent listener stacking on re-renders
     const prevBtn = document.getElementById('slider-prev');
     const nextBtn = document.getElementById('slider-next');
-    if(prevBtn) prevBtn.addEventListener('click', () => { stopAuto(); goToSlide(currentSlide - 1); startAuto(); });
-    if(nextBtn) nextBtn.addEventListener('click', () => { stopAuto(); goToSlide(currentSlide + 1); startAuto(); });
+    if(prevBtn) prevBtn.onclick = () => { stopAuto(); goToSlide(currentSlide - 1); startAuto(); };
+    if(nextBtn) nextBtn.onclick = () => { stopAuto(); goToSlide(currentSlide + 1); startAuto(); };
 
     // Touch / drag handling
     initDrag(track);
@@ -1488,34 +1471,202 @@ function renderTicker() {
    PHONE PREFIX — EDITABLE + SEARCHABLE
    ════════════════════════════════════════ */
 const COUNTRY_CODES = [
-  {flag:'🇺🇸',country:'United States',code:'+1'},
-  {flag:'🇬🇧',country:'United Kingdom',code:'+44'},
-  {flag:'🇳🇬',country:'Nigeria',code:'+234'},
-  {flag:'🇨🇦',country:'Canada',code:'+1'},
+  {flag:'🇦🇫',country:'Afghanistan',code:'+93'},
+  {flag:'🇦🇱',country:'Albania',code:'+355'},
+  {flag:'🇩🇿',country:'Algeria',code:'+213'},
+  {flag:'🇦🇩',country:'Andorra',code:'+376'},
+  {flag:'🇦🇴',country:'Angola',code:'+244'},
+  {flag:'🇦🇬',country:'Antigua & Barbuda',code:'+1268'},
+  {flag:'🇦🇷',country:'Argentina',code:'+54'},
+  {flag:'🇦🇲',country:'Armenia',code:'+374'},
   {flag:'🇦🇺',country:'Australia',code:'+61'},
-  {flag:'🇮🇳',country:'India',code:'+91'},
-  {flag:'🇩🇪',country:'Germany',code:'+49'},
-  {flag:'🇫🇷',country:'France',code:'+33'},
+  {flag:'🇦🇹',country:'Austria',code:'+43'},
+  {flag:'🇦🇿',country:'Azerbaijan',code:'+994'},
+  {flag:'🇧🇸',country:'Bahamas',code:'+1242'},
+  {flag:'🇧🇭',country:'Bahrain',code:'+973'},
+  {flag:'🇧🇩',country:'Bangladesh',code:'+880'},
+  {flag:'🇧🇧',country:'Barbados',code:'+1246'},
+  {flag:'🇧🇾',country:'Belarus',code:'+375'},
+  {flag:'🇧🇪',country:'Belgium',code:'+32'},
+  {flag:'🇧🇿',country:'Belize',code:'+501'},
+  {flag:'🇧🇯',country:'Benin',code:'+229'},
+  {flag:'🇧🇹',country:'Bhutan',code:'+975'},
+  {flag:'🇧🇴',country:'Bolivia',code:'+591'},
+  {flag:'🇧🇦',country:'Bosnia & Herzegovina',code:'+387'},
+  {flag:'🇧🇼',country:'Botswana',code:'+267'},
   {flag:'🇧🇷',country:'Brazil',code:'+55'},
-  {flag:'🇿🇦',country:'South Africa',code:'+27'},
-  {flag:'🇸🇦',country:'Saudi Arabia',code:'+966'},
-  {flag:'🇦🇪',country:'UAE',code:'+971'},
-  {flag:'🇸🇬',country:'Singapore',code:'+65'},
-  {flag:'🇯🇵',country:'Japan',code:'+81'},
+  {flag:'🇧🇳',country:'Brunei',code:'+673'},
+  {flag:'🇧🇬',country:'Bulgaria',code:'+359'},
+  {flag:'🇧🇫',country:'Burkina Faso',code:'+226'},
+  {flag:'🇧🇮',country:'Burundi',code:'+257'},
+  {flag:'🇨🇻',country:'Cabo Verde',code:'+238'},
+  {flag:'🇰🇭',country:'Cambodia',code:'+855'},
+  {flag:'🇨🇲',country:'Cameroon',code:'+237'},
+  {flag:'🇨🇦',country:'Canada',code:'+1'},
+  {flag:'🇨🇫',country:'Central African Republic',code:'+236'},
+  {flag:'🇹🇩',country:'Chad',code:'+235'},
+  {flag:'🇨🇱',country:'Chile',code:'+56'},
   {flag:'🇨🇳',country:'China',code:'+86'},
-  {flag:'🇰🇪',country:'Kenya',code:'+254'},
-  {flag:'🇬🇭',country:'Ghana',code:'+233'},
+  {flag:'🇨🇴',country:'Colombia',code:'+57'},
+  {flag:'🇰🇲',country:'Comoros',code:'+269'},
+  {flag:'🇨🇩',country:'Congo (DRC)',code:'+243'},
+  {flag:'🇨🇬',country:'Congo (Republic)',code:'+242'},
+  {flag:'🇨🇷',country:'Costa Rica',code:'+506'},
+  {flag:'🇭🇷',country:'Croatia',code:'+385'},
+  {flag:'🇨🇺',country:'Cuba',code:'+53'},
+  {flag:'🇨🇾',country:'Cyprus',code:'+357'},
+  {flag:'🇨🇿',country:'Czech Republic',code:'+420'},
+  {flag:'🇩🇰',country:'Denmark',code:'+45'},
+  {flag:'🇩🇯',country:'Djibouti',code:'+253'},
+  {flag:'🇩🇲',country:'Dominica',code:'+1767'},
+  {flag:'🇩🇴',country:'Dominican Republic',code:'+1809'},
+  {flag:'🇪🇨',country:'Ecuador',code:'+593'},
   {flag:'🇪🇬',country:'Egypt',code:'+20'},
+  {flag:'🇸🇻',country:'El Salvador',code:'+503'},
+  {flag:'🇬🇶',country:'Equatorial Guinea',code:'+240'},
+  {flag:'🇪🇷',country:'Eritrea',code:'+291'},
+  {flag:'🇪🇪',country:'Estonia',code:'+372'},
+  {flag:'🇸🇿',country:'Eswatini',code:'+268'},
+  {flag:'🇪🇹',country:'Ethiopia',code:'+251'},
+  {flag:'🇫🇯',country:'Fiji',code:'+679'},
+  {flag:'🇫🇮',country:'Finland',code:'+358'},
+  {flag:'🇫🇷',country:'France',code:'+33'},
+  {flag:'🇬🇦',country:'Gabon',code:'+241'},
+  {flag:'🇬🇲',country:'Gambia',code:'+220'},
+  {flag:'🇬🇪',country:'Georgia',code:'+995'},
+  {flag:'🇩🇪',country:'Germany',code:'+49'},
+  {flag:'🇬🇭',country:'Ghana',code:'+233'},
+  {flag:'🇬🇷',country:'Greece',code:'+30'},
+  {flag:'🇬🇩',country:'Grenada',code:'+1473'},
+  {flag:'🇬🇹',country:'Guatemala',code:'+502'},
+  {flag:'🇬🇳',country:'Guinea',code:'+224'},
+  {flag:'🇬🇼',country:'Guinea-Bissau',code:'+245'},
+  {flag:'🇬🇾',country:'Guyana',code:'+592'},
+  {flag:'🇭🇹',country:'Haiti',code:'+509'},
+  {flag:'🇭🇳',country:'Honduras',code:'+504'},
+  {flag:'🇭🇺',country:'Hungary',code:'+36'},
+  {flag:'🇮🇸',country:'Iceland',code:'+354'},
+  {flag:'🇮🇳',country:'India',code:'+91'},
+  {flag:'🇮🇩',country:'Indonesia',code:'+62'},
+  {flag:'🇮🇷',country:'Iran',code:'+98'},
+  {flag:'🇮🇶',country:'Iraq',code:'+964'},
+  {flag:'🇮🇪',country:'Ireland',code:'+353'},
+  {flag:'🇮🇱',country:'Israel',code:'+972'},
+  {flag:'🇮🇹',country:'Italy',code:'+39'},
+  {flag:'🇯🇲',country:'Jamaica',code:'+1876'},
+  {flag:'🇯🇵',country:'Japan',code:'+81'},
+  {flag:'🇯🇴',country:'Jordan',code:'+962'},
+  {flag:'🇰🇿',country:'Kazakhstan',code:'+7'},
+  {flag:'🇰🇪',country:'Kenya',code:'+254'},
+  {flag:'🇰🇮',country:'Kiribati',code:'+686'},
+  {flag:'🇽🇰',country:'Kosovo',code:'+383'},
+  {flag:'🇰🇼',country:'Kuwait',code:'+965'},
+  {flag:'🇰🇬',country:'Kyrgyzstan',code:'+996'},
+  {flag:'🇱🇦',country:'Laos',code:'+856'},
+  {flag:'🇱🇻',country:'Latvia',code:'+371'},
+  {flag:'🇱🇧',country:'Lebanon',code:'+961'},
+  {flag:'🇱🇸',country:'Lesotho',code:'+266'},
+  {flag:'🇱🇷',country:'Liberia',code:'+231'},
+  {flag:'🇱🇾',country:'Libya',code:'+218'},
+  {flag:'🇱🇮',country:'Liechtenstein',code:'+423'},
+  {flag:'🇱🇹',country:'Lithuania',code:'+370'},
+  {flag:'🇱🇺',country:'Luxembourg',code:'+352'},
+  {flag:'🇲🇬',country:'Madagascar',code:'+261'},
+  {flag:'🇲🇼',country:'Malawi',code:'+265'},
+  {flag:'🇲🇾',country:'Malaysia',code:'+60'},
+  {flag:'🇲🇻',country:'Maldives',code:'+960'},
+  {flag:'🇲🇱',country:'Mali',code:'+223'},
+  {flag:'🇲🇹',country:'Malta',code:'+356'},
+  {flag:'🇲🇭',country:'Marshall Islands',code:'+692'},
+  {flag:'🇲🇷',country:'Mauritania',code:'+222'},
+  {flag:'🇲🇺',country:'Mauritius',code:'+230'},
   {flag:'🇲🇽',country:'Mexico',code:'+52'},
+  {flag:'🇫🇲',country:'Micronesia',code:'+691'},
+  {flag:'🇲🇩',country:'Moldova',code:'+373'},
+  {flag:'🇲🇨',country:'Monaco',code:'+377'},
+  {flag:'🇲🇳',country:'Mongolia',code:'+976'},
+  {flag:'🇲🇪',country:'Montenegro',code:'+382'},
+  {flag:'🇲🇦',country:'Morocco',code:'+212'},
+  {flag:'🇲🇿',country:'Mozambique',code:'+258'},
+  {flag:'🇲🇲',country:'Myanmar',code:'+95'},
+  {flag:'🇳🇦',country:'Namibia',code:'+264'},
+  {flag:'🇳🇷',country:'Nauru',code:'+674'},
+  {flag:'🇳🇵',country:'Nepal',code:'+977'},
   {flag:'🇳🇱',country:'Netherlands',code:'+31'},
   {flag:'🇳🇿',country:'New Zealand',code:'+64'},
-  {flag:'🇮🇹',country:'Italy',code:'+39'},
-  {flag:'🇪🇸',country:'Spain',code:'+34'},
+  {flag:'🇳🇮',country:'Nicaragua',code:'+505'},
+  {flag:'🇳🇪',country:'Niger',code:'+227'},
+  {flag:'🇳🇬',country:'Nigeria',code:'+234'},
+  {flag:'🇲🇰',country:'North Macedonia',code:'+389'},
+  {flag:'🇳🇴',country:'Norway',code:'+47'},
+  {flag:'🇴🇲',country:'Oman',code:'+968'},
+  {flag:'🇵🇰',country:'Pakistan',code:'+92'},
+  {flag:'🇵🇼',country:'Palau',code:'+680'},
+  {flag:'🇵🇦',country:'Panama',code:'+507'},
+  {flag:'🇵🇬',country:'Papua New Guinea',code:'+675'},
+  {flag:'🇵🇾',country:'Paraguay',code:'+595'},
+  {flag:'🇵🇪',country:'Peru',code:'+51'},
+  {flag:'🇵🇭',country:'Philippines',code:'+63'},
+  {flag:'🇵🇱',country:'Poland',code:'+48'},
   {flag:'🇵🇹',country:'Portugal',code:'+351'},
-  {flag:'🇰🇷',country:'South Korea',code:'+82'},
+  {flag:'🇶🇦',country:'Qatar',code:'+974'},
+  {flag:'🇷🇴',country:'Romania',code:'+40'},
+  {flag:'🇷🇺',country:'Russia',code:'+7'},
+  {flag:'🇷🇼',country:'Rwanda',code:'+250'},
+  {flag:'🇰🇳',country:'Saint Kitts & Nevis',code:'+1869'},
+  {flag:'🇱🇨',country:'Saint Lucia',code:'+1758'},
+  {flag:'🇻🇨',country:'Saint Vincent & Grenadines',code:'+1784'},
+  {flag:'🇼🇸',country:'Samoa',code:'+685'},
+  {flag:'🇸🇲',country:'San Marino',code:'+378'},
+  {flag:'🇸🇹',country:'São Tomé & Príncipe',code:'+239'},
+  {flag:'🇸🇦',country:'Saudi Arabia',code:'+966'},
+  {flag:'🇸🇳',country:'Senegal',code:'+221'},
+  {flag:'🇷🇸',country:'Serbia',code:'+381'},
+  {flag:'🇸🇨',country:'Seychelles',code:'+248'},
+  {flag:'🇸🇱',country:'Sierra Leone',code:'+232'},
+  {flag:'🇸🇬',country:'Singapore',code:'+65'},
+  {flag:'🇸🇰',country:'Slovakia',code:'+421'},
+  {flag:'🇸🇮',country:'Slovenia',code:'+386'},
+  {flag:'🇸🇧',country:'Solomon Islands',code:'+677'},
+  {flag:'🇸🇴',country:'Somalia',code:'+252'},
+  {flag:'🇿🇦',country:'South Africa',code:'+27'},
+  {flag:'🇸🇸',country:'South Sudan',code:'+211'},
+  {flag:'🇪🇸',country:'Spain',code:'+34'},
+  {flag:'🇱🇰',country:'Sri Lanka',code:'+94'},
+  {flag:'🇸🇩',country:'Sudan',code:'+249'},
+  {flag:'🇸🇷',country:'Suriname',code:'+597'},
+  {flag:'🇸🇪',country:'Sweden',code:'+46'},
+  {flag:'🇨🇭',country:'Switzerland',code:'+41'},
+  {flag:'🇸🇾',country:'Syria',code:'+963'},
+  {flag:'🇹🇼',country:'Taiwan',code:'+886'},
+  {flag:'🇹🇯',country:'Tajikistan',code:'+992'},
+  {flag:'🇹🇿',country:'Tanzania',code:'+255'},
+  {flag:'🇹🇭',country:'Thailand',code:'+66'},
+  {flag:'🇹🇱',country:'Timor-Leste',code:'+670'},
+  {flag:'🇹🇬',country:'Togo',code:'+228'},
+  {flag:'🇹🇴',country:'Tonga',code:'+676'},
+  {flag:'🇹🇹',country:'Trinidad & Tobago',code:'+1868'},
+  {flag:'🇹🇳',country:'Tunisia',code:'+216'},
+  {flag:'🇹🇷',country:'Turkey',code:'+90'},
+  {flag:'🇹🇲',country:'Turkmenistan',code:'+993'},
+  {flag:'🇹🇻',country:'Tuvalu',code:'+688'},
+  {flag:'🇺🇬',country:'Uganda',code:'+256'},
+  {flag:'🇺🇦',country:'Ukraine',code:'+380'},
+  {flag:'🇦🇪',country:'United Arab Emirates',code:'+971'},
+  {flag:'🇬🇧',country:'United Kingdom',code:'+44'},
+  {flag:'🇺🇸',country:'United States',code:'+1'},
+  {flag:'🇺🇾',country:'Uruguay',code:'+598'},
+  {flag:'🇺🇿',country:'Uzbekistan',code:'+998'},
+  {flag:'🇻🇺',country:'Vanuatu',code:'+678'},
+  {flag:'🇻🇦',country:'Vatican City',code:'+39'},
+  {flag:'🇻🇪',country:'Venezuela',code:'+58'},
+  {flag:'🇻🇳',country:'Vietnam',code:'+84'},
+  {flag:'🇾🇪',country:'Yemen',code:'+967'},
+  {flag:'🇿🇲',country:'Zambia',code:'+260'},
+  {flag:'🇿🇼',country:'Zimbabwe',code:'+263'},
 ];
 
-let selectedPrefix = COUNTRY_CODES[0];
+let selectedPrefix = COUNTRY_CODES.find(c => c.country === 'United States') || COUNTRY_CODES[0];
 
 function renderPrefixOptions(filter) {
   const dd = document.getElementById('prefix-dropdown');
@@ -1595,6 +1746,18 @@ function initPrefixDropdown() {
   const arrowEl = document.getElementById('prefix-arrow');
   if(!searchEl) return;
 
+  // Issue 19: guard against duplicate initialization on second renderAll call
+  if(searchEl.dataset.prefixBound) {
+    // Already bound — just sync the displayed value to selectedPrefix
+    searchEl.value = selectedPrefix.code;
+    searchEl.style.width = Math.max(28, selectedPrefix.code.length * 9 + 4) + 'px';
+    document.getElementById('prefix-flag').textContent = selectedPrefix.flag;
+    return;
+  }
+  searchEl.dataset.prefixBound = '1';
+
+  // Sync initial display value to selectedPrefix (Issue 18 companion fix)
+  searchEl.value = selectedPrefix.code;
   // Set initial width
   searchEl.style.width = Math.max(28, selectedPrefix.code.length * 9 + 4) + 'px';
 
@@ -1761,6 +1924,26 @@ renderTicker();
 applyTranslations();
 initPrefixDropdown();
 
+/* ── GLOBAL EXPOSURES — cross-file compatibility ──────────────
+   The prefix system above uses selectedPrefix internally.
+   These window shims let auth.js / register.html interact with
+   the same pattern used across the project.
+   ────────────────────────────────────────────────────────────*/
+window.prefixManuallyEdited = false;
+(function() {
+  const si = document.getElementById('prefix-search');
+  if(si) {
+    si.addEventListener('input', () => {
+      window.prefixManuallyEdited = si.value.trim() !== (selectedPrefix ? selectedPrefix.code : '');
+    });
+  }
+})();
+window.syncPhoneCode = function(code) {
+  if(window.prefixManuallyEdited) return;
+  const idx = COUNTRY_CODES.findIndex(c => c.code === code);
+  if(idx >= 0) selectPrefix(idx);
+};
+
 loadFromSupabase().then(data => {
   if(data) {
     Object.assign(C, data);
@@ -1768,6 +1951,182 @@ loadFromSupabase().then(data => {
     initPrefixDropdown();
   }
 });
+
+/* ── PHASE 5: TEAM MEMBERS — Supabase fetch ──────────────────
+   Fetches live team data from team_members table.
+   Falls back to C.team defaults if table is empty or unavailable.
+   ─────────────────────────────────────────────────────────── */
+async function loadTeamFromSupabase() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/team_members?select=name,role,bio,image_url,sort_order&is_active=eq.true&order=sort_order.asc`,
+      { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+    );
+    if (!res.ok) return;
+    const rows = await res.json();
+    if (!rows || !rows.length) return; // keep defaults
+    // Map DB columns → C.team shape
+    C.team = rows.map(r => ({
+      name:    r.name,
+      role:    r.role,
+      bio:     r.bio || '',
+      photo:   r.image_url || null,
+      initials: r.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
+    }));
+    // Re-render team section only
+    const tg = document.getElementById('team-grid');
+    if (tg && C.team.length) {
+      tg.innerHTML = C.team.map(m => `
+        <div class="team-card">
+          <div class="team-avatar">
+            ${m.photo ? `<img src="${m.photo}" alt="${m.name}" loading="lazy">` : ''}
+            <span class="team-avatar-initials"${m.photo ? ' style="display:none"' : ''}>${m.initials}</span>
+          </div>
+          <div class="team-info">
+            <div class="team-name">${m.name}</div>
+            <div class="team-role">${m.role}</div>
+            <div class="team-bio">${m.bio}</div>
+          </div>
+        </div>`).join('');
+      // Issue 20: re-observe so stagger animation fires on injected children
+      if (typeof observer !== 'undefined') observer.observe(tg);
+    }
+  } catch(e) { /* keep default team data on any error */ }
+}
+
+loadTeamFromSupabase();
+
+/* ── PHASE 6: ARTICLES — dynamic loader ──────────────────────
+   Priority order:
+   1. External blog API (url stored in Supabase settings.blog_api_url)
+   2. Supabase site_content 'articles' JSON key (admin-managed)
+   3. C.articles defaults (always available, no network needed)
+   ─────────────────────────────────────────────────────────── */
+
+function renderArticles(articles) {
+  const grid = document.getElementById('insights-grid');
+  if (!grid) return;
+  // Store full articles array so article.html can access any entry
+  try { sessionStorage.setItem('hcp_articles', JSON.stringify(articles)); } catch(e) {}
+  grid.innerHTML = articles.map((a, idx) => {
+    // Issue 7: sanitize external URLs — only allow http/https
+    const safeUrl = (a.url && a.url.startsWith('http')) ? a.url : '#';
+    return `
+    <div class="insight-card${a.image ? '' : ' no-image'}" data-article-idx="${idx}" data-article-url="${safeUrl}">
+      ${a.image ? `<div class="insight-image-wrap"><img class="insight-image" src="${a.image}" alt="${a.title}" loading="lazy"></div>` : ''}
+      <div class="insight-body">
+        <div class="insight-tag">${a.tag || 'Article'}</div>
+        <div class="insight-title">${a.title}</div>
+        <div class="insight-excerpt">${a.excerpt}</div>
+        <div class="insight-date">${a.date}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Issue 4: use onclick to prevent listener stacking on repeated calls
+  grid.onclick = function(e) {
+    const card = e.target.closest('[data-article-idx]');
+    if (!card) return;
+    const url = card.dataset.articleUrl;
+    if (url && url !== '#' && url.startsWith('http')) {
+      window.open(url, '_blank', 'noopener');
+      return;
+    }
+    const idx = card.dataset.articleIdx;
+    window.location.href = `article.html?id=${idx}`;
+  };
+
+  // Issue 20: re-observe after content injected so stagger animation fires
+  if (typeof observer !== 'undefined') observer.observe(grid);
+}
+
+function showArticleSkeletons() {
+  const grid = document.getElementById('insights-grid');
+  if (!grid) return;
+  grid.innerHTML = Array(3).fill(`
+    <div class="insight-skeleton">
+      <div class="sk-img"></div>
+      <div class="sk-body">
+        <div class="sk-line" style="width:35%;height:8px"></div>
+        <div class="sk-line" style="width:90%"></div>
+        <div class="sk-line" style="width:75%"></div>
+        <div class="sk-line" style="width:80%;height:8px;margin-top:4px"></div>
+        <div class="sk-line" style="width:55%;height:8px;margin-top:4px"></div>
+        <div class="sk-line" style="width:30%;height:8px;margin-top:8px"></div>
+      </div>
+    </div>`).join('');
+}
+
+async function loadArticles() {
+  showArticleSkeletons();
+
+  try {
+    // 1. Check Supabase settings for external blog API URL
+    const settingsRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/settings?select=key,value&key=eq.blog_api_url`,
+      { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+    );
+    if (settingsRes.ok) {
+      const settingsRows = await settingsRes.json();
+      const blogApiUrl = settingsRows?.[0]?.value?.trim();
+
+      if (blogApiUrl) {
+        // External API configured — fetch from it
+        const apiRes = await fetch(blogApiUrl);
+        if (apiRes.ok) {
+          const apiData = await apiRes.json();
+          // Normalize: supports {articles:[...]}, [{...},...], or RSS-like shape
+          const raw = Array.isArray(apiData) ? apiData : (apiData.articles || apiData.items || []);
+          if (raw.length) {
+            const normalized = raw.slice(0, 6).map(item => ({
+              tag:     item.tag || item.category || item.section || 'Article',
+              title:   item.title || item.name || '',
+              excerpt: item.excerpt || item.description || item.summary || '',
+              date:    item.date || item.published_at || item.pubDate || '',
+              image:   item.image || item.image_url || item.thumbnail || item.urlToImage || null,
+              url:     item.url || item.link || item.href || '#',
+            })).filter(a => a.title);
+            if (normalized.length) { renderArticles(normalized); return; }
+          }
+        }
+      }
+    }
+  } catch(e) { /* fall through */ }
+
+  try {
+    // 2. Check Supabase site_content for 'articles' key (admin CMS-managed)
+    const cmsRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/site_content?select=value&key=eq.articles`,
+      { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` } }
+    );
+    if (cmsRes.ok) {
+      const cmsRows = await cmsRes.json();
+      const raw = cmsRows?.[0]?.value;
+      if (raw) {
+        const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+        if (Array.isArray(parsed) && parsed.length) {
+          renderArticles(parsed);
+          return;
+        }
+      }
+    }
+  } catch(e) { /* fall through */ }
+
+  // 3. Fallback — C.articles defaults (always works)
+  renderArticles(C.articles);
+}
+
+loadArticles();
+</script>
+
+<!-- ═══ i18n MODULE ═══ -->
+<script type="module">
+  import { initI18n, t, setLang, applyToDOM } from '../js-css/i18n.js';
+  // Expose to non-module scope so existing inline callers work
+  window._i18n = { t, setLang, applyToDOM };
+  initI18n();
+  // Re-apply after renderAll (content may have overwritten text nodes)
+  document.addEventListener('hcp:rendered', () => applyToDOM());
 </script>
 </body>
 </html>

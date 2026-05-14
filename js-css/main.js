@@ -63,7 +63,7 @@ export async function initApp({ skipAuth = false } = {}) {
     const path = window.location.pathname;
     const isMaintPage = path.includes('maintenance') || path.includes('admin');
     if (!isMaintPage) {
-      window.location.href = '/maintenance.html';
+      window.location.href = '/htmlpages/maintenance.html';
     }
   }
 

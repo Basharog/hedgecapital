@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://egedzwcezqksjeozzttd.supabase.co https://ipapi.co https:; frame-src 'none'; object-src 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — HedgeCapitalPro | Financial Consulting & Asset Management</title>
+<meta name="description" content="HedgeCapitalPro is a premier financial consulting firm dedicated to helping clients grow and protect wealth through expert guidance and personalized strategies.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060a12;--surface:#0b1120;--surface2:#101828;--surface3:#141f32;
+  --border:rgba(100,160,220,0.10);--border2:rgba(100,160,220,0.18);
+  --accent:#00d9b5;--accent2:#1466ff;
+  --text:#dce6f0;--muted:#5a7095;
+  --head:'Syne',sans-serif;--body:'Outfit',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  background:rgba(6,10,18,.92);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{font-family:var(--head);font-weight:800;font-size:19px;color:#fff;text-decoration:none;letter-spacing:-.3px}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.3px;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;padding:10px 22px;border-radius:3px;font-family:var(--body);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s;border:none;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#06090f}
+.btn-primary:hover{opacity:.85}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--text)}
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:20px 24px;z-index:199;flex-direction:column}
+.mobile-menu.open{display:flex}
+.mobile-menu a{display:block;padding:14px 0;color:var(--muted);text-decoration:none;font-size:15px;border-bottom:1px solid var(--border)}
+.mobile-menu a:last-child{border-bottom:none}
+
+/* ── HERO ── */
+.about-hero{
+  padding:160px 48px 100px;text-align:center;position:relative;overflow:hidden;
+}
+.hero-bg{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%)}
+.hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,217,181,.08) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none}
+.hero-glow2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(20,102,255,.05) 0%,transparent 70%);bottom:-100px;left:-50px;pointer-events:none}
+.about-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:24px;position:relative}
+.about-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent)}
+.about-hero h1{position:relative;font-family:var(--head);font-size:clamp(36px,6vw,72px);font-weight:800;color:#fff;letter-spacing:-2.5px;line-height:1.05;margin-bottom:24px}
+.about-hero h1 span{color:var(--accent)}
+.about-hero p{position:relative;font-size:18px;color:var(--muted);max-width:600px;margin:0 auto 40px;line-height:1.8}
+.hero-actions{position:relative;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ── STATS BAR ── */
+.stats-bar{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px}
+.stats-grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);text-align:center}
+.stat{padding:12px 24px;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-num{font-family:var(--head);font-size:44px;font-weight:800;color:var(--accent);letter-spacing:-2px;line-height:1;margin-bottom:8px}
+.stat-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;font-weight:500}
+
+/* ── CONTENT SECTIONS ── */
+.section{padding:96px 48px;max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.section-title{font-family:var(--head);font-size:clamp(26px,4vw,44px);font-weight:700;color:#fff;letter-spacing:-1px;line-height:1.1;margin-bottom:24px}
+.section-body{font-size:16px;color:var(--muted);line-height:1.85;max-width:720px}
+.section-body p{margin-bottom:20px}
+.section-body p:last-child{margin-bottom:0}
+
+/* ── SPLIT SECTIONS ── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.split.reverse .split-visual{order:-1}
+.split-visual{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:48px;min-height:360px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.split-visual .grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:32px 32px}
+
+/* ── VISUAL ELEMENTS ── */
+.metric-list{position:relative;display:flex;flex-direction:column;gap:16px;width:100%}
+.metric-item{display:flex;align-items:center;gap:14px;padding:14px;background:rgba(0,217,181,.04);border:1px solid rgba(0,217,181,.12);border-radius:4px}
+.metric-icon{font-size:20px;width:40px;height:40px;background:rgba(0,217,181,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.metric-label{font-size:12px;color:var(--muted);margin-bottom:2px}
+.metric-value{font-family:var(--head);font-size:18px;font-weight:700;color:#fff}
+
+/* ── CREDENTIALS ── */
+.credentials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.cred-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:24px;text-align:center;transition:border-color .2s}
+.cred-card:hover{border-color:var(--accent)}
+.cred-icon{font-size:28px;margin-bottom:12px}
+.cred-title{font-family:var(--head);font-size:14px;font-weight:700;color:#fff;margin-bottom:6px}
+.cred-desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* ── VALUES ── */
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.val-card{background:var(--surface);padding:32px;transition:background .25s}
+.val-card:hover{background:var(--surface2)}
+.val-icon{width:38px;height:38px;border-radius:4px;background:rgba(0,217,181,.1);border:1px solid rgba(0,217,181,.2);display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:16px}
+.val-title{font-family:var(--head);font-size:16px;font-weight:700;color:#fff;margin-bottom:8px}
+.val-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ── TEAM ── */
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:8px}
+.team-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color .2s,transform .2s}
+.team-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.team-avatar-wrap{height:180px;background:var(--surface2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.team-avatar-wrap img{width:100%;height:100%;object-fit:cover}
+.team-initials{font-family:var(--head);font-size:36px;font-weight:800;color:var(--accent);opacity:.4}
+.team-info{padding:18px}
+.team-name{font-family:var(--head);font-size:15px;font-weight:700;color:#fff;margin-bottom:4px}
+.team-role{font-size:12px;color:var(--accent);margin-bottom:8px;font-weight:500}
+.team-bio{font-size:12px;color:var(--muted);line-height:1.65}
+.team-empty{text-align:center;padding:60px 20px;color:var(--muted);grid-column:1/-1}
+.team-empty-icon{font-size:36px;margin-bottom:12px;opacity:.4}
+
+/* ── CTA STRIP ── */
+.cta-strip{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 48px;text-align:center}
+.cta-strip h2{font-family:var(--head);font-size:clamp(24px,4vw,42px);font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:16px}
+.cta-strip h2 span{color:var(--accent)}
+.cta-strip p{font-size:16px;color:var(--muted);margin-bottom:36px;line-height:1.8}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:48px;text-align:center}
+.footer-logo{font-family:var(--head);font-weight:800;font-size:18px;color:#fff;text-decoration:none;margin-bottom:12px;display:inline-block}
+.footer-logo span{color:var(--accent)}
+.footer-copy{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .about-hero{padding:120px 20px 72px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:none}
+  .stat{border-bottom:1px solid var(--border);padding-bottom:24px}
+  .stat:nth-child(3),.stat:nth-child(4){border-bottom:none}
+  .stats-bar{padding:40px 20px}
+  .section{padding:60px 20px}
+  .split{grid-template-columns:1fr;gap:40px}
+  .split.reverse .split-visual{order:0}
+  .split-visual{min-height:280px}
+  .credentials-grid{grid-template-columns:1fr 1fr}
+  .values-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:repeat(2,1fr)}
+  .cta-strip{padding:60px 20px}
+  footer{padding:32px 20px}
+}
+@media(max-width:480px){
+  .team-grid{grid-template-columns:1fr}
+  .credentials-grid{grid-template-columns:1fr}
+  .hero-actions,.cta-actions{flex-direction:column;align-items:center}
+  .btn{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="index.html" class="nav-logo">Hedge<span>Capital</span>Pro</a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="about.html" style="color:var(--text)">About</a></li>
+    <li><a href="index.html#insights">Insights</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="login.html" class="btn btn-ghost" style="font-size:12px">Client Portal</a>
+    <a href="index.html#contact" class="btn btn-primary">Get a Consultation</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html#services">Services</a>
+  <a href="about.html">About</a>
+  <a href="index.html#insights">Insights</a>
+  <a href="index.html#contact">Contact</a>
+  <a href="login.html">Client Portal</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="about-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="about-eyebrow">Our Story</div>
+  <h1>Built on trust.<br><span>Driven by results.</span></h1>
+  <p>For over 18 years, HedgeCapitalPro has helped individuals, families, and institutions build lasting wealth through disciplined strategy, deep expertise, and unwavering integrity.</p>
+  <div class="hero-actions">
+    <a href="index.html#contact" class="btn btn-primary">Schedule a Consultation</a>
+    <a href="#team" class="btn btn-ghost">Meet Our Team</a>
+  </div>
+</section>
+
+<!-- ═══ STATS ═══ -->
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-num">18+</div><div class="stat-lbl">Years of Experience</div></div>
+    <div class="stat"><div class="stat-num">1,400+</div><div class="stat-lbl">Clients Served</div></div>
+    <div class="stat"><div class="stat-num">$2B+</div><div class="stat-lbl">Assets Under Management</div></div>
+    <div class="stat"><div class="stat-num">200+</div><div class="stat-lbl">Specialists</div></div>
+  </div>
+</div>
+
+<!-- ═══ OUR STORY ═══ -->
+<div class="section">
+  <div class="split">
+    <div>
+      <div class="section-label">Who We Are</div>
+      <div class="section-title">A firm founded on<br>client-first principles</div>
+      <div class="section-body">
+        <p>HedgeCapitalPro was founded with a singular conviction: that every client deserves access to institutional-quality financial expertise, regardless of their starting point. We combine deep market knowledge with a genuinely personalized approach — treating each portfolio as if it were our own.</p>
+        <p>Our team of 200+ specialists spans financial planning, portfolio management, tax strategy, estate planning, and alternative investments. We operate across multiple asset classes and geographies, providing our clients with a truly global perspective anchored by local insight.</p>
+        <p>We are fiduciaries — meaning we are legally and ethically obligated to act in your best interest at all times. No commissions. No conflicts of interest. Just clear, objective advice.</p>
+      </div>
+    </div>
+    <div class="split-visual">
+      <div class="grid-bg"></div>
+      <div class="metric-list">
+        <div class="metric-item">
+          <div class="metric-icon">📈</div>
+          <div><div class="metric-label">Average Annual Return</div><div class="metric-value">+18.4% (10yr)</div></div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-icon">🛡️</div>
+          <div><div class="metric-label">Client Retention Rate</div><div class="metric-value">97.3%</div></div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-icon">🌍</div>
+          <div><div class="metric-label">Countries Served</div><div class="metric-value">50+ Nations</div></div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-icon">⭐</div>
+          <div><div class="metric-label">Client Satisfaction</div><div class="metric-value">4.9 / 5.0</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MISSION ═══ -->
+<div style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="section">
+    <div class="split reverse">
+      <div class="split-visual">
+        <div class="grid-bg"></div>
+        <div style="position:relative;text-align:center;padding:20px">
+          <div style="font-family:var(--head);font-size:13px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px">Our Mission</div>
+          <blockquote style="font-family:var(--head);font-size:clamp(18px,2.5vw,26px);font-weight:700;color:#fff;line-height:1.4;letter-spacing:-.5px">
+            "To empower every client to achieve financial independence through expertise, transparency, and partnership."
+          </blockquote>
+          <div style="margin-top:20px;font-size:13px;color:var(--muted)">— HedgeCapitalPro Founding Charter, 2006</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Our Approach</div>
+        <div class="section-title">Strategy before<br>product. Always.</div>
+        <div class="section-body">
+          <p>We begin every client relationship with a comprehensive discovery process — understanding not just your financial situation, but your life goals, family dynamics, risk psychology, and legacy intentions.</p>
+          <p>From there, we build a bespoke financial plan that is reviewed quarterly and updated as your life evolves. We believe great financial planning is a living process, not a one-time transaction.</p>
+          <p>Our investment philosophy is rooted in evidence-based principles: broad diversification, disciplined rebalancing, tax efficiency, and long-term patience. We don't chase trends — we build portfolios designed to compound steadily over decades.</p>
+        </div>
+        <a href="index.html#contact" class="btn btn-primary" style="margin-top:28px;display:inline-flex">Start Your Journey →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CREDENTIALS ═══ -->
+<div class="section">
+  <div style="text-align:center;margin-bottom:52px">
+    <div class="section-label" style="justify-content:center;display:flex">Credentials & Memberships</div>
+    <div class="section-title" style="margin-bottom:0">Accredited. Regulated. Trusted.</div>
+  </div>
+  <div class="credentials-grid">
+    <div class="cred-card">
+      <div class="cred-icon">🏛️</div>
+      <div class="cred-title">SEC Registered</div>
+      <div class="cred-desc">Registered Investment Advisor with the U.S. Securities & Exchange Commission</div>
+    </div>
+    <div class="cred-card">
+      <div class="cred-icon">📜</div>
+      <div class="cred-title">CFA Institute</div>
+      <div class="cred-desc">Our lead advisors hold CFA designations, the global gold standard in investment management</div>
+    </div>
+    <div class="cred-card">
+      <div class="cred-icon">🔒</div>
+      <div class="cred-title">ISO 27001 Certified</div>
+      <div class="cred-desc">Information security management certified — your data is protected to the highest standard</div>
+    </div>
+    <div class="cred-card">
+      <div class="cred-icon">⚖️</div>
+      <div class="cred-title">Fiduciary Standard</div>
+      <div class="cred-desc">Legally bound to act in your best interest at all times — no commissions, no conflicts</div>
+    </div>
+    <div class="cred-card">
+      <div class="cred-icon">🌐</div>
+      <div class="cred-title">FINRA Member</div>
+      <div class="cred-desc">Member of the Financial Industry Regulatory Authority, providing added investor protection</div>
+    </div>
+    <div class="cred-card">
+      <div class="cred-icon">🏆</div>
+      <div class="cred-title">Best in Wealth 2024</div>
+      <div class="cred-desc">Named one of the top boutique wealth management firms by WealthBriefing Awards</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VALUES ═══ -->
+<div style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="section">
+    <div style="text-align:center;margin-bottom:44px">
+      <div class="section-label" style="justify-content:center;display:flex">Our Values</div>
+      <div class="section-title" style="margin-bottom:0">What we stand for</div>
+    </div>
+    <div class="values-grid">
+      <div class="val-card">
+        <div class="val-icon">⚖️</div>
+        <div class="val-title">Integrity</div>
+        <div class="val-desc">We hold ourselves to the highest ethical standards in every interaction — with clients, partners, and each other.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">🔒</div>
+        <div class="val-title">Trust & Confidentiality</div>
+        <div class="val-desc">Your financial life is private. We treat every detail you share with absolute discretion and respect.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">🎯</div>
+        <div class="val-title">Objectivity</div>
+        <div class="val-desc">No sales quotas. No product commissions. Just clear, unbiased advice grounded in your best interest.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">💡</div>
+        <div class="val-title">Expertise</div>
+        <div class="val-desc">We invest relentlessly in our team's knowledge — so our advice is always current, rigorous, and relevant.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">🤝</div>
+        <div class="val-title">Partnership</div>
+        <div class="val-desc">We build long-term relationships, not transactions. Your success is our reputation.</div>
+      </div>
+      <div class="val-card">
+        <div class="val-icon">📊</div>
+        <div class="val-title">Accountability</div>
+        <div class="val-desc">We measure what matters, report transparently, and take ownership of every outcome.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TEAM ═══ -->
+<div class="section" id="team">
+  <div style="text-align:center;margin-bottom:44px">
+    <div class="section-label" style="justify-content:center;display:flex">Our People</div>
+    <div class="section-title" style="margin-bottom:8px">The team behind your wealth</div>
+    <p style="font-size:15px;color:var(--muted);max-width:520px;margin:0 auto;line-height:1.8">Experienced professionals across financial planning, investment management, tax strategy, and client services.</p>
+  </div>
+  <div class="team-grid" id="team-grid">
+    <!-- Populated by JS from Supabase team_members table -->
+    <div class="team-empty">
+      <div class="team-empty-icon">👥</div>
+      <div>Loading team members…</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:36px">
+    <a href="index.html#contact" class="btn btn-ghost">Join Our Team →</a>
+  </div>
+</div>
+
+<!-- ═══ CTA STRIP ═══ -->
+<div class="cta-strip">
+  <h2>Ready to build your <span>financial future?</span></h2>
+  <p>Schedule a complimentary consultation with one of our senior advisors.<br>No obligation. No pressure. Just clarity.</p>
+  <div class="cta-actions">
+    <a href="index.html#contact" class="btn btn-primary">Schedule a Free Consultation</a>
+    <a href="register.html" class="btn btn-ghost">Create Your Account</a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <a href="index.html" class="footer-logo">Hedge<span>Capital</span>Pro</a>
+  <div class="footer-copy">© 2025 HedgeCapitalPro. All rights reserved. · <a href="#" style="color:var(--muted);text-decoration:none">Privacy Policy</a> · <a href="#" style="color:var(--muted);text-decoration:none">Terms of Use</a></div>
+</footer>
+
+<script>
+// ── MOBILE NAV ────────────────────────────────────────────────
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobile-menu').classList.toggle('open');
+});
+
+// ── TEAM MEMBERS — Supabase fetch ─────────────────────────────
+const SUPABASE_URL = 'https://egedzwcezqksjeozzttd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_YOGPxMoD0RWCTW43n-hurw_es3iSN8K';
+
+const FALLBACK_TEAM = [
+  { name:'Jonathan Reed',    role:'Chief Executive Officer',      bio:'20+ years in global asset management and private equity.', initials:'JR' },
+  { name:'Aisha Okonkwo',    role:'Head of Risk & Compliance',    bio:'15 years guiding regulatory frameworks across 3 continents.', initials:'AO' },
+  { name:'Marcus Leblanc',   role:'Director of Investments',      bio:'CFA charterholder. Former Goldman Sachs portfolio manager.', initials:'ML' },
+  { name:'Priya Nambiar',    role:'Head of Client Strategy',      bio:'Specialist in high-net-worth financial planning and estate strategy.', initials:'PN' },
+];
+
+async function loadTeam() {
+  const grid = document.getElementById('team-grid');
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/team_members?select=name,role,bio,image_url,sort_order&is_active=eq.true&order=sort_order.asc`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    if (res.ok) {
+      const rows = await res.json();
+      if (rows?.length) {
+        renderTeam(grid, rows.map(r => ({
+          name:     r.name,
+          role:     r.role,
+          bio:      r.bio || '',
+          image:    r.image_url || null,
+          initials: r.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
+        })));
+        return;
+      }
+    }
+  } catch(e) { /* fall through to fallback */ }
+  renderTeam(grid, FALLBACK_TEAM.map(m => ({ ...m, image: null })));
+}
+
+function renderTeam(grid, members) {
+  grid.innerHTML = members.map(m => `
+    <div class="team-card">
+      <div class="team-avatar-wrap">
+        ${m.image
+          ? `<img src="${m.image}" alt="${m.name}" loading="lazy">`
+          : `<div class="team-initials">${m.initials || m.name.split(' ').map(n=>n[0]).join('').toUpperCase()}</div>`}
+      </div>
+      <div class="team-info">
+        <div class="team-name">${m.name}</div>
+        <div class="team-role">${m.role}</div>
+        <div class="team-bio">${m.bio}</div>
+      </div>
+    </div>`).join('');
+}
+
+loadTeam();
+</script>
+</body>
+</html>

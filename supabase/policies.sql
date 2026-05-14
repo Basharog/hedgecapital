@@ -349,6 +349,11 @@ CREATE POLICY "settings: auth reads"
     AND key NOT IN ('nowpayments_api_key', 'nowpayments_ipn_secret') -- hide sensitive keys
   );
 
+-- Public (anon) can read only the blog_api_url setting — not sensitive
+CREATE POLICY "settings: public reads blog_url"
+  ON public.settings FOR SELECT
+  USING (key = 'blog_api_url');
+
 -- Admins read all settings including sensitive ones
 CREATE POLICY "settings: admin reads all"
   ON public.settings FOR SELECT
@@ -398,6 +403,22 @@ CREATE POLICY "settings: admin updates"
 -- CREATE POLICY "team storage: admin upload"
 --   ON storage.objects FOR INSERT
 --   WITH CHECK (bucket_id = 'team-avatars' AND public.is_admin());
+
+
+-- ============================================================
+--  TABLE: contact_requests
+-- ============================================================
+ALTER TABLE public.contact_requests ENABLE ROW LEVEL SECURITY;
+
+-- Anyone (visitor) can submit a contact request
+CREATE POLICY "contact_requests: public inserts"
+  ON public.contact_requests FOR INSERT
+  WITH CHECK (TRUE);
+
+-- Only admins can read submissions
+CREATE POLICY "contact_requests: admin reads all"
+  ON public.contact_requests FOR SELECT
+  USING (public.is_admin());
 
 
 -- ============================================================

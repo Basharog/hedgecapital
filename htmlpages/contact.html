@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://egedzwcezqksjeozzttd.supabase.co https://ipapi.co https:; frame-src 'none'; object-src 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — HedgeCapitalPro | Schedule a Consultation</title>
+<meta name="description" content="Get in touch with HedgeCapitalPro. Schedule a free consultation with our senior financial advisors. Available Monday–Friday, 8am–7pm EST.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060a12;--surface:#0b1120;--surface2:#101828;--surface3:#141f32;
+  --border:rgba(100,160,220,0.10);--border2:rgba(100,160,220,0.18);
+  --accent:#00d9b5;--accent2:#1466ff;--red:#ff4d6a;
+  --text:#dce6f0;--muted:#5a7095;
+  --head:'Syne',sans-serif;--body:'Outfit',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(6,10,18,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--head);font-weight:800;font-size:19px;color:#fff;text-decoration:none;letter-spacing:-.3px}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.3px;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:3px;font-family:var(--body);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s;border:none;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#06090f}
+.btn-primary:hover{opacity:.85}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--text)}
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:20px 24px;z-index:199;flex-direction:column}
+.mobile-menu.open{display:flex}
+.mobile-menu a{display:block;padding:14px 0;color:var(--muted);text-decoration:none;font-size:15px;border-bottom:1px solid var(--border)}
+.mobile-menu a:last-child{border-bottom:none}
+
+/* ── HERO ── */
+.contact-hero{padding:160px 48px 80px;position:relative;overflow:hidden;text-align:center}
+.hero-bg{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%)}
+.hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,217,181,.08) 0%,transparent 70%);top:-200px;right:-100px;pointer-events:none}
+.contact-eyebrow{position:relative;display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
+.contact-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent)}
+.contact-hero h1{position:relative;font-family:var(--head);font-size:clamp(36px,6vw,68px);font-weight:800;color:#fff;letter-spacing:-2.5px;line-height:1.05;margin-bottom:20px}
+.contact-hero h1 span{color:var(--accent)}
+.contact-hero p{position:relative;font-size:17px;color:var(--muted);max-width:540px;margin:0 auto;line-height:1.8}
+
+/* ── MAIN GRID ── */
+.contact-main{max-width:1200px;margin:0 auto;padding:72px 48px 100px;display:grid;grid-template-columns:1fr 1.4fr;gap:72px;align-items:start}
+
+/* ── LEFT COLUMN ── */
+.contact-info-section{position:sticky;top:96px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.contact-info-title{font-family:var(--head);font-size:clamp(22px,3vw,32px);font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1.15;margin-bottom:20px}
+.contact-info-desc{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:36px}
+
+.detail-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+.detail-icon{width:40px;height:40px;border-radius:6px;background:rgba(0,217,181,.1);border:1px solid rgba(0,217,181,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px}
+.detail-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.detail-value{font-size:15px;color:#fff;font-weight:600;margin-bottom:2px}
+.detail-sub{font-size:12px;color:var(--muted)}
+
+/* Availability indicator */
+.availability{display:flex;align-items:center;gap:8px;margin-top:28px;font-size:13px;color:var(--muted);background:rgba(0,217,181,.05);border:1px solid rgba(0,217,181,.12);border-radius:4px;padding:12px 16px}
+.avail-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.2)}}
+
+/* Social links */
+.social-links{display:flex;gap:10px;margin-top:28px}
+.social-btn{width:36px;height:36px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);text-decoration:none;transition:all .2s}
+.social-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── FORM ── */
+.form-card{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:40px}
+.form-title{font-family:var(--head);font-size:20px;font-weight:700;color:#fff;margin-bottom:6px}
+.form-sub{font-size:13px;color:var(--muted);margin-bottom:32px;line-height:1.6}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.form-group input,
+.form-group select,
+.form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:12px 16px;color:var(--text);font-family:var(--body);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,217,181,.08)}
+.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7095' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.form-group select option{background:#101828;color:var(--text)}
+.form-group textarea{resize:vertical;min-height:120px;line-height:1.65}
+.form-group input.err,.form-group select.err{border-color:var(--red)}
+
+/* Phone group */
+.phone-group{display:flex;gap:8px}
+#phone-prefix{width:80px;flex-shrink:0;font-family:monospace;letter-spacing:.5px}
+#phone-number{flex:1}
+
+/* Submit */
+.submit-btn{width:100%;background:var(--accent);color:#060a12;padding:14px;border-radius:4px;font-family:var(--body);font-weight:700;font-size:14px;border:none;cursor:pointer;transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
+.submit-btn:hover{opacity:.87}
+.submit-btn:active{transform:scale(.99)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-spinner{display:none;width:16px;height:16px;border:2px solid rgba(6,10,18,.3);border-top-color:#060a12;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading .btn-spinner{display:block}
+.loading .btn-text{display:none}
+
+.form-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
+
+/* Alerts */
+.alert{border-radius:4px;padding:12px 16px;font-size:13px;margin-bottom:18px;display:none;line-height:1.55;animation:fadeDown .2s}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.alert.show{display:block}
+.alert-ok{background:rgba(0,217,181,.08);border:1px solid rgba(0,217,181,.25);color:var(--accent)}
+.alert-err{background:rgba(255,77,106,.08);border:1px solid rgba(255,77,106,.25);color:var(--red)}
+
+/* ── FAQ ── */
+.faq-section{max-width:800px;margin:0 auto;padding:0 48px 96px}
+.faq-title{font-family:var(--head);font-size:clamp(24px,4vw,36px);font-weight:700;color:#fff;letter-spacing:-.5px;text-align:center;margin-bottom:8px}
+.faq-sub{text-align:center;color:var(--muted);font-size:15px;margin-bottom:48px;line-height:1.7}
+.faq-item{border-bottom:1px solid var(--border);padding:0}
+.faq-q{width:100%;text-align:left;padding:20px 0;background:none;border:none;font-family:var(--body);font-size:15px;font-weight:600;color:#fff;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;transition:color .2s}
+.faq-q:hover{color:var(--accent)}
+.faq-arrow{font-size:18px;color:var(--muted);transition:transform .3s;flex-shrink:0}
+.faq-item.open .faq-arrow{transform:rotate(45deg);color:var(--accent)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s}
+.faq-item.open .faq-a{max-height:300px}
+.faq-a-inner{padding:0 0 20px;font-size:14px;color:var(--muted);line-height:1.8}
+
+/* ── FOOTER ── */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:48px;text-align:center}
+.footer-logo{font-family:var(--head);font-weight:800;font-size:18px;color:#fff;text-decoration:none;margin-bottom:12px;display:inline-block}
+.footer-logo span{color:var(--accent)}
+.footer-copy{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .contact-hero{padding:120px 20px 60px}
+  .contact-main{grid-template-columns:1fr;gap:48px;padding:48px 20px 72px}
+  .contact-info-section{position:static}
+  .form-card{padding:28px 20px}
+  .faq-section{padding:0 20px 72px}
+}
+@media(max-width:480px){
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="index.html" class="nav-logo">Hedge<span>Capital</span>Pro</a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="index.html#insights">Insights</a></li>
+    <li><a href="contact.html" style="color:var(--text)">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="login.html" class="btn btn-ghost" style="font-size:12px">Client Portal</a>
+    <a href="#form" class="btn btn-primary">Get a Consultation</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html#services">Services</a>
+  <a href="about.html">About</a>
+  <a href="index.html#insights">Insights</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Client Portal</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="contact-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="contact-eyebrow">Get In Touch</div>
+  <h1>Let's talk about<br>your <span>financial future</span></h1>
+  <p>Whether you're ready to get started or just exploring your options, our advisors are here to help — no pressure, no obligation.</p>
+</section>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="contact-main">
+
+  <!-- Left: info -->
+  <div class="contact-info-section">
+    <div class="section-label">Contact Information</div>
+    <div class="contact-info-title">We'd love to hear from you</div>
+    <p class="contact-info-desc">Our senior consultants typically respond within one business day. For urgent matters, call us directly during office hours.</p>
+
+    <div class="detail-item">
+      <div class="detail-icon">📞</div>
+      <div>
+        <div class="detail-label">Phone</div>
+        <div class="detail-value">1-800-HEDGEPRO</div>
+        <div class="detail-sub">Mon – Fri, 8am – 7pm EST</div>
+      </div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-icon">✉️</div>
+      <div>
+        <div class="detail-label">Email</div>
+        <div class="detail-value">contact@hedgecapitalpro.com</div>
+        <div class="detail-sub">We reply within 24 hours</div>
+      </div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-icon">📍</div>
+      <div>
+        <div class="detail-label">Main Office</div>
+        <div class="detail-value">New York, NY 10004</div>
+        <div class="detail-sub">Financial District</div>
+      </div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-icon">🌐</div>
+      <div>
+        <div class="detail-label">Regional Offices</div>
+        <div class="detail-value">London · Dubai · Singapore</div>
+        <div class="detail-sub">Global coverage, local expertise</div>
+      </div>
+    </div>
+
+    <div class="availability">
+      <div class="avail-dot"></div>
+      <span>Advisors are currently available — reach out now</span>
+    </div>
+
+    <div class="social-links">
+      <a class="social-btn" href="#" aria-label="LinkedIn">in</a>
+      <a class="social-btn" href="#" aria-label="X / Twitter">𝕏</a>
+      <a class="social-btn" href="#" aria-label="Facebook">fb</a>
+    </div>
+  </div>
+
+  <!-- Right: form -->
+  <div id="form">
+    <div class="form-card">
+      <div class="form-title">Schedule Your Consultation</div>
+      <div class="form-sub">Fill in your details and a senior advisor will reach out within one business day.</div>
+
+      <div class="alert alert-ok" id="form-success"></div>
+      <div class="alert alert-err" id="form-error"></div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="c-first" placeholder="John" autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="c-last" placeholder="Smith" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="c-email" placeholder="john@example.com" autocomplete="email" maxlength="254">
+      </div>
+
+      <div class="form-group">
+        <label>Country</label>
+        <select id="c-country">
+          <option value="">Select Country…</option>
+          <option value="US" data-code="+1">United States</option>
+          <option value="GB" data-code="+44">United Kingdom</option>
+          <option value="CA" data-code="+1">Canada</option>
+          <option value="AU" data-code="+61">Australia</option>
+          <option value="AE" data-code="+971">United Arab Emirates</option>
+          <option value="SA" data-code="+966">Saudi Arabia</option>
+          <option value="NG" data-code="+234">Nigeria</option>
+          <option value="GH" data-code="+233">Ghana</option>
+          <option value="ZA" data-code="+27">South Africa</option>
+          <option value="KE" data-code="+254">Kenya</option>
+          <option value="IN" data-code="+91">India</option>
+          <option value="SG" data-code="+65">Singapore</option>
+          <option value="DE" data-code="+49">Germany</option>
+          <option value="FR" data-code="+33">France</option>
+          <option value="IT" data-code="+39">Italy</option>
+          <option value="ES" data-code="+34">Spain</option>
+          <option value="NL" data-code="+31">Netherlands</option>
+          <option value="CH" data-code="+41">Switzerland</option>
+          <option value="BR" data-code="+55">Brazil</option>
+          <option value="MX" data-code="+52">Mexico</option>
+          <option value="JP" data-code="+81">Japan</option>
+          <option value="CN" data-code="+86">China</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <div class="phone-group">
+          <input type="text" id="phone-prefix" placeholder="+1" maxlength="6" autocomplete="tel-country-code">
+          <input type="tel"  id="phone-number" placeholder="555 000 0000" autocomplete="tel-national">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Interested In</label>
+        <select id="c-service">
+          <option value="">Select a service…</option>
+          <option>Investment Planning</option>
+          <option>Retirement Planning</option>
+          <option>Education Planning</option>
+          <option>Portfolio Management</option>
+          <option>Asset Allocation</option>
+          <option>Risk Management</option>
+          <option>Tax Planning</option>
+          <option>Estate Planning</option>
+          <option>Wealth Preservation</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Investment Range</label>
+        <select id="c-range">
+          <option value="">Approximate investment amount…</option>
+          <option>Under $10,000</option>
+          <option>$10,000 – $50,000</option>
+          <option>$50,000 – $250,000</option>
+          <option>$250,000 – $1,000,000</option>
+          <option>$1,000,000+</option>
+          <option>Prefer not to say</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="c-message" placeholder="Tell us about your financial goals and how we can help…" maxlength="2000"></textarea>
+      </div>
+
+      <button class="submit-btn" id="submit-btn">
+        <div class="btn-spinner"></div>
+        <span class="btn-text">Send My Request →</span>
+      </button>
+
+      <div class="form-note">
+        By submitting this form you agree to our <a href="#" style="color:var(--accent)">Privacy Policy</a>.
+        We never share your information with third parties.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FAQ ═══ -->
+<div class="faq-section">
+  <div class="section-label" style="text-align:center;display:flex;justify-content:center;margin-bottom:12px">FAQ</div>
+  <div class="faq-title">Common questions</div>
+  <div class="faq-sub">Everything you need to know before your first consultation.</div>
+
+  <div class="faq-item">
+    <button class="faq-q">Is the initial consultation really free? <span class="faq-arrow">+</span></button>
+    <div class="faq-a"><div class="faq-a-inner">Yes — completely free and with no obligation. We believe the best way to demonstrate our value is to show you what's possible before you commit to anything.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">What happens after I submit the form? <span class="faq-arrow">+</span></button>
+    <div class="faq-a"><div class="faq-a-inner">A senior advisor will review your request and contact you within one business day to schedule a convenient time for your consultation, either via phone, video call, or in person.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">What is the minimum investment amount? <span class="faq-arrow">+</span></button>
+    <div class="faq-a"><div class="faq-a-inner">Our investment management services generally begin at $10,000 for starter plans. However, our financial planning and consulting services are available to all clients regardless of portfolio size.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Are you a fiduciary? <span class="faq-arrow">+</span></button>
+    <div class="faq-a"><div class="faq-a-inner">Yes. HedgeCapitalPro is a fiduciary firm, meaning we are legally and ethically bound to act in your best interest at all times. We do not earn commissions from product recommendations.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Can I work with you if I'm outside the United States? <span class="faq-arrow">+</span></button>
+    <div class="faq-a"><div class="faq-a-inner">Absolutely. We serve clients in 50+ countries through our offices in New York, London, Dubai, and Singapore. Our advisors are experienced with cross-border financial planning and international tax considerations.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">How is my information kept secure? <span class="faq-arrow">+</span></button>
+    <div class="faq-a"><div class="faq-a-inner">We are ISO 27001 certified and use bank-grade encryption to protect all client data. We never sell or share your information with third parties. All communications are encrypted in transit and at rest.</div></div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <a href="index.html" class="footer-logo">Hedge<span>Capital</span>Pro</a>
+  <div class="footer-copy">© 2025 HedgeCapitalPro. All rights reserved. · <a href="#" style="color:var(--muted);text-decoration:none">Privacy Policy</a> · <a href="#" style="color:var(--muted);text-decoration:none">Terms of Use</a></div>
+</footer>
+
+<script>
+// ── SUPABASE CONFIG ────────────────────────────────────────────
+const SUPABASE_URL = 'https://egedzwcezqksjeozzttd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_YOGPxMoD0RWCTW43n-hurw_es3iSN8K';
+
+// ── MOBILE NAV ─────────────────────────────────────────────────
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobile-menu').classList.toggle('open');
+});
+
+// ── PHONE PREFIX SYNC ──────────────────────────────────────────
+// Global standard implementation
+window.prefixManuallyEdited = false;
+const prefixInput   = document.getElementById('phone-prefix');
+const countrySelect = document.getElementById('c-country');
+
+prefixInput.addEventListener('input', () => {
+  window.prefixManuallyEdited = prefixInput.value.trim() !== '';
+});
+
+countrySelect.addEventListener('change', () => {
+  const opt  = countrySelect.options[countrySelect.selectedIndex];
+  const code = opt?.getAttribute('data-code') || '';
+  if (!window.prefixManuallyEdited && code) {
+    prefixInput.value = code;
+  }
+});
+
+window.syncPhoneCode = function(code) {
+  if (window.prefixManuallyEdited) return;
+  prefixInput.value = code;
+};
+
+// ── FORM VALIDATION ────────────────────────────────────────────
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+}
+
+function showAlert(type, msg) {
+  ['form-success','form-error'].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove('show');
+    el.textContent = '';
+  });
+  const el = document.getElementById('form-' + type);
+  el.textContent = msg;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── FORM SUBMIT ────────────────────────────────────────────────
+document.getElementById('submit-btn').addEventListener('click', async () => {
+  const first   = document.getElementById('c-first').value.trim();
+  const last    = document.getElementById('c-last').value.trim();
+  const email   = document.getElementById('c-email').value.trim();
+  const country = document.getElementById('c-country').value;
+  const prefix  = prefixInput.value.trim();
+  const phone   = document.getElementById('phone-number').value.trim();
+  const service = document.getElementById('c-service').value;
+  const range   = document.getElementById('c-range').value;
+  const message = document.getElementById('c-message').value.trim();
+  const btn     = document.getElementById('submit-btn');
+
+  // Validation
+  if (!first)              { showAlert('error', 'Please enter your first name.'); return; }
+  if (!last)               { showAlert('error', 'Please enter your last name.'); return; }
+  if (!validateEmail(email)) { showAlert('error', 'Please enter a valid email address.'); return; }
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  // Try to save to Supabase contact_requests table
+  // Falls back gracefully if table doesn't exist yet
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/contact_requests`, {
+      method: 'POST',
+      headers: {
+        'apikey':       SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type':  'application/json',
+        'Prefer':        'return=minimal',
+      },
+      body: JSON.stringify({
+        first_name:   first,
+        last_name:    last,
+        email,
+        country:      country || null,
+        phone:        prefix && phone ? `${prefix} ${phone}` : null,
+        service:      service || null,
+        invest_range: range   || null,
+        message:      message || null,
+        submitted_at: new Date().toISOString(),
+      }),
+    });
+  } catch(e) {
+    // Non-blocking — form still shows success to user
+    console.warn('[contact] Supabase save failed:', e);
+  }
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+
+  // Clear form
+  ['c-first','c-last','c-email','c-country','c-service','c-range','c-message','phone-number'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  prefixInput.value = '';
+  window.prefixManuallyEdited = false;
+
+  showAlert('success', '✓ Request submitted! One of our senior advisors will be in touch within one business day. Thank you, ' + first + '.');
+});
+
+// ── FAQ ACCORDION ──────────────────────────────────────────────
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item    = btn.closest('.faq-item');
+    const isOpen  = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    // Open this one (unless it was already open)
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// ── NAV SCROLL SHADOW ──────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+</script>
+</body>
+</html>

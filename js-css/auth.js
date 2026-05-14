@@ -56,7 +56,7 @@ export async function register({
         referred_by: referredBy?.trim().toUpperCase() || '',
       },
       // Email confirmation redirect
-      emailRedirectTo: `${window.location.origin}/login.html?verified=1`,
+      emailRedirectTo: `${window.location.origin}/htmlpages/login.html?verified=1`,
     }
   });
 
@@ -127,7 +127,7 @@ export async function sendResetEmail(email) {
 
   const { error } = await supabase.auth.resetPasswordForEmail(
     email.trim().toLowerCase(),
-    { redirectTo: `${window.location.origin}/reset-password.html` }
+    { redirectTo: `${window.location.origin}/htmlpages/reset-password.html` }
   );
 
   if (error) return { error: friendlyAuthError(error.message) };
@@ -151,7 +151,7 @@ export async function resendConfirmation(email) {
   const { error } = await supabase.auth.resend({
     type:  'signup',
     email: email.trim().toLowerCase(),
-    options: { emailRedirectTo: `${window.location.origin}/login.html?verified=1` }
+    options: { emailRedirectTo: `${window.location.origin}/htmlpages/login.html?verified=1` }
   });
   if (error) return { error: friendlyAuthError(error.message) };
   return { success: true };

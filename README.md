@@ -1,3 +1,0 @@
-detailed
-instruction
-here

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://egedzwcezqksjeozzttd.supabase.co https://ipapi.co https:; frame-src 'none'; object-src 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Article — HedgeCapitalPro</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- DOMPurify: sanitize article content from external sources (Issue 29) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+<style>
+:root{
+  --bg:#060a12;--surface:#0b1120;--surface2:#101828;
+  --border:rgba(100,160,220,0.10);--border2:rgba(100,160,220,0.18);
+  --accent:#00d9b5;--text:#dce6f0;--muted:#5a7095;
+  --head:'Syne',sans-serif;--body:'Outfit',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden;min-height:100vh}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(6,10,18,0.95);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--head);font-weight:800;font-size:18px;color:#fff;text-decoration:none}
+.nav-logo span{color:var(--accent)}
+.nav-back{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--text)}
+.nav-back::before{content:'←';font-size:15px}
+
+/* ── BACKGROUND ── */
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at 50% 30%,black 20%,transparent 70%);pointer-events:none;z-index:0}
+.glow{position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,217,181,.06) 0%,transparent 70%);top:-150px;right:-100px;pointer-events:none;z-index:0}
+
+/* ── LAYOUT ── */
+.article-wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:108px 24px 80px}
+
+/* ── HEADER ── */
+.article-header{margin-bottom:48px}
+.article-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);background:rgba(0,217,181,.10);padding:5px 12px;border-radius:2px;margin-bottom:20px}
+.article-title{font-family:var(--head);font-size:clamp(26px,4.5vw,46px);font-weight:800;color:#fff;line-height:1.1;letter-spacing:-1px;margin-bottom:20px}
+.article-meta{display:flex;align-items:center;gap:20px;font-size:13px;color:var(--muted);padding-bottom:32px;border-bottom:1px solid var(--border)}
+.article-meta-dot{width:4px;height:4px;border-radius:50%;background:var(--muted)}
+
+/* ── HERO IMAGE ── */
+.article-hero-img{width:100%;border-radius:6px;margin-bottom:48px;display:block;max-height:420px;object-fit:cover;border:1px solid var(--border)}
+
+/* ── BODY CONTENT ── */
+.article-content{font-size:16px;color:var(--muted);line-height:1.85}
+.article-content p{margin-bottom:24px}
+.article-content h2{font-family:var(--head);font-size:24px;font-weight:700;color:#fff;margin:40px 0 16px;letter-spacing:-.5px}
+.article-content h3{font-family:var(--head);font-size:19px;font-weight:700;color:#fff;margin:32px 0 12px}
+.article-content a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,217,181,.3);transition:border-color .2s}
+.article-content a:hover{border-color:var(--accent)}
+.article-content strong{color:var(--text);font-weight:600}
+.article-content ul,.article-content ol{padding-left:24px;margin-bottom:24px}
+.article-content li{margin-bottom:8px;color:var(--muted)}
+.article-content blockquote{border-left:3px solid var(--accent);padding:16px 20px;background:rgba(0,217,181,.04);border-radius:0 4px 4px 0;margin:28px 0;font-style:italic;color:var(--text)}
+
+/* ── FOOTER STRIP ── */
+.article-footer{margin-top:60px;padding-top:32px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.article-footer-logo{font-family:var(--head);font-size:16px;font-weight:800;color:#fff}
+.article-footer-logo span{color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:3px;font-family:var(--body);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:opacity .2s;border:none}
+.btn-primary{background:var(--accent);color:#060a12}
+.btn-primary:hover{opacity:.86}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── NOT FOUND ── */
+.not-found{text-align:center;padding:60px 20px}
+.not-found-icon{font-size:48px;margin-bottom:20px;opacity:.4}
+.not-found h2{font-family:var(--head);font-size:24px;color:#fff;margin-bottom:12px}
+.not-found p{font-size:14px;color:var(--muted);margin-bottom:28px}
+
+/* ── RELATED ── */
+.related-section{margin-top:64px;padding-top:40px;border-top:1px solid var(--border)}
+.related-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.related-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px;text-decoration:none;transition:border-color .2s,transform .2s;display:block}
+.related-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.related-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.related-title{font-family:var(--head);font-size:14px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:6px}
+.related-date{font-size:11px;color:var(--muted)}
+
+@media(max-width:600px){
+  nav{padding:0 20px}
+  .article-wrap{padding:88px 16px 60px}
+  .related-grid{grid-template-columns:1fr}
+  .article-footer{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="glow"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Hedge<span>Capital</span>Pro</a>
+  <a href="index.html#insights" class="nav-back">Back to Articles</a>
+</nav>
+
+<div class="article-wrap">
+  <div id="article-content">
+    <!-- Populated by JS -->
+  </div>
+</div>
+
+<script>
+(function() {
+  const params  = new URLSearchParams(window.location.search);
+  const idx     = parseInt(params.get('id') || '0', 10);
+  const wrap    = document.getElementById('article-content');
+
+  // ── LOAD ARTICLES from sessionStorage (set by index.html renderArticles) ──
+  let articles = [];
+  try {
+    const stored = sessionStorage.getItem('hcp_articles');
+    if (stored) articles = JSON.parse(stored);
+  } catch(e) {}
+
+  // ── FALLBACK: hardcoded defaults (user navigated directly / refreshed) ──
+  if (!articles.length) {
+    articles = [
+      {
+        tag: 'Analysis',
+        title: 'Strategies to Stay Calm and Make Informed Decisions in Volatile Markets',
+        excerpt: 'Investors must navigate uncertain times and unpredictable waters.',
+        date: 'March 2025',
+        image: null,
+        content: '<p>Navigating volatile markets requires discipline, a clear framework, and the ability to separate short-term noise from long-term fundamentals.</p><h3>1. Maintain a Diversified Portfolio</h3><p>Diversification remains one of the most reliable buffers against market volatility. Spreading assets across equities, fixed income, real estate, and alternative investments reduces exposure to any single sector shock.</p><h3>2. Analyze Fundamentals, Not Headlines</h3><p>Market swings are often driven by sentiment rather than fundamentals. Investors who focus on earnings quality, balance sheet strength, and cash flow generation tend to make more rational decisions in turbulent periods.</p><h3>3. Maintain Adequate Liquidity</h3><p>Holding a liquidity reserve prevents forced selling at depressed prices. A 6–12 month cash buffer gives investors the patience to wait out drawdowns without disrupting their long-term strategy.</p><h3>4. Revisit Risk Tolerance</h3><p>Volatility is an opportunity to reassess whether your current allocation genuinely matches your risk tolerance. Adjust positions proactively rather than reactively.</p><p>At HedgeCapitalPro, our advisors help clients build portfolios designed to perform across market cycles. <a href="index.html#contact">Schedule a consultation</a> to review your strategy.</p>'
+      },
+      {
+        tag: 'Insights',
+        title: 'Practical Tips for Creating and Managing Your Personal Wealth Strategy',
+        excerpt: 'Explore effective approaches to building long-term wealth.',
+        date: 'February 2025',
+        image: null,
+        content: '<p>A personal wealth strategy is not a one-time exercise — it is a living plan that evolves with your life circumstances, financial goals, and market conditions.</p><h3>1. Define Clear Financial Goals</h3><p>Begin with specificity. "I want to retire comfortably" is not a goal. "I want $2M in investable assets by age 60 to fund a $80K annual lifestyle" is. Concrete goals drive concrete plans.</p><h3>2. Build Around Your Cash Flow</h3><p>Wealth is built from the gap between what you earn and what you spend. Before selecting investment vehicles, optimize this gap through budgeting, debt reduction, and income growth.</p><h3>3. Leverage Tax-Advantaged Accounts</h3><p>Maximize contributions to retirement and tax-advantaged vehicles before allocating to taxable accounts. The compounding effect of deferred taxation is one of the most powerful tools available.</p><h3>4. Review and Rebalance Regularly</h3><p>Markets move, life changes, and allocations drift. A quarterly review ensures your portfolio remains aligned with your goals and risk profile.</p><p>Our wealth management team specializes in building personalized strategies. <a href="index.html#contact">Talk to an advisor today.</a></p>'
+      },
+      {
+        tag: 'Perspectives',
+        title: 'Understanding Behavioral Biases and Making Rational Financial Choices',
+        excerpt: 'How cognitive biases affect investment decisions.',
+        date: 'January 2025',
+        image: null,
+        content: '<p>The most sophisticated investment strategy can be undermined by predictable human psychology. Understanding the biases that distort financial decision-making is the first step to counteracting them.</p><h3>Confirmation Bias</h3><p>Investors tend to seek information that validates existing beliefs while discounting contradictory evidence. Counter this by actively seeking opposing viewpoints before making any significant portfolio decision.</p><h3>Loss Aversion</h3><p>Losses feel roughly twice as painful as equivalent gains feel pleasurable. This asymmetry leads to holding losing positions too long and selling winners too early.</p><h3>Recency Bias</h3><p>Recent events disproportionately influence expectations about the future. Anchoring to long-term historical data helps correct this distortion.</p><h3>Overconfidence</h3><p>Studies consistently show that individual investors overestimate their ability to time markets or select outperforming stocks. A rules-based, systematic approach removes discretion — and with it, many expensive mistakes.</p><p>Working with an objective advisor provides a behavioral check. <a href="index.html#contact">Connect with our team.</a></p>'
+      }
+    ];
+  }
+
+  const article = articles[idx];
+
+  // ── NOT FOUND ──
+  if (!article) {
+    wrap.innerHTML = `
+      <div class="not-found">
+        <div class="not-found-icon">📄</div>
+        <h2>Article not found</h2>
+        <p>This article may have been removed or the link has expired.</p>
+        <a href="index.html#insights" class="btn btn-primary">Browse All Articles</a>
+      </div>`;
+    return;
+  }
+
+  // ── SET PAGE TITLE ──
+  document.title = article.title + ' — HedgeCapitalPro';
+
+  // ── RELATED ARTICLES (all except current) ──
+  const related = articles
+    .filter((_, i) => i !== idx)
+    .slice(0, 2);
+
+  const relatedHTML = related.length ? `
+    <div class="related-section">
+      <div class="related-label">Related Articles</div>
+      <div class="related-grid">
+        ${related.map((r, i) => {
+          // Find real index in articles array
+          const realIdx = articles.indexOf(r);
+          return `
+          <a class="related-card" href="article.html?id=${realIdx}">
+            <div class="related-tag">${r.tag}</div>
+            <div class="related-title">${r.title}</div>
+            <div class="related-date">${r.date}</div>
+          </a>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  // ── RENDER ──
+  wrap.innerHTML = `
+    <div class="article-header">
+      <div class="article-tag">${article.tag}</div>
+      <h1 class="article-title">${article.title}</h1>
+      <div class="article-meta">
+        <span>HedgeCapitalPro Editorial</span>
+        <div class="article-meta-dot"></div>
+        <span>${article.date}</span>
+        <div class="article-meta-dot"></div>
+        <span>${estimateReadTime(article.content || article.excerpt)} min read</span>
+      </div>
+    </div>
+
+    ${article.image ? `<img class="article-hero-img" src="${article.image}" alt="${article.title}">` : ''}
+
+    <div class="article-content">
+      ${(typeof DOMPurify !== 'undefined')
+        ? DOMPurify.sanitize(article.content || `<p>${article.excerpt}</p>`)
+        : (article.content || `<p>${article.excerpt}</p>`)}
+    </div>
+
+    ${relatedHTML}
+
+    <div class="article-footer">
+      <div class="article-footer-logo">Hedge<span>Capital</span>Pro</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="index.html#insights" class="btn btn-ghost">← All Articles</a>
+        <a href="index.html#contact"  class="btn btn-primary">Get a Consultation</a>
+      </div>
+    </div>`;
+
+  function estimateReadTime(html) {
+    if (!html) return 1;
+    const words = html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.ceil(words / 220));
+  }
+})();
+</script>
+</body>
+</html>

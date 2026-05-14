@@ -97,6 +97,7 @@ CREATE TABLE public.investment_plans (
   roi_percentage  NUMERIC(5,2)  NOT NULL CHECK (roi_percentage > 0),  -- daily %
   description     TEXT,
   is_active       BOOLEAN       NOT NULL DEFAULT TRUE,
+  featured        BOOLEAN       NOT NULL DEFAULT FALSE,
   sort_order      INTEGER       NOT NULL DEFAULT 0,
   created_at      TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
   updated_at      TIMESTAMPTZ   NOT NULL DEFAULT NOW()
@@ -107,13 +108,13 @@ CREATE TRIGGER trg_plans_updated
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- Seed default plans (admin can edit/delete these)
-INSERT INTO public.investment_plans (name, min_amount, max_amount, roi_percentage, description, sort_order)
+INSERT INTO public.investment_plans (name, min_amount, max_amount, roi_percentage, description, featured, sort_order)
 VALUES
-  ('Starter',  100,    999,    5.00,  'Entry-level plan for new investors. Steady daily returns.',     1),
-  ('Bronze',   1000,   4999,   7.00,  'Intermediate plan with enhanced daily ROI.',                   2),
-  ('Silver',   5000,   19999,  10.00, 'Most popular plan. Strong daily returns with priority support.',3),
-  ('Gold',     20000,  49999,  15.00, 'High-performance plan for serious investors.',                  4),
-  ('Platinum', 50000,  9999999,20.00, 'Elite plan with maximum daily ROI and private advisor.',        5);
+  ('Starter',  100,    999,    5.00,  'Entry-level plan for new investors. Steady daily returns.',     false, 1),
+  ('Bronze',   1000,   4999,   7.00,  'Intermediate plan with enhanced daily ROI.',                   false, 2),
+  ('Silver',   5000,   19999,  10.00, 'Most popular plan. Strong daily returns with priority support.',true,  3),
+  ('Gold',     20000,  49999,  15.00, 'High-performance plan for serious investors.',                  false, 4),
+  ('Platinum', 50000,  9999999,20.00, 'Elite plan with maximum daily ROI and private advisor.',        false, 5);
 
 -- ============================================================
 --  TABLE: investments
@@ -380,7 +381,7 @@ BEGIN
     COALESCE(NEW.raw_user_meta_data->>'first_name', ''),
     COALESCE(NEW.raw_user_meta_data->>'last_name',  ''),
     NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'username',   ''),
+    COALESCE(NULLIF(NEW.raw_user_meta_data->>'username', ''), SPLIT_PART(NEW.email, '@', 1) || '_' || SUBSTR(NEW.id::TEXT, 1, 4)),
     COALESCE(NEW.raw_user_meta_data->>'phone',      ''),
     COALESCE(NEW.raw_user_meta_data->>'country',    ''),
     COALESCE(NEW.raw_user_meta_data->>'referred_by','')
@@ -532,7 +533,7 @@ BEGIN
     UPDATE public.profiles
     SET
       balance          = balance + tx.amount,
-      total_withdrawn  = total_withdrawn - tx.amount
+      total_withdrawn  = GREATEST(0, total_withdrawn - tx.amount)
     WHERE id = tx.user_id;
   END IF;
 
@@ -577,6 +578,46 @@ BEGIN
   RETURN TRUE;
 END;
 $$;
+
+-- ============================================================
+--  TABLE: contact_requests
+--  Stores consultation/contact form submissions from visitors.
+-- ============================================================
+CREATE TABLE public.contact_requests (
+  id           UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
+  first_name   TEXT,
+  last_name    TEXT,
+  email        TEXT,
+  country      TEXT,
+  phone        TEXT,
+  service      TEXT,
+  invest_range TEXT,
+  message      TEXT,
+  submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- ============================================================
+--  TRIGGER: prevent_direct_balance_update
+--  Blocks client-side direct balance manipulation via anon key.
+--  Balance changes must go through SECURITY DEFINER functions.
+-- ============================================================
+CREATE OR REPLACE FUNCTION public.raise_if_balance_changed()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+BEGIN
+  IF NEW.balance IS DISTINCT FROM OLD.balance
+     AND current_setting('role', true) NOT IN ('service_role', 'supabase_admin')
+     AND auth.uid() IS NOT NULL
+     AND NOT public.is_admin()
+  THEN
+    RAISE EXCEPTION 'Direct balance update not permitted. Use server functions.';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_prevent_balance_update
+  BEFORE UPDATE ON public.profiles
+  FOR EACH ROW EXECUTE FUNCTION public.raise_if_balance_changed();
 
 -- ============================================================
 --  STORAGE BUCKETS (run via Supabase dashboard or migration)

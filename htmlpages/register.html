@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://egedzwcezqksjeozzttd.supabase.co https://ipapi.co https:; frame-src 'none'; object-src 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HedgeCapitalPro — Create Account</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -112,7 +115,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
 
 <div class="card">
   <div class="logo">Hedge<span>Capital</span>Pro</div>
-  <div class="card-sub">Create your investment account — it's free</div>
+  <div class="card-sub" data-i18n="auth.register.title">Create your investment account — it's free</div>
 
   <!-- Alerts -->
   <div class="alert alert-err" id="alert-err"></div>
@@ -133,7 +136,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
 
     <div class="form-group">
       <label>Email Address</label>
-      <input type="email" id="r-email" placeholder="john@example.com" autocomplete="email">
+      <input type="email" id="r-email" placeholder="john@example.com" autocomplete="email" maxlength="254">
     </div>
 
     <div class="form-group">
@@ -238,7 +241,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
       <div class="form-group">
         <label>Password</label>
         <div class="pass-wrap">
-          <input type="password" id="r-pass" placeholder="Min. 8 characters">
+          <input type="password" id="r-pass" placeholder="Min. 8 characters" maxlength="128">
           <button class="pass-toggle" type="button" id="eye1">👁</button>
         </div>
         <div class="strength-bar"><div class="strength-fill" id="str-fill"></div></div>
@@ -247,7 +250,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
       <div class="form-group">
         <label>Confirm Password</label>
         <div class="pass-wrap">
-          <input type="password" id="r-confirm" placeholder="Repeat password">
+          <input type="password" id="r-confirm" placeholder="Repeat password" maxlength="128">
           <button class="pass-toggle" type="button" id="eye2">👁</button>
         </div>
       </div>
@@ -260,9 +263,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
 
     <button class="btn-full" id="reg-btn">
       <div class="spinner"></div>
-      <span class="btn-text">Create Account →</span>
+      <span class="btn-text" data-i18n="auth.register.btn">Create Account →</span>
     </button>
-    <div class="login-link">Already have an account? <a href="login.html">Sign in</a></div>
+    <div class="login-link"><span data-i18n="auth.register.have">Already have an account?</span> <a href="login.html" data-i18n="auth.register.signin">Sign in</a></div>
   </div>
 
   <!-- Success Screen (shown after registration) -->
@@ -278,7 +281,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
 </div>
 
 <script type="module">
-import { register, redirectIfLoggedIn, getPasswordStrength, getUrlParam } from './auth.js';
+import { register, redirectIfLoggedIn, getPasswordStrength, getUrlParam } from '../js-css/auth.js';
 
 // Redirect if already logged in
 await redirectIfLoggedIn('dashboard.html');
@@ -345,18 +348,18 @@ prefixInput.addEventListener('input', () => {
 // Bind country change → sync prefix
 countrySelect.addEventListener('change', syncPhoneCode);
 
-window.syncPhoneCode = function() {
+function syncPhoneCode() {
   const selectedOption = countrySelect.options[countrySelect.selectedIndex];
   const dialCode = selectedOption?.getAttribute('data-code') || '';
   if (!window.prefixManuallyEdited && dialCode) {
     prefixInput.value = dialCode;
   }
-};
+}
 
 // ── PASSWORD STRENGTH ────────────────────────────────────────
 async function checkStrength(val) {
   const { getPasswordStrength: _unused, ..._ } = {};
-  import('./auth.js').then(({ getPasswordStrength }) => {
+  import('../js-css/auth.js').then(({ getPasswordStrength }) => {
     if (!val) {
       document.getElementById('str-fill').style.width = '0';
       document.getElementById('str-label').textContent = '';
@@ -402,6 +405,11 @@ function showAlert(type, msg) {
   el.textContent = msg;
   el.classList.add('show');
 }
+</script>
+<script type="module">
+  import { initI18n, t, setLang, applyToDOM } from '../js-css/i18n.js';
+  window._i18n = { t, setLang, applyToDOM };
+  initI18n();
 </script>
 </body>
 </html>
