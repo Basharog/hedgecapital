@@ -1,0 +1,7 @@
+/login          /htmlpages/login.html          301
+/register       /htmlpages/register.html       301
+/dashboard      /htmlpages/dashboard.html      301
+/admin          /htmlpages/admin.html          301
+/about          /htmlpages/about.html          301
+/contact        /htmlpages/contact.html        301
+/*              /htmlpages/404.html            404
