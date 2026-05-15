@@ -668,6 +668,9 @@ export function setLang(code) {
   localStorage.setItem('hcp_lang', code);
   applyToDOM();
   updateSwitcherState(code);
+  // Close dropdown if open
+  const ls = document.getElementById('lang-switch');
+  if (ls) ls.classList.remove('open');
   document.dispatchEvent(new CustomEvent('hcp:langchange', { detail: { lang: code } }));
 }
 
@@ -677,6 +680,9 @@ export function setLang(code) {
  */
 export function initI18n() {
   _lang = detectLang();
+  // Expose to window so inline onclick="setLang('fr')" works from non-module scripts
+  window.setLang   = setLang;
+  window.toggleLang = toggleLang;
   applyToDOM();
   bindSwitcher();
 }
@@ -742,8 +748,9 @@ export function bindSwitcher() {
     });
   }
 
-  // Language option clicks
+  // Language option clicks — skip opts that already have inline onclick to avoid double-fire
   document.querySelectorAll('.lang-opt[data-lang]').forEach(opt => {
+    if (opt.getAttribute('onclick')) return; // inline onclick already calls setLang via window.setLang
     opt.addEventListener('click', () => {
       setLang(opt.dataset.lang);
       langSwitch?.classList.remove('open');

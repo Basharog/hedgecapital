@@ -266,6 +266,7 @@ main{flex:1;overflow-y:auto;background:var(--bg)}
     <button class="sb-link" data-panel="values"><span class="icon">💎</span>Our Values</button>
     <button class="sb-link" data-panel="contact"><span class="icon">📞</span>Contact Info</button>
     <button class="sb-link" data-panel="footer"><span class="icon">📄</span>Footer</button>
+    <button class="sb-link" data-panel="team-members"><span class="icon">👥</span>Team Members</button>
 
     <div class="sb-section">System</div>
     <button class="sb-link" data-panel="system"><span class="icon">🔧</span>System Settings</button>
@@ -523,6 +524,19 @@ main{flex:1;overflow-y:auto;background:var(--bg)}
       <button class="btn btn-primary" id="save-footer-btn">💾 Save Changes</button>
     </div>
 
+    <!-- ─── TEAM MEMBERS ─── -->
+    <div class="panel" id="panel-team-members">
+      <div class="card">
+        <div class="card-title">Team Members</div>
+        <div class="card-desc">Manage team members shown on the About and landing pages.</div>
+        <button class="btn btn-primary btn-sm" id="add-team-btn" style="margin-bottom:16px">+ Add Member</button>
+        <div class="table-wrap"><table class="adm-table">
+          <thead><tr><th>Name</th><th>Role</th><th>Bio</th><th>Active</th><th>Actions</th></tr></thead>
+          <tbody id="team-members-tbody"><tr><td colspan="5"><div class="empty-state"><div class="empty-icon">👥</div>Loading…</div></td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
     <!-- ─── SYSTEM SETTINGS ─── -->
     <div class="panel" id="panel-system">
       <div class="card">
@@ -539,6 +553,8 @@ main{flex:1;overflow-y:auto;background:var(--bg)}
         <div class="form-group"><label>NOWPayments IPN Secret</label><input type="password" id="np-ipn-secret" placeholder="•••••••••••••••••"></div>
         <div class="form-group"><label>Blog API URL <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional — for Articles section)</span></label>
           <input type="text" id="blog-api-url" placeholder="https://your-blog-api.com/posts"></div>
+        <div class="form-group"><label>Tawk.to Property ID <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(e.g. abc123/widget456 — enable Live Chat toggle below)</span></label>
+          <input type="text" id="tawkto-id" placeholder="abc123def/1234567890abcdef"></div>
         <button class="btn btn-primary" id="save-keys-btn">💾 Save API Keys</button>
       </div>
       <div class="card">
@@ -687,6 +703,40 @@ main{flex:1;overflow-y:auto;background:var(--bg)}
     <div class="modal-footer">
       <button class="btn btn-primary" id="confirm-review-btn" style="flex:1;justify-content:center">Confirm</button>
       <button class="btn btn-ghost" data-close="modal-review">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Team Member Modal -->
+<div class="modal-bg" id="modal-team-member">
+  <div class="modal-box">
+    <button class="modal-close" data-close="modal-team-member">✕</button>
+    <div class="modal-title" id="modal-team-title">Add Team Member</div>
+    <input type="hidden" id="team-member-id">
+    <div class="form-row">
+      <div class="form-group"><label>Full Name</label><input type="text" id="tm-name" placeholder="Jane Smith"></div>
+      <div class="form-group"><label>Role / Title</label><input type="text" id="tm-role" placeholder="Chief Investment Officer"></div>
+    </div>
+    <div class="form-group"><label>Bio</label><textarea id="tm-bio" rows="3" placeholder="Short biography…"></textarea></div>
+    <div class="form-group"><label>Image URL <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional — from team-avatars bucket or external URL)</span></label>
+      <input type="text" id="tm-image" placeholder="https://… or leave blank for initials">
+    </div>
+    <div class="form-group">
+      <label>Upload Photo <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional — uploads to team-avatars bucket)</span></label>
+      <input type="file" id="tm-photo-file" accept="image/*" style="background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:8px 12px;color:var(--muted);width:100%">
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Sort Order</label><input type="number" id="tm-order" placeholder="1" min="0"></div>
+      <div class="form-group"><label>Active</label>
+        <select id="tm-active">
+          <option value="true">Active (visible)</option>
+          <option value="false">Inactive (hidden)</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" id="confirm-team-member-btn" style="flex:1;justify-content:center">Save Member</button>
+      <button class="btn btn-ghost" data-close="modal-team-member">Cancel</button>
     </div>
   </div>
 </div>
@@ -845,6 +895,7 @@ const PANEL_META = {
   footer:          { title: 'Footer',              sub: 'Edit footer content and copyright' },
   system:          { title: 'System Settings',     sub: 'Toggles, API keys, data management' },
   security:        { title: 'Security',            sub: 'Manage admin credentials' },
+  'team-members':  { title: 'Team Members',        sub: 'Manage team section on the website' },
 };
 
 function showPanel(name) {
@@ -869,6 +920,7 @@ function showPanel(name) {
     sessions: loadSessions, tickets: loadTickets,
     plans: loadPlans, wallets: loadWallets,
     system: loadSystemSettings,
+    'team-members': loadTeamMembers,
   };
   if (loaders[name]) loaders[name]();
 }
@@ -930,7 +982,7 @@ async function loadDeposits() {
       <td style="font-weight:700;color:var(--accent)">${fmt$(tx.amount)}</td>
       <td>${esc(tx.method)}</td>
       <td style="color:var(--muted);font-size:12px">${fmtTime(tx.created_at)}</td>
-      <td>${tx.screenshot_url ? `<a href="https://egedzwcezqksjeozzttd.supabase.co/storage/v1/object/public/deposit-proofs/${esc(tx.screenshot_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">View</a>` : '<span style="color:var(--muted)">—</span>'}</td>
+      <td>${tx.screenshot_url ? `<a href="#" data-kyc-path="${esc(tx.screenshot_url)}" data-kyc-bucket="deposit-proofs" class="btn btn-ghost btn-sm">View</a>` : '<span style="color:var(--muted)">—</span>'}</td>
       <td style="display:flex;gap:6px">
         <button class="btn btn-success btn-sm" data-tx-id="${esc(tx.id)}" data-tx-action="approve" data-tx-type="deposit" data-tx-name="${esc(tx.profiles?.first_name)} ${esc(tx.profiles?.last_name)}">✓ Approve</button>
         <button class="btn btn-danger btn-sm"  data-tx-id="${esc(tx.id)}" data-tx-action="reject"  data-tx-type="deposit" data-tx-name="${esc(tx.profiles?.first_name)} ${esc(tx.profiles?.last_name)}">✕ Reject</button>
@@ -1193,8 +1245,8 @@ async function loadKYC() {
     <td style="color:var(--muted);font-size:12px">${fmtTime(k.submitted_at)}</td>
     <td>${badge(k.status)}</td>
     <td style="display:flex;gap:6px">
-      ${k.id_front_url ? `<a href="https://egedzwcezqksjeozzttd.supabase.co/storage/v1/object/public/kyc-documents/${esc(k.id_front_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">Front</a>` : '—'}
-      ${k.id_back_url  ? `<a href="https://egedzwcezqksjeozzttd.supabase.co/storage/v1/object/public/kyc-documents/${esc(k.id_back_url)}"  target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">Back</a>` : ''}
+      ${k.id_front_url ? `<a href="#" data-kyc-path="${esc(k.id_front_url)}" data-kyc-bucket="kyc-documents" class="btn btn-ghost btn-sm">Front</a>` : '—'}
+      ${k.id_back_url  ? `<a href="#" data-kyc-path="${esc(k.id_back_url)}"  data-kyc-bucket="kyc-documents" class="btn btn-ghost btn-sm">Back</a>`  : ''}
     </td>
     <td style="display:flex;gap:6px">
       ${k.status === 'pending' ? `
@@ -1501,6 +1553,7 @@ async function loadSystemSettings() {
   document.getElementById('np-api-key').value    = settings['nowpayments_api_key']    || '';
   document.getElementById('np-ipn-secret').value = settings['nowpayments_ipn_secret'] || '';
   document.getElementById('blog-api-url').value  = settings['blog_api_url']           || '';
+  document.getElementById('tawkto-id').value     = settings['tawkto_id']              || '';
 }
 
 async function saveApiKeys() {
@@ -1508,6 +1561,7 @@ async function saveApiKeys() {
     { key: 'nowpayments_api_key',    value: document.getElementById('np-api-key').value.trim()    },
     { key: 'nowpayments_ipn_secret', value: document.getElementById('np-ipn-secret').value.trim() },
     { key: 'blog_api_url',           value: document.getElementById('blog-api-url').value.trim()  },
+    { key: 'tawkto_id',              value: document.getElementById('tawkto-id').value.trim()     },
   ];
   for (const u of updates) {
     await sb.from('settings').update({ value: u.value }).eq('key', u.key);
@@ -1840,6 +1894,129 @@ document.getElementById('user-search').addEventListener('input', filterUsers);
 // Ctrl+S shortcut
 document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveAll(); }
+});
+
+// ══════════════════════════════════════════════════════════════
+//  TEAM MEMBERS CRUD
+// ══════════════════════════════════════════════════════════════
+async function loadTeamMembers() {
+  const { data } = await sb.from('team_members').select('*').order('sort_order');
+  const tbody = document.getElementById('team-members-tbody');
+  if (!data?.length) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">👥</div>No team members yet.</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.map(m => `<tr>
+    <td>
+      <div style="display:flex;align-items:center;gap:10px">
+        ${m.image_url ? `<img src="${esc(m.image_url)}" style="width:32px;height:32px;border-radius:50%;object-fit:cover">` : `<div style="width:32px;height:32px;border-radius:50%;background:rgba(0,217,181,.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent)">${esc(m.name?.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2))}</div>`}
+        <strong>${esc(m.name)}</strong>
+      </div>
+    </td>
+    <td>${esc(m.role)}</td>
+    <td style="font-size:12px;color:var(--muted);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(m.bio || '—')}</td>
+    <td>${badge(m.is_active ? 'active' : 'paused')}</td>
+    <td style="display:flex;gap:6px">
+      <button class="btn btn-ghost btn-sm"
+        data-tm-id="${esc(m.id)}" data-tm-action="edit"
+        data-tm-name="${esc(m.name)}" data-tm-role="${esc(m.role)}"
+        data-tm-bio="${esc(m.bio||'')}" data-tm-image="${esc(m.image_url||'')}"
+        data-tm-order="${esc(String(m.sort_order))}" data-tm-active="${m.is_active}">Edit</button>
+      <button class="btn btn-danger btn-sm"
+        data-tm-id="${esc(m.id)}" data-tm-action="delete">Delete</button>
+    </td>
+  </tr>`).join('');
+}
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-tm-id][data-tm-action]');
+  if (!btn) return;
+  const action = btn.dataset.tmAction;
+  const id     = btn.dataset.tmId;
+  if (action === 'edit')   openTeamModal(id, btn.dataset.tmName, btn.dataset.tmRole, btn.dataset.tmBio, btn.dataset.tmImage, btn.dataset.tmOrder, btn.dataset.tmActive);
+  if (action === 'delete') deleteTeamMember(id);
+});
+
+function openTeamModal(id='', name='', role='', bio='', image='', order='0', active='true') {
+  document.getElementById('team-member-id').value = id;
+  document.getElementById('tm-name').value         = name;
+  document.getElementById('tm-role').value         = role;
+  document.getElementById('tm-bio').value          = bio;
+  document.getElementById('tm-image').value        = image;
+  document.getElementById('tm-order').value        = order;
+  document.getElementById('tm-active').value       = active === 'true' || active === true ? 'true' : 'false';
+  document.getElementById('tm-photo-file').value   = '';
+  document.getElementById('modal-team-title').textContent = id ? 'Edit Team Member' : 'Add Team Member';
+  openModal('modal-team-member');
+}
+
+async function confirmTeamMember() {
+  const id     = document.getElementById('team-member-id').value;
+  const name   = document.getElementById('tm-name').value.trim();
+  const role   = document.getElementById('tm-role').value.trim();
+  const bio    = document.getElementById('tm-bio').value.trim();
+  const order  = parseInt(document.getElementById('tm-order').value) || 0;
+  const active = document.getElementById('tm-active').value === 'true';
+  const file   = document.getElementById('tm-photo-file').files[0];
+  let   imageUrl = document.getElementById('tm-image').value.trim();
+
+  if (!name || !role) { toast('Name and role are required', 'warn'); return; }
+
+  const btn = document.getElementById('confirm-team-member-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  // Upload photo if provided
+  if (file) {
+    try {
+      const ext  = file.name.split('.').pop();
+      const path = `team/${Date.now()}_${name.replace(/\s+/g,'_').toLowerCase()}.${ext}`;
+      const { error: upErr } = await sb.storage.from('team-avatars').upload(path, file, { upsert: true });
+      if (!upErr) {
+        const { data: urlData } = sb.storage.from('team-avatars').getPublicUrl(path);
+        imageUrl = urlData?.publicUrl || imageUrl;
+      } else {
+        toast('Photo upload failed: ' + upErr.message, 'warn');
+      }
+    } catch(e) { toast('Photo upload error: ' + e.message, 'warn'); }
+  }
+
+  const member = { name, role, bio, image_url: imageUrl || null, sort_order: order, is_active: active };
+  const { error } = id
+    ? await sb.from('team_members').update(member).eq('id', id)
+    : await sb.from('team_members').insert(member);
+
+  btn.disabled = false; btn.textContent = 'Save Member';
+
+  if (error) { toast('Error: ' + error.message, 'error'); return; }
+
+  closeModalById('modal-team-member');
+  toast('✓ Team member saved.');
+  loadTeamMembers();
+}
+
+async function deleteTeamMember(id) {
+  if (!confirm('Delete this team member? This cannot be undone.')) return;
+  const { error } = await sb.from('team_members').delete().eq('id', id);
+  if (error) { toast('Error: ' + error.message, 'error'); return; }
+  toast('Team member deleted.', 'warn');
+  loadTeamMembers();
+}
+
+// Bind team member modal buttons
+document.getElementById('add-team-btn')?.addEventListener('click', () => openTeamModal());
+document.getElementById('confirm-team-member-btn')?.addEventListener('click', confirmTeamMember);
+document.querySelector('[data-close="modal-team-member"]')?.addEventListener('click', () => closeModalById('modal-team-member'));
+
+// KYC signed URL fix — generate signed URLs for admin doc viewing
+document.addEventListener('click', async e => {
+  const link = e.target.closest('a[data-kyc-path]');
+  if (!link) return;
+  e.preventDefault();
+  const path   = link.dataset.kycPath;
+  const bucket = link.dataset.kycBucket || 'kyc-documents';
+  const { data, error } = await sb.storage.from(bucket).createSignedUrl(path, 300);
+  if (error) { toast('Could not load document: ' + error.message, 'error'); return; }
+  window.open(data.signedUrl, '_blank', 'noopener');
 });
 </script>
 </body>

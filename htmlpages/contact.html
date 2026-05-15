@@ -60,19 +60,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 .section-label{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
 .contact-info-title{font-family:var(--head);font-size:clamp(22px,3vw,32px);font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1.15;margin-bottom:20px}
 .contact-info-desc{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:36px}
-
 .detail-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
 .detail-icon{width:40px;height:40px;border-radius:6px;background:rgba(0,217,181,.1);border:1px solid rgba(0,217,181,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px}
 .detail-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .detail-value{font-size:15px;color:#fff;font-weight:600;margin-bottom:2px}
 .detail-sub{font-size:12px;color:var(--muted)}
-
-/* Availability indicator */
 .availability{display:flex;align-items:center;gap:8px;margin-top:28px;font-size:13px;color:var(--muted);background:rgba(0,217,181,.05);border:1px solid rgba(0,217,181,.12);border-radius:4px;padding:12px 16px}
 .avail-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.2)}}
-
-/* Social links */
 .social-links{display:flex;gap:10px;margin-top:28px}
 .social-btn{width:36px;height:36px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);text-decoration:none;transition:all .2s}
 .social-btn:hover{border-color:var(--accent);color:var(--accent)}
@@ -81,7 +76,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 .form-card{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:40px}
 .form-title{font-family:var(--head);font-size:20px;font-weight:700;color:#fff;margin-bottom:6px}
 .form-sub{font-size:13px;color:var(--muted);margin-bottom:32px;line-height:1.6}
-
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .form-group{margin-bottom:18px}
 .form-group label{display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
@@ -95,13 +89,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 .form-group select option{background:#101828;color:var(--text)}
 .form-group textarea{resize:vertical;min-height:120px;line-height:1.65}
 .form-group input.err,.form-group select.err{border-color:var(--red)}
-
-/* Phone group */
-.phone-group{display:flex;gap:8px}
-#phone-prefix{width:80px;flex-shrink:0;font-family:monospace;letter-spacing:.5px}
-#phone-number{flex:1}
-
-/* Submit */
 .submit-btn{width:100%;background:var(--accent);color:#060a12;padding:14px;border-radius:4px;font-family:var(--body);font-weight:700;font-size:14px;border:none;cursor:pointer;transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
 .submit-btn:hover{opacity:.87}
 .submit-btn:active{transform:scale(.99)}
@@ -110,10 +97,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:72px;display:flex;ali
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading .btn-spinner{display:block}
 .loading .btn-text{display:none}
-
 .form-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
-
-/* Alerts */
 .alert{border-radius:4px;padding:12px 16px;font-size:13px;margin-bottom:18px;display:none;line-height:1.55;animation:fadeDown .2s}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 .alert.show{display:block}
@@ -273,37 +257,35 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:48px
         <label>Country</label>
         <select id="c-country">
           <option value="">Select Country…</option>
-          <option value="US" data-code="+1">United States</option>
-          <option value="GB" data-code="+44">United Kingdom</option>
-          <option value="CA" data-code="+1">Canada</option>
-          <option value="AU" data-code="+61">Australia</option>
-          <option value="AE" data-code="+971">United Arab Emirates</option>
-          <option value="SA" data-code="+966">Saudi Arabia</option>
-          <option value="NG" data-code="+234">Nigeria</option>
-          <option value="GH" data-code="+233">Ghana</option>
-          <option value="ZA" data-code="+27">South Africa</option>
-          <option value="KE" data-code="+254">Kenya</option>
-          <option value="IN" data-code="+91">India</option>
-          <option value="SG" data-code="+65">Singapore</option>
-          <option value="DE" data-code="+49">Germany</option>
-          <option value="FR" data-code="+33">France</option>
-          <option value="IT" data-code="+39">Italy</option>
-          <option value="ES" data-code="+34">Spain</option>
-          <option value="NL" data-code="+31">Netherlands</option>
-          <option value="CH" data-code="+41">Switzerland</option>
-          <option value="BR" data-code="+55">Brazil</option>
-          <option value="MX" data-code="+52">Mexico</option>
-          <option value="JP" data-code="+81">Japan</option>
-          <option value="CN" data-code="+86">China</option>
+          <option value="US">United States</option>
+          <option value="GB">United Kingdom</option>
+          <option value="CA">Canada</option>
+          <option value="AU">Australia</option>
+          <option value="AE">United Arab Emirates</option>
+          <option value="SA">Saudi Arabia</option>
+          <option value="NG">Nigeria</option>
+          <option value="GH">Ghana</option>
+          <option value="ZA">South Africa</option>
+          <option value="KE">Kenya</option>
+          <option value="IN">India</option>
+          <option value="SG">Singapore</option>
+          <option value="DE">Germany</option>
+          <option value="FR">France</option>
+          <option value="IT">Italy</option>
+          <option value="ES">Spain</option>
+          <option value="NL">Netherlands</option>
+          <option value="CH">Switzerland</option>
+          <option value="BR">Brazil</option>
+          <option value="MX">Mexico</option>
+          <option value="JP">Japan</option>
+          <option value="CN">China</option>
         </select>
       </div>
 
+      <!-- ── SIMPLE PHONE FIELD (no prefix widget) ── -->
       <div class="form-group">
         <label>Phone Number</label>
-        <div class="phone-group">
-          <input type="text" id="phone-prefix" placeholder="+1" maxlength="6" autocomplete="tel-country-code">
-          <input type="tel"  id="phone-number" placeholder="555 000 0000" autocomplete="tel-national">
-        </div>
+        <input type="tel" id="c-phone-full" placeholder="+1 555 000 0000" autocomplete="tel">
       </div>
 
       <div class="form-group">
@@ -393,39 +375,13 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:48px
 </footer>
 
 <script>
-// ── SUPABASE CONFIG ────────────────────────────────────────────
 const SUPABASE_URL = 'https://egedzwcezqksjeozzttd.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_YOGPxMoD0RWCTW43n-hurw_es3iSN8K';
 
-// ── MOBILE NAV ─────────────────────────────────────────────────
 document.getElementById('hamburger').addEventListener('click', () => {
   document.getElementById('mobile-menu').classList.toggle('open');
 });
 
-// ── PHONE PREFIX SYNC ──────────────────────────────────────────
-// Global standard implementation
-window.prefixManuallyEdited = false;
-const prefixInput   = document.getElementById('phone-prefix');
-const countrySelect = document.getElementById('c-country');
-
-prefixInput.addEventListener('input', () => {
-  window.prefixManuallyEdited = prefixInput.value.trim() !== '';
-});
-
-countrySelect.addEventListener('change', () => {
-  const opt  = countrySelect.options[countrySelect.selectedIndex];
-  const code = opt?.getAttribute('data-code') || '';
-  if (!window.prefixManuallyEdited && code) {
-    prefixInput.value = code;
-  }
-});
-
-window.syncPhoneCode = function(code) {
-  if (window.prefixManuallyEdited) return;
-  prefixInput.value = code;
-};
-
-// ── FORM VALIDATION ────────────────────────────────────────────
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
 }
@@ -442,34 +398,29 @@ function showAlert(type, msg) {
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// ── FORM SUBMIT ────────────────────────────────────────────────
 document.getElementById('submit-btn').addEventListener('click', async () => {
   const first   = document.getElementById('c-first').value.trim();
   const last    = document.getElementById('c-last').value.trim();
   const email   = document.getElementById('c-email').value.trim();
   const country = document.getElementById('c-country').value;
-  const prefix  = prefixInput.value.trim();
-  const phone   = document.getElementById('phone-number').value.trim();
+  const phone   = document.getElementById('c-phone-full').value.trim();
   const service = document.getElementById('c-service').value;
   const range   = document.getElementById('c-range').value;
   const message = document.getElementById('c-message').value.trim();
   const btn     = document.getElementById('submit-btn');
 
-  // Validation
-  if (!first)              { showAlert('error', 'Please enter your first name.'); return; }
-  if (!last)               { showAlert('error', 'Please enter your last name.'); return; }
-  if (!validateEmail(email)) { showAlert('error', 'Please enter a valid email address.'); return; }
+  if (!first)               { showAlert('error', 'Please enter your first name.'); return; }
+  if (!last)                { showAlert('error', 'Please enter your last name.'); return; }
+  if (!validateEmail(email)){ showAlert('error', 'Please enter a valid email address.'); return; }
 
   btn.classList.add('loading');
   btn.disabled = true;
 
-  // Try to save to Supabase contact_requests table
-  // Falls back gracefully if table doesn't exist yet
   try {
     await fetch(`${SUPABASE_URL}/rest/v1/contact_requests`, {
       method: 'POST',
       headers: {
-        'apikey':       SUPABASE_KEY,
+        'apikey':        SUPABASE_KEY,
         'Authorization': `Bearer ${SUPABASE_KEY}`,
         'Content-Type':  'application/json',
         'Prefer':        'return=minimal',
@@ -479,7 +430,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
         last_name:    last,
         email,
         country:      country || null,
-        phone:        prefix && phone ? `${prefix} ${phone}` : null,
+        phone:        phone   || null,
         service:      service || null,
         invest_range: range   || null,
         message:      message || null,
@@ -487,37 +438,29 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
       }),
     });
   } catch(e) {
-    // Non-blocking — form still shows success to user
-    console.warn('[contact] Supabase save failed:', e);
+    console.warn('[contact] save failed:', e);
   }
 
   btn.classList.remove('loading');
   btn.disabled = false;
 
-  // Clear form
-  ['c-first','c-last','c-email','c-country','c-service','c-range','c-message','phone-number'].forEach(id => {
+  ['c-first','c-last','c-email','c-country','c-service','c-range','c-message','c-phone-full'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
-  prefixInput.value = '';
-  window.prefixManuallyEdited = false;
 
   showAlert('success', '✓ Request submitted! One of our senior advisors will be in touch within one business day. Thank you, ' + first + '.');
 });
 
-// ── FAQ ACCORDION ──────────────────────────────────────────────
 document.querySelectorAll('.faq-q').forEach(btn => {
   btn.addEventListener('click', () => {
-    const item    = btn.closest('.faq-item');
-    const isOpen  = item.classList.contains('open');
-    // Close all
+    const item   = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
     document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
-    // Open this one (unless it was already open)
     if (!isOpen) item.classList.add('open');
   });
 });
 
-// ── NAV SCROLL SHADOW ──────────────────────────────────────────
 window.addEventListener('scroll', () => {
   document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 20);
 }, { passive: true });

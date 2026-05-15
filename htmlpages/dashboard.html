@@ -248,6 +248,7 @@ svg.line-chart{width:100%;height:100%}
 <body>
 
 <div id="app">
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 <!-- ═══ SIDEBAR ═══ -->
 <aside id="sidebar">
   <div class="sb-head">
@@ -276,6 +277,7 @@ svg.line-chart{width:100%;height:100%}
   <div class="sb-section">Account</div>
   <button class="sb-link" data-panel="referral"><span class="ico">🔗</span>Referral Program</button>
   <button class="sb-link" data-panel="profile"><span class="ico">👤</span>My Profile</button>
+  <button class="sb-link" data-panel="support"><span class="ico">🎫</span>Support Tickets</button>
 
   <div class="sb-bottom">
     <a href="index.html" class="sb-bottom-link">🌐 Back to Website</a>
@@ -396,9 +398,53 @@ svg.line-chart{width:100%;height:100%}
   <div class="panel" id="panel-deposit">
     <div class="panel-header">
       <div class="panel-title">Deposit Funds</div>
-      <div class="panel-sub">Send crypto to your dedicated wallet address to fund your account</div>
+      <div class="panel-sub">Choose a deposit method below</div>
     </div>
-    <div class="deposit-wrap">
+    <!-- Deposit method tabs (Manual always shown; NOWPayments shown when enabled) -->
+    <div style="display:flex;gap:8px;margin-bottom:20px" id="dep-method-tabs">
+      <button class="chart-tab active" id="dep-tab-manual" onclick="switchDepTab('manual')">Manual Transfer</button>
+      <button class="chart-tab" id="dep-tab-nowpayments" onclick="switchDepTab('nowpayments')" style="display:none">NOWPayments</button>
+    </div>
+
+    <!-- NOWPayments panel (hidden by default) -->
+    <div id="nowpayments-panel" style="display:none" class="deposit-wrap">
+      <div class="dep-step">
+        <div class="dep-step-num">Step 1</div>
+        <div class="dep-step-title">Select Currency &amp; Enter Amount</div>
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Cryptocurrency</label>
+          <select id="np-currency" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:12px 16px;color:var(--text);font-family:var(--body);font-size:14px;outline:none">
+            <option value="btc">Bitcoin (BTC)</option>
+            <option value="eth">Ethereum (ETH)</option>
+            <option value="usdttrc20">Tether (USDT TRC20)</option>
+            <option value="usdterc20">Tether (USDT ERC20)</option>
+          </select>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Amount (USD)</label>
+          <input class="dep-amount-input" type="number" id="np-amount" placeholder="Enter amount e.g. 500" min="10">
+        </div>
+        <button class="btn-submit" id="np-create-btn" style="width:auto;padding:11px 24px">Generate Payment Address →</button>
+      </div>
+
+      <!-- Payment address shown after creation -->
+      <div class="dep-step" id="np-address-step" style="display:none">
+        <div class="dep-step-num">Step 2</div>
+        <div class="dep-step-title">Send Payment</div>
+        <div class="wallet-box">
+          <div class="wallet-label" id="np-currency-label">Send to address</div>
+          <div class="wallet-addr" id="np-pay-address">—</div>
+          <div style="margin-top:8px;font-size:13px;color:var(--muted)">Amount to send: <strong id="np-pay-amount" style="color:var(--accent)">—</strong></div>
+          <button class="copy-btn" id="np-copy-addr-btn" style="margin-top:10px">📋 Copy Address</button>
+        </div>
+        <div id="np-status-box" style="margin-top:14px;padding:12px 16px;background:rgba(0,217,181,.05);border:1px solid rgba(0,217,181,.15);border-radius:4px;font-size:13px;color:var(--muted)">
+          Status: <strong id="np-status-label" style="color:var(--accent)">Waiting for payment…</strong>
+        </div>
+        <div class="dep-notice" style="margin-top:12px">⏱ This payment address expires. Send the exact amount shown. Do not close this page until payment is confirmed.</div>
+      </div>
+    </div>
+
+    <div class="deposit-wrap" id="manual-deposit-panel">
       <div class="dep-step">
         <div class="dep-step-num">Step 1</div>
         <div class="dep-step-title">Select Cryptocurrency</div>
@@ -449,6 +495,7 @@ svg.line-chart{width:100%;height:100%}
         <button class="btn-submit" style="margin-top:16px" id="submit-deposit-btn">Submit Deposit Request →</button>
       </div>
     </div>
+    </div><!-- /manual-deposit-panel -->
   </div>
 
   <!-- ── WITHDRAW ── -->
@@ -580,6 +627,59 @@ svg.line-chart{width:100%;height:100%}
     </div>
   </div>
 
+
+  <!-- ── SUPPORT TICKETS ── -->
+  <div class="panel" id="panel-support">
+    <div class="panel-header">
+      <div class="panel-title">Support Tickets</div>
+      <div class="panel-sub">Create a new ticket or view your existing requests</div>
+    </div>
+
+    <!-- New ticket form -->
+    <div class="dep-step" style="margin-bottom:20px">
+      <div class="dep-step-title">Open a New Ticket</div>
+      <div class="form-group2" style="margin-bottom:14px">
+        <label>Subject</label>
+        <input type="text" id="tkt-subject" placeholder="Briefly describe your issue" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:12px 16px;color:var(--text);font-family:var(--body);font-size:14px;outline:none;transition:border-color .2s">
+      </div>
+      <div class="form-group2" style="margin-bottom:14px">
+        <label>Message</label>
+        <textarea id="tkt-message" placeholder="Describe your issue in detail…" rows="4" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:12px 16px;color:var(--text);font-family:var(--body);font-size:14px;outline:none;resize:vertical;line-height:1.6;transition:border-color .2s"></textarea>
+      </div>
+      <button class="btn-submit" id="submit-ticket-btn" style="width:auto;padding:11px 24px">Submit Ticket →</button>
+    </div>
+
+    <!-- Ticket list -->
+    <div style="font-weight:700;color:#fff;font-size:14px;margin-bottom:14px">My Tickets</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:auto">
+      <table class="tx-table" id="tickets-table">
+        <thead>
+          <tr>
+            <th>Subject</th><th>Status</th><th>Submitted</th><th>Last Reply</th>
+          </tr>
+        </thead>
+        <tbody id="tickets-tbody">
+          <tr><td colspan="4"><div class="empty-state"><div class="empty-icon">🎫</div>No tickets yet.</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Ticket thread modal -->
+    <div class="modal-bg" id="ticket-thread-modal">
+      <div class="modal" style="max-width:560px">
+        <div class="modal-title" id="thread-title">Ticket Thread</div>
+        <div id="thread-messages" style="max-height:320px;overflow-y:auto;margin-bottom:16px;display:flex;flex-direction:column;gap:12px"></div>
+        <div id="thread-reply-wrap">
+          <textarea id="thread-reply" placeholder="Type your reply…" rows="3" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:11px 14px;color:var(--text);font-family:var(--body);font-size:13px;outline:none;resize:vertical;margin-bottom:10px"></textarea>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-p" id="send-reply-btn" style="flex:1;justify-content:center;padding:11px">Send Reply</button>
+            <button class="btn btn-g" id="close-thread-btn">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 </div>
 
@@ -652,7 +752,7 @@ function esc(str) {
 const TITLES = {
   overview:'Overview', invest:'Investment Plans', deposit:'Deposit Funds',
   withdraw:'Withdraw', transactions:'Transactions', referral:'Referral Program',
-  profile:'My Profile'
+  profile:'My Profile', support:'Support Tickets'
 };
 
 // ── FORMAT ───────────────────────────────────────────────────
@@ -678,6 +778,8 @@ async function boot() {
   profile = data;
   try {
     await Promise.all([populateUI(), loadPlans(), loadTransactions(), loadReferrals()]);
+    checkNowPaymentsEnabled();
+    loadTickets();
   } catch(e) {
     console.error('[boot] Dashboard load error:', e);
     const t = document.getElementById('toast');
@@ -892,7 +994,7 @@ async function confirmInvest() {
   const amt = parseFloat(document.getElementById('m-amount').value);
   const { min_amount, max_amount, name } = modalPlan;
 
-  if (!amt || amt < min_amount || amt > max_amount) {
+  if (!amt || amt < min_amount || (max_amount < 9999999 && amt > max_amount)) {
     toast('Amount out of range for this plan'); return;
   }
   if (amt > (profile.balance || 0)) {
@@ -902,33 +1004,25 @@ async function confirmInvest() {
   const btn = document.getElementById('confirm-invest-btn');
   btn.disabled = true; btn.textContent = 'Processing…';
 
-  // Deduct balance
-  const { error: balErr } = await supabase
-    .from('profiles')
-    .update({ balance: profile.balance - amt, total_invested: (profile.total_invested || 0) + amt })
-    .eq('id', profile.id);
-
-  if (balErr) { toast('Error: ' + balErr.message); btn.disabled = false; btn.textContent = 'Confirm Investment'; return; }
-
-  // Create investment record
-  const { error: invErr } = await supabase
-    .from('investments')
-    .insert({ user_id: profile.id, plan_id: modalPlan.id, amount: amt });
+  // Use SECURITY DEFINER RPC — avoids direct balance update trigger
+  const { data, error } = await supabase.rpc('create_investment', {
+    p_user_id: profile.id,
+    p_plan_id: modalPlan.id,
+    p_amount:  amt,
+  });
 
   btn.disabled = false; btn.textContent = 'Confirm Investment';
 
-  if (invErr) { toast('Error: ' + invErr.message); return; }
+  if (error) { toast('Error: ' + error.message); return; }
 
-  // Update local profile state
-  profile.balance       = profile.balance - amt;
-  profile.total_invested = (profile.total_invested || 0) + amt;
+  profile.balance        = data.new_balance;
+  profile.total_invested = data.new_invested;
 
   closeModal();
   toast('✓ ' + name + ' plan activated! Daily profits will be credited.');
 
-  // Refresh UI
-  document.getElementById('ov-balance').textContent   = fmt(profile.balance);
-  document.getElementById('ov-invested').textContent  = fmt(profile.total_invested);
+  document.getElementById('ov-balance').textContent      = fmt(profile.balance);
+  document.getElementById('ov-invested').textContent     = fmt(profile.total_invested);
   document.getElementById('withdraw-balance').textContent = fmt(profile.balance);
   drawChart();
   loadActivePlans();
@@ -1097,10 +1191,6 @@ async function submitDeposit() {
 //  WITHDRAW (KYC-gated)
 // ─────────────────────────────────────────────────────────────
 async function submitWithdraw() {
-  if (profile.kyc_status !== 'approved') {
-    toast('KYC verification required to withdraw.'); return;
-  }
-
   const method = document.getElementById('w-method').value;
   const addr   = document.getElementById('w-addr').value.trim();
   const amt    = parseFloat(document.getElementById('w-amount').value);
@@ -1112,27 +1202,33 @@ async function submitWithdraw() {
 
   btn.disabled = true; btn.textContent = 'Submitting…';
 
-  const { error: balErr } = await supabase
-    .from('profiles')
-    .update({ balance: profile.balance - amt, total_withdrawn: (profile.total_withdrawn || 0) + amt })
-    .eq('id', profile.id);
-
-  if (balErr) { toast('Error: ' + balErr.message); btn.disabled = false; btn.textContent = 'Request Withdrawal →'; return; }
-
-  await supabase.from('transactions').insert({
-    user_id: profile.id, type: 'withdrawal', method, amount: amt,
-    status: 'processing', wallet_address: addr,
+  // Use SECURITY DEFINER RPC — handles KYC gate + avoids balance trigger
+  const { data, error } = await supabase.rpc('submit_withdrawal', {
+    p_user_id:        profile.id,
+    p_method:         method,
+    p_amount:         amt,
+    p_wallet_address: addr,
   });
 
-  profile.balance        = profile.balance - amt;
-  profile.total_withdrawn = (profile.total_withdrawn || 0) + amt;
-
   btn.disabled = false; btn.textContent = 'Request Withdrawal →';
-  document.getElementById('w-addr').value = '';
+
+  if (error) {
+    if (error.message && error.message.includes('KYC')) {
+      toast('KYC verification required to withdraw.');
+    } else {
+      toast('Error: ' + error.message);
+    }
+    return;
+  }
+
+  profile.balance         = data.new_balance;
+  profile.total_withdrawn = data.new_withdrawn;
+
+  document.getElementById('w-addr').value   = '';
   document.getElementById('w-amount').value = '';
-  document.getElementById('ov-balance').textContent        = fmt(profile.balance);
-  document.getElementById('ov-withdrawn').textContent      = fmt(profile.total_withdrawn);
-  document.getElementById('withdraw-balance').textContent  = fmt(profile.balance);
+  document.getElementById('ov-balance').textContent       = fmt(profile.balance);
+  document.getElementById('ov-withdrawn').textContent     = fmt(profile.total_withdrawn);
+  document.getElementById('withdraw-balance').textContent = fmt(profile.balance);
 
   toast('✓ Withdrawal request submitted. Processing in 24–48 hours.');
   await loadTransactions();
@@ -1242,6 +1338,7 @@ function showPanel(name) {
   if (activeBtn) activeBtn.classList.add('active');
   document.getElementById('topbar-title').textContent = TITLES[name] || name;
   document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-backdrop').classList.remove('show');
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1282,6 +1379,11 @@ document.addEventListener('click', e => {
 // Hamburger
 document.getElementById('hbtn').addEventListener('click', () => {
   document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-backdrop').classList.toggle('show');
+});
+document.getElementById('sidebar-backdrop').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-backdrop').classList.remove('show');
 });
 
 // Logout
@@ -1353,6 +1455,26 @@ document.getElementById('submit-kyc-btn').addEventListener('click', async () => 
   btn.disabled = false; btn.textContent = 'Submit for Verification';
 });
 
+// NOWPayments
+document.getElementById('np-create-btn').addEventListener('click', createNowPaymentsDeposit);
+document.getElementById('np-copy-addr-btn')?.addEventListener('click', () => {
+  navigator.clipboard.writeText(document.getElementById('np-pay-address').textContent)
+    .then(() => toast('✓ Address copied!'));
+});
+
+// Support tickets
+document.getElementById('submit-ticket-btn').addEventListener('click', submitTicket);
+document.getElementById('send-reply-btn').addEventListener('click', sendThreadReply);
+document.getElementById('close-thread-btn').addEventListener('click', () => {
+  document.getElementById('ticket-thread-modal').classList.remove('show');
+});
+document.getElementById('ticket-thread-modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
+});
+
+// Support panel nav — load tickets on visit
+document.querySelector('.sb-link[data-panel="support"]')?.addEventListener('click', loadTickets);
+
 // Referral copy
 document.getElementById('copy-ref-btn').addEventListener('click', () => {
   navigator.clipboard.writeText(document.getElementById('ref-code').textContent)
@@ -1374,6 +1496,264 @@ document.querySelectorAll('.chart-tab').forEach(tab => {
 
 // Scroll: back to top (not applicable in dashboard but harmless)
 window.addEventListener('scroll', () => {}, { passive: true });
+
+// ─────────────────────────────────────────────────────────────
+//  DEPOSIT TAB SWITCHER
+// ─────────────────────────────────────────────────────────────
+let _npEnabled = false;
+
+async function checkNowPaymentsEnabled() {
+  try {
+    const { data } = await supabase.from('settings').select('value').eq('key','nowpayments_enabled').single();
+    _npEnabled = data?.value === 'true';
+    if (_npEnabled) {
+      document.getElementById('dep-tab-nowpayments').style.display = '';
+    }
+  } catch(e) {}
+}
+
+function switchDepTab(tab) {
+  const manualPanel = document.getElementById('manual-deposit-panel');
+  const npPanel     = document.getElementById('nowpayments-panel');
+  const tabManual   = document.getElementById('dep-tab-manual');
+  const tabNP       = document.getElementById('dep-tab-nowpayments');
+
+  if (tab === 'manual') {
+    manualPanel.style.display = '';
+    npPanel.style.display     = 'none';
+    tabManual.classList.add('active');
+    tabNP.classList.remove('active');
+  } else {
+    manualPanel.style.display = 'none';
+    npPanel.style.display     = '';
+    tabManual.classList.remove('active');
+    tabNP.classList.add('active');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+//  NOWPAYMENTS DEPOSIT FLOW
+// ─────────────────────────────────────────────────────────────
+let _npPaymentId   = null;
+let _npPollTimer   = null;
+
+async function createNowPaymentsDeposit() {
+  const currency = document.getElementById('np-currency').value;
+  const amount   = parseFloat(document.getElementById('np-amount').value);
+  const btn      = document.getElementById('np-create-btn');
+
+  if (!amount || amount < 10) { toast('Minimum deposit is $10'); return; }
+
+  btn.disabled = true; btn.textContent = 'Creating payment…';
+
+  try {
+    // Get API key from settings
+    const { data: keyRow } = await supabase.from('settings').select('value').eq('key','nowpayments_api_key').single();
+    const { data: sbRow }  = await supabase.from('settings').select('value').eq('key','nowpayments_sandbox').single();
+    const apiKey    = keyRow?.value || '';
+    const isSandbox = sbRow?.value === 'true';
+    const baseUrl   = isSandbox ? 'https://api-sandbox.nowpayments.io/v1' : 'https://api.nowpayments.io/v1';
+
+    if (!apiKey) { toast('NOWPayments API key not configured. Contact support.'); btn.disabled=false; btn.textContent='Generate Payment Address →'; return; }
+
+    const orderId = profile.id.slice(0,8) + '_' + Date.now();
+
+    const res = await fetch(`${baseUrl}/payment`, {
+      method: 'POST',
+      headers: { 'x-api-key': apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        price_amount: amount,
+        price_currency: 'usd',
+        pay_currency: currency,
+        order_id: orderId,
+        order_description: 'HedgeCapitalPro Deposit',
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      toast('Payment error: ' + (err.message || res.status));
+      btn.disabled=false; btn.textContent='Generate Payment Address →';
+      return;
+    }
+
+    const payment = await res.json();
+    _npPaymentId  = payment.payment_id;
+
+    // Record in DB
+    await supabase.from('transactions').insert({
+      user_id:           profile.id,
+      type:              'deposit',
+      method:            currency.toUpperCase() + ' via NOWPayments',
+      amount:            amount,
+      status:            'pending',
+      payment_provider:  'nowpayments',
+      nowpayments_id:    String(payment.payment_id),
+      nowpayments_status: payment.payment_status,
+    });
+
+    // Show address
+    document.getElementById('np-pay-address').textContent   = payment.pay_address || '—';
+    document.getElementById('np-pay-amount').textContent    = (payment.pay_amount || '—') + ' ' + (payment.pay_currency || '').toUpperCase();
+    document.getElementById('np-currency-label').textContent = 'Send ' + (payment.pay_currency || '').toUpperCase() + ' to this address';
+    document.getElementById('np-address-step').style.display = '';
+    document.getElementById('np-copy-addr-btn').onclick = () =>
+      navigator.clipboard.writeText(payment.pay_address).then(() => toast('✓ Address copied!'));
+
+    startNpPolling(apiKey, baseUrl, payment.payment_id);
+
+  } catch(e) {
+    toast('Error: ' + e.message);
+  }
+
+  btn.disabled=false; btn.textContent='Generate Payment Address →';
+}
+
+function startNpPolling(apiKey, baseUrl, paymentId) {
+  if (_npPollTimer) clearInterval(_npPollTimer);
+  _npPollTimer = setInterval(async () => {
+    try {
+      const res = await fetch(`${baseUrl}/payment/${paymentId}`, {
+        headers: { 'x-api-key': apiKey }
+      });
+      if (!res.ok) return;
+      const data   = await res.json();
+      const status = data.payment_status || 'waiting';
+      const labels = {
+        waiting:'Waiting for payment…', confirming:'Confirming…',
+        confirmed:'Confirmed', sending:'Sending…',
+        partially_paid:'Partially paid — please send the full amount',
+        finished:'✓ Payment complete!',
+        failed:'Payment failed', refunded:'Refunded', expired:'Expired',
+      };
+      const label = document.getElementById('np-status-label');
+      label.textContent = labels[status] || status;
+      label.style.color = ['finished'].includes(status) ? 'var(--accent)' : ['failed','refunded','expired'].includes(status) ? 'var(--red)' : 'var(--yellow)';
+
+      // Sync status in our transactions table
+      await supabase.from('transactions').update({
+        nowpayments_status: status,
+        status: status === 'finished' ? 'confirmed' : ['failed','refunded','expired'].includes(status) ? 'rejected' : 'pending',
+      }).eq('nowpayments_id', String(paymentId)).eq('user_id', profile.id);
+
+      if (['finished','failed','refunded','expired'].includes(status)) {
+        clearInterval(_npPollTimer);
+        if (status === 'finished') {
+          toast('✓ Payment confirmed! Balance will be updated shortly.');
+          await loadTransactions();
+        }
+      }
+    } catch(e) {}
+  }, 15000);
+}
+
+// ─────────────────────────────────────────────────────────────
+//  SUPPORT TICKETS
+// ─────────────────────────────────────────────────────────────
+let _currentTicketId = null;
+
+async function loadTickets() {
+  const { data } = await supabase
+    .from('support_tickets')
+    .select('*')
+    .eq('user_id', profile.id)
+    .order('created_at', { ascending: false });
+
+  const tbody = document.getElementById('tickets-tbody');
+  if (!data?.length) {
+    tbody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">🎫</div>No tickets yet.</div></td></tr>';
+    return;
+  }
+
+  const stClass = { open:'st-pending', in_progress:'st-processing', resolved:'st-confirmed', closed:'st-completed' };
+
+  tbody.innerHTML = data.map(t => `
+    <tr style="cursor:pointer" onclick="openTicketThread('${esc(t.id)}','${esc(t.subject)}')">
+      <td style="font-weight:600">${esc(t.subject)}</td>
+      <td><span class="tx-status ${stClass[t.status] || 'st-pending'}">${esc(t.status)}</span></td>
+      <td style="color:var(--muted);font-size:12px">${esc(t.created_at?.split('T')[0] || '—')}</td>
+      <td style="color:var(--muted);font-size:12px">${t.admin_response ? 'Admin replied' : '—'}</td>
+    </tr>`).join('');
+}
+
+async function submitTicket() {
+  const subject = document.getElementById('tkt-subject').value.trim();
+  const message = document.getElementById('tkt-message').value.trim();
+  const btn     = document.getElementById('submit-ticket-btn');
+
+  if (!subject) { toast('Please enter a subject'); return; }
+  if (!message) { toast('Please enter a message'); return; }
+
+  btn.disabled = true; btn.textContent = 'Submitting…';
+
+  const { error } = await supabase.from('support_tickets').insert({
+    user_id: profile.id, subject, message, status: 'open',
+  });
+
+  btn.disabled = false; btn.textContent = 'Submit Ticket →';
+
+  if (error) { toast('Error: ' + error.message); return; }
+
+  document.getElementById('tkt-subject').value = '';
+  document.getElementById('tkt-message').value = '';
+  toast('✓ Ticket submitted! We will respond within 24 hours.');
+  await loadTickets();
+}
+
+async function openTicketThread(ticketId, subject) {
+  _currentTicketId = ticketId;
+  document.getElementById('thread-title').textContent = subject;
+
+  const { data } = await supabase.from('support_tickets').select('*').eq('id', ticketId).single();
+  if (!data) return;
+
+  const msgs = document.getElementById('thread-messages');
+  msgs.innerHTML = '';
+
+  // User's original message
+  const userMsg = document.createElement('div');
+  userMsg.style.cssText = 'background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:12px 14px;font-size:13px';
+  userMsg.innerHTML = `<div style="font-size:11px;color:var(--accent);margin-bottom:6px;font-weight:700">YOU · ${esc(data.created_at?.split('T')[0] || '')}</div><div style="color:var(--text)">${esc(data.message)}</div>`;
+  msgs.appendChild(userMsg);
+
+  // Admin reply if exists
+  if (data.admin_response) {
+    const adminMsg = document.createElement('div');
+    adminMsg.style.cssText = 'background:rgba(0,217,181,.06);border:1px solid rgba(0,217,181,.2);border-radius:4px;padding:12px 14px;font-size:13px';
+    adminMsg.innerHTML = `<div style="font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700">SUPPORT TEAM</div><div style="color:var(--text)">${esc(data.admin_response)}</div>`;
+    msgs.appendChild(adminMsg);
+  }
+
+  // Hide reply box if closed/resolved
+  document.getElementById('thread-reply-wrap').style.display = ['closed','resolved'].includes(data.status) ? 'none' : '';
+  document.getElementById('ticket-thread-modal').classList.add('show');
+}
+
+async function sendThreadReply() {
+  if (!_currentTicketId) return;
+  const reply = document.getElementById('thread-reply').value.trim();
+  if (!reply) { toast('Please type a reply'); return; }
+
+  const btn = document.getElementById('send-reply-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+
+  // Append user reply to message
+  const { data: existing } = await supabase.from('support_tickets').select('message').eq('id', _currentTicketId).single();
+  const updatedMsg = (existing?.message || '') + '\n\n[User follow-up]: ' + reply;
+
+  const { error } = await supabase.from('support_tickets').update({
+    message: updatedMsg, status: 'open',
+  }).eq('id', _currentTicketId);
+
+  btn.disabled = false; btn.textContent = 'Send Reply';
+
+  if (error) { toast('Error: ' + error.message); return; }
+
+  document.getElementById('thread-reply').value = '';
+  toast('✓ Reply sent!');
+  document.getElementById('ticket-thread-modal').classList.remove('show');
+  await loadTickets();
+}
 
 // ─────────────────────────────────────────────────────────────
 //  INIT
